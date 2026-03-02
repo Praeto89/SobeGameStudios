@@ -1,0 +1,21 @@
+# Godot 4
+.godot/
+
+# Mono and build artefacts if you use C#
+.mono/
+bin/
+obj/
+
+# Exports
+export/
+exports/
+*.exe
+*.apk
+*.aab
+*.app
+*.dmg
+*.zip
+
+# OS junk
+.DS_Store
+Thumbs.db
