@@ -1,21 +1,16 @@
 # Godot 4
 .godot/
-
-# Mono and build artefacts if you use C#
-.mono/
-bin/
-obj/
-
-# Exports
+.import/
 export/
-exports/
-*.exe
-*.apk
-*.aab
-*.app
-*.dmg
-*.zip
 
-# OS junk
+# Logs und temporäre Dateien
+*.log
+*.tmp
+
+# IDE Dateien
+.vscode/
+.idea/
+
+# OS
 .DS_Store
 Thumbs.db
