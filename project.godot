@@ -11,8 +11,14 @@ config_version=5
 [application]
 
 config/name="SobeGame"
+run/main_scene="uid://c4bej2p3521hh"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
+
+[editor]
+
+version_control/plugin_name="GitPlugin"
+version_control/autoload_on_startup=true
 
 [physics]
 
@@ -20,4 +26,5 @@ config/icon="res://icon.svg"
 
 [rendering]
 
+textures/canvas_textures/default_texture_filter=0
 rendering_device/driver.windows="d3d12"
