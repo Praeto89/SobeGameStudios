@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://jhiuqdedq0l3"]
 
-[ext_resource type="Script" uid="uid://b4an360rnqox3" path="res://scenes/coin.gd" id="1_i64fm"]
+[ext_resource type="Script" uid="uid://b4an360rnqox3" path="res://scripts/coin.gd" id="1_i64fm"]
 [ext_resource type="Texture2D" uid="uid://bl7n15k2kwa3s" path="res://assets/sprites/coin.png" id="1_rwqht"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_i64fm"]
@@ -91,7 +91,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_rojmm")
 }],
 "loop": true,
-"name": &"idle",
+"name": &"spin",
 "speed": 5.0
 }]
 
@@ -103,7 +103,7 @@ script = ExtResource("1_i64fm")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1344042944]
 sprite_frames = SubResource("SpriteFrames_ls27i")
-animation = &"idle"
+animation = &"spin"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1154318741]
 shape = SubResource("CircleShape2D_ssuvv")
