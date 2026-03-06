@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://c41gavgbv0wpq"]
+
+[ext_resource type="Script" uid="uid://b7sys1w0f7fwv" path="res://scenes/hud.gd" id="1_ahhtf"]
+
+[node name="CanvasLayer" type="CanvasLayer" unique_id=672277396]
+layer = 10
+script = ExtResource("1_ahhtf")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=729905355]
+offset_left = 999.0
+offset_top = 10.0
+offset_right = 1139.0
+offset_bottom = 80.0
+
+[node name="ColorRect" type="ColorRect" parent="HBoxContainer" unique_id=1705151768]
+z_index = 10
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+color = Color(0.264, 1, 0.996, 1)
+
+[node name="ColorRect2" type="ColorRect" parent="HBoxContainer" unique_id=678805252]
+z_index = 10
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+color = Color(0.2627451, 1, 1, 1)
+
+[node name="ColorRect3" type="ColorRect" parent="HBoxContainer" unique_id=129741522]
+z_index = 10
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+color = Color(0.2627451, 1, 1, 1)
+
+[node name="ColorRect4" type="ColorRect" parent="HBoxContainer" unique_id=1552933932]
+z_index = 10
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+color = Color(0.2627451, 1, 1, 1)
+
+[node name="CoinLabel" type="Label" parent="." unique_id=1655058459]
+custom_minimum_size = Vector2(32, 32)
+offset_right = 60.0
+offset_bottom = 40.0
+theme_override_font_sizes/font_size = 30
