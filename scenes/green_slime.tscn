@@ -93,7 +93,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_28jbo")
 }, {
-"duration": 1.0,
+"duration": 1.5,
 "texture": SubResource("AtlasTexture_s63eg")
 }, {
 "duration": 1.0,
@@ -105,9 +105,9 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_wdk7f")
 }],
-"loop": true,
+"loop": false,
 "name": &"death",
-"speed": 5.0
+"speed": 3.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -134,17 +134,30 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_y6yh0"]
-size = Vector2(13, 13)
+size = Vector2(16, 13)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tuic5"]
+size = Vector2(18, 13)
 
 [node name="CharacterBody2D" type="CharacterBody2D" unique_id=705821222]
+collision_layer = 2
+collision_mask = 5
 script = ExtResource("1_vqynf")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1344520829]
 sprite_frames = SubResource("SpriteFrames_cvh1n")
 animation = &"death"
-frame = 1
-frame_progress = 0.791663
+frame = 5
+frame_progress = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1517650821]
-position = Vector2(0, 5)
+position = Vector2(0, 5.5)
 shape = SubResource("RectangleShape2D_y6yh0")
+
+[node name="Hitbox" type="Area2D" parent="." unique_id=1558615358]
+position = Vector2(0, 5)
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=1407305757]
+position = Vector2(0, 0.5)
+shape = SubResource("RectangleShape2D_tuic5")
