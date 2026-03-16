@@ -5,7 +5,6 @@
 
 [node name="GeenSlimeSpawner" type="Node2D" unique_id=1423220628]
 script = ExtResource("1_6s5hs")
+slime_scene = ExtResource("2_ko27n")
 
 [node name="Timer" type="Timer" parent="." unique_id=677429236]
-
-[node name="CharacterBody2D" parent="." unique_id=705821222 instance=ExtResource("2_ko27n")]

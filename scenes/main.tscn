@@ -565,4 +565,4 @@ position = Vector2(278, 115)
 position = Vector2(566, -29)
 
 [node name="GeenSlimeSpawner" parent="." unique_id=1423220628 instance=ExtResource("3_85g3d")]
-position = Vector2(377, -90)
+position = Vector2(209, -80)
