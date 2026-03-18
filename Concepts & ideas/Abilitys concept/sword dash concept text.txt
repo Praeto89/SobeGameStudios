@@ -1,0 +1,14 @@
+dash button + Special
+charges up
+player shimmers when done charging
+White line with "particels" where Sword swings trough
+Sword does a horizontal swing during dash
+
+without dash trough:
+Sword is slightly infornt of Player during attack so you kill enemys (that are slow enough) bevor you collide with them
+most Damage in swing just before the dash Ends
+
+with dash trough:
+you just go trough the enemy
+Damage is the same as without dash trough
+?Animation inspiret by Katana dashes in popular media?
