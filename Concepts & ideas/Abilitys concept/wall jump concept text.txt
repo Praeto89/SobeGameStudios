@@ -1,0 +1,5 @@
+when touching wall while Holding Joystick in direction of wall, Player grabs onto wall
+Player slowly (not to slow) slides down wall after a a second or a half after Grabbing wall
+if Player stops Holding stick to wall, Player stops Grabbing
+Jumping while on wall behaves almost excactly like Jumping from Floor (no preset Jumping angle)
+Player can climb wall by repeatetly wall Jumping on the same wall (no like jump and runs (like mario), but like a metroidvania (hollow Knight for example)
