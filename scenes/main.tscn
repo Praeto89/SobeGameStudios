@@ -535,7 +535,7 @@ frame_progress = 0.3901646
 
 [node name="Camera2D" type="Camera2D" parent="CharacterBody2D" unique_id=412120254]
 zoom = Vector2(3, 3)
-limit_bottom = 105
+limit_bottom = 200
 
 [node name="RollHitbox" type="Area2D" parent="CharacterBody2D" unique_id=809052962]
 collision_layer = 0
@@ -557,7 +557,7 @@ position = Vector2(113, -73)
 position = Vector2(27, -8)
 
 [node name="death" parent="." unique_id=960584487 instance=ExtResource("7_o6xl0")]
-position = Vector2(278, 115)
+position = Vector2(220, 232)
 
 [node name="CanvasLayer" parent="." unique_id=672277396 instance=ExtResource("8_tipki")]
 
