@@ -1,10 +1,10 @@
 extends CharacterBody2D
 const SPEED = 300.0
-const JUMP_VELOCITY = -400.0
-const ROLL_SPEED = 600.0
-const CHARGE_SPEED = 800.0
-const CHARGE_DURATION = 3.0
-const CHARGE_MAX_TIME = 2.0
+const JUMP_VELOCITY = -500.0
+const ROLL_SPEED = 300.0
+const CHARGE_SPEED = 700.0
+const CHARGE_DURATION = 0.5
+const CHARGE_MAX_TIME = 0.5
 @onready var animated_sprite = $AnimatedSprite2D
 @onready var roll_hitbox := $"RollHitbox"
 var is_rolling = false
@@ -92,7 +92,7 @@ func _physics_process(delta: float) -> void:
 		if charge_timer >= CHARGE_DURATION:
 			is_charging = true
 			charge_timer = 0.0
-			velocity.y = -600.0
+			velocity.y = -900.0
 	if Input.is_action_just_released("charge") and not is_charging:
 		charge_timer = 0.0
 	var direction := Input.get_axis("ui_left", "ui_right")
@@ -114,7 +114,7 @@ func _physics_process(delta: float) -> void:
 		if charge_time_active >= CHARGE_MAX_TIME:
 			is_charging = false
 			charge_time_active = 0.0
-		elif charge_time_active > 0.2:
+		elif charge_time_active > 0.1:
 			if is_on_wall() or is_on_ceiling() or is_on_floor():
 				is_charging = false
 				charge_time_active = 0.0
