@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://cbxwfiysrsyxr"]
+
+[ext_resource type="Script" uid="uid://bl3ojbfl0lfpi" path="res://scenes/fade_area.gd" id="1_r08ol"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_s3p7g"]
+
+[node name="Fade Area" type="Area2D" unique_id=1423754655]
+script = ExtResource("1_r08ol")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1435484421]
+shape = SubResource("RectangleShape2D_s3p7g")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]

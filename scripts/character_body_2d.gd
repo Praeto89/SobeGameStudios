@@ -1,6 +1,7 @@
-extends CharacterBody2D
-const SPEED = 300.0
-const JUMP_VELOCITY = -500.0
+class_name Player extends CharacterBody2D
+
+const SPEED = 150.0
+const JUMP_VELOCITY = -300.0
 const ROLL_SPEED = 300.0
 const CHARGE_SPEED = 700.0
 const CHARGE_DURATION = 0.5
