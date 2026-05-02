@@ -212,6 +212,18 @@ region = Rect2(192, 96, 32, 32)
 atlas = ExtResource("1_0wfyh")
 region = Rect2(224, 96, 32, 32)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_o7ddy"]
+atlas = ExtResource("1_0wfyh")
+region = Rect2(64, 160, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0loja"]
+atlas = ExtResource("1_0wfyh")
+region = Rect2(64, 224, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ids8r"]
+atlas = ExtResource("1_0wfyh")
+region = Rect2(224, 64, 32, 32)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_5poiv"]
 animations = [{
 "frames": [{
@@ -417,6 +429,20 @@ animations = [{
 }],
 "loop": true,
 "name": &"run",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.5,
+"texture": SubResource("AtlasTexture_o7ddy")
+}, {
+"duration": 1.5,
+"texture": SubResource("AtlasTexture_0loja")
+}, {
+"duration": 1.5,
+"texture": SubResource("AtlasTexture_ids8r")
+}],
+"loop": true,
+"name": &"wallcrawl",
 "speed": 5.0
 }]
 
@@ -631,7 +657,7 @@ shape = SubResource("CircleShape2D_jyhfs")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharacterBody2D" unique_id=1371305601]
 position = Vector2(-17, -16)
 sprite_frames = SubResource("SpriteFrames_5poiv")
-animation = &"charge"
+animation = &"jump"
 
 [node name="Camera2D" type="Camera2D" parent="CharacterBody2D" unique_id=412120254]
 position = Vector2(-1, 0)

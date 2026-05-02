@@ -1,12 +1,17 @@
 extends CharacterBody2D
+
 const SPEED = 300.0
 const JUMP_VELOCITY = -500.0
 const ROLL_SPEED = 300.0
 const CHARGE_SPEED = 700.0
 const CHARGE_DURATION = 0.5
 const CHARGE_MAX_TIME = 0.5
+const WALL_CRAWL_SPEED = 120.0
+const WALL_JUMP_VELOCITY = Vector2(350.0, -450.0)
+
 @onready var animated_sprite = $AnimatedSprite2D
 @onready var roll_hitbox := $"RollHitbox"
+
 var is_rolling = false
 var is_charging = false
 var charge_timer := 0.0
@@ -20,11 +25,18 @@ var hit_timer := 0.0
 const HIT_DURATION = 0.6
 var is_dead := false
 var has_charge = false
+
+# --- Wallcrawl ---
+var is_wall_crawling = false
+var has_wallcrawl = false
+
 signal health_changed(new_health)
 signal coin_collected(new_count)
+
 func _ready() -> void:
 	spawn_position = global_position
 	roll_hitbox.monitoring = true
+
 func respawn() -> void:
 	global_position = spawn_position
 	velocity = Vector2.ZERO
@@ -35,9 +47,11 @@ func respawn() -> void:
 	is_dead = false
 	is_hit = false
 	hit_timer = 0.0
+	is_wall_crawling = false
 	$CollisionShape2D.set_deferred("disabled", false)
+
 func take_damage(amount: int, knockback_direction: float = 0.0) -> void:
-	if is_hit or is_dead or is_rolling or is_charging:
+	if is_hit or is_dead or is_rolling or is_charging or is_wall_crawling:
 		return
 	current_health -= amount
 	current_health = clamp(current_health, 0, max_health)
@@ -49,10 +63,12 @@ func take_damage(amount: int, knockback_direction: float = 0.0) -> void:
 		return
 	is_hit = true
 	hit_timer = HIT_DURATION
+
 func _die() -> void:
 	is_dead = true
 	is_rolling = false
 	is_charging = false
+	is_wall_crawling = false
 	charge_timer = 0.0
 	charge_time_active = 0.0
 	velocity.x = 0
@@ -64,30 +80,58 @@ func _die() -> void:
 	respawn()
 	current_health = max_health
 	emit_signal("health_changed", current_health)
+
 func collect_coin() -> void:
 	coin_count += 1
 	emit_signal("coin_collected", coin_count)
+
 func unlock_charge() -> void:
 	has_charge = true
+
+func unlock_wallcrawl() -> void:
+	has_wallcrawl = true
+
 func _physics_process(delta: float) -> void:
 	if is_dead:
 		velocity += get_gravity() * delta
 		move_and_slide()
 		return
+
 	if hit_timer > 0:
 		hit_timer -= delta
 		if hit_timer <= 0:
 			is_hit = false
+
+	# --- Wallcrawl-Zustand bestimmen ---
+	if has_wallcrawl and is_on_wall() and not is_on_floor() and not is_charging and not is_rolling:
+		is_wall_crawling = true
+	else:
+		is_wall_crawling = false
+
+	# --- Gravity (deaktiviert beim Wallcrawl und Charge) ---
 	if not is_on_floor():
-		if not is_charging and charge_time_active <= 0:
+		if not is_charging and charge_time_active <= 0 and not is_wall_crawling:
 			velocity += get_gravity() * delta
-	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
-		velocity.y = JUMP_VELOCITY
+
+	# --- Springen (normal oder von der Wand) ---
+	if Input.is_action_just_pressed("ui_accept"):
+		if is_on_floor():
+			velocity.y = JUMP_VELOCITY
+		elif is_wall_crawling:
+			# Von der Wand abspringen: in die entgegengesetzte Richtung
+			var wall_normal = get_wall_normal()
+			velocity.x = wall_normal.x * WALL_JUMP_VELOCITY.x
+			velocity.y = WALL_JUMP_VELOCITY.y
+			is_wall_crawling = false
+
+	# --- Roll ---
 	if Input.is_action_just_pressed("ui_shift") and is_on_floor():
 		is_rolling = true
 	if Input.is_action_just_released("ui_shift"):
 		is_rolling = false
-	if Input.is_action_pressed("charge") and has_charge and not is_rolling and not is_charging:
+
+	# --- Charge ---
+	if Input.is_action_pressed("charge") and has_charge and not is_rolling and not is_charging and not is_wall_crawling:
 		charge_timer += delta
 		if charge_timer >= CHARGE_DURATION:
 			is_charging = true
@@ -95,8 +139,15 @@ func _physics_process(delta: float) -> void:
 			velocity.y = -900.0
 	if Input.is_action_just_released("charge") and not is_charging:
 		charge_timer = 0.0
+
 	var direction := Input.get_axis("ui_left", "ui_right")
-	if is_rolling:
+
+	if is_wall_crawling:
+		# An der Wand hoch-/runterklettern
+		var vertical := Input.get_axis("ui_up", "ui_down")
+		velocity.y = vertical * WALL_CRAWL_SPEED
+		velocity.x = 0
+	elif is_rolling:
 		var roll_dir = -1.0 if animated_sprite.flip_h else 1.0
 		velocity.x = roll_dir * ROLL_SPEED
 		for body in roll_hitbox.get_overlapping_bodies():
@@ -123,8 +174,10 @@ func _physics_process(delta: float) -> void:
 		animated_sprite.flip_h = direction < 0
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
+
 	move_and_slide()
 	_update_animation()
+
 func _update_animation() -> void:
 	if is_dead:
 		return
@@ -143,6 +196,10 @@ func _update_animation() -> void:
 	if is_charging:
 		if animated_sprite.animation != "charge":
 			animated_sprite.play("charge")
+		return
+	if is_wall_crawling:
+		if animated_sprite.animation != "wallcrawl":
+			animated_sprite.play("wallcrawl")
 		return
 	if not is_on_floor():
 		if animated_sprite.animation != "jump":

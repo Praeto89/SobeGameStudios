@@ -1,6 +1,9 @@
 [gd_scene format=3 uid="uid://b3fmywqfcrq3g"]
 
 [ext_resource type="PackedScene" uid="uid://ck6q6oyovvakg" path="res://scenes/Player.tscn" id="1_c5o7e"]
+[ext_resource type="Script" uid="uid://dnh3mwhpyxfy3" path="res://scripts/collision_polygon_2d_4.gd" id="2_8okyy"]
+[ext_resource type="Script" uid="uid://brau1j2dyhdv2" path="res://scripts/collision_polygon_2d_3.gd" id="2_g7lkb"]
+[ext_resource type="PackedScene" uid="uid://0lmbkrm3yis5" path="res://scenes/wallcrawl_ability.tscn" id="4_7i8v8"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7i8v8"]
 size = Vector2(80, 16)
@@ -12,14 +15,14 @@ size = Vector2(80, 16)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xjso5"]
 size = Vector2(16, 72)
 
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_ervsl"]
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_masvn"]
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_xjso5"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7ekqj"]
 size = Vector2(288, 16)
 
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_masvn"]
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_ervsl"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8iv4n"]
 size = Vector2(16, 56)
@@ -65,11 +68,12 @@ texture = SubResource("PlaceholderTexture2D_g7lkb")
 [node name="CollisionShape2D6" type="CollisionShape2D" parent="StaticBody2D" unique_id=1047456323]
 position = Vector2(232, 12)
 shape = SubResource("RectangleShape2D_xjso5")
+debug_color = Color(0.49318433, 0.10428678, 0.4031631, 0.41960785)
 
 [node name="Sprite2D" type="Sprite2D" parent="StaticBody2D/CollisionShape2D6" unique_id=272747984]
-position = Vector2(0, 1.9073486e-06)
-scale = Vector2(16, 72)
-texture = SubResource("PlaceholderTexture2D_ervsl")
+position = Vector2(-146.00002, -13.812404)
+scale = Vector2(0.2414773, 0.31721982)
+texture = SubResource("PlaceholderTexture2D_masvn")
 
 [node name="Sprite2D" type="Sprite2D" parent="StaticBody2D" unique_id=42472424]
 position = Vector2(231.99998, -68)
@@ -79,11 +83,13 @@ texture = SubResource("PlaceholderTexture2D_xjso5")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1690378728]
 position = Vector2(80, -80)
 shape = SubResource("RectangleShape2D_7ekqj")
+debug_color = Color(0.82457864, 0.2660114, 0.7455813, 0.41960785)
 
 [node name="Sprite2D" type="Sprite2D" parent="StaticBody2D/CollisionShape2D" unique_id=1908695828]
+visible = false
 position = Vector2(-7.6293945e-06, -4.7683716e-07)
 scale = Vector2(288, 16.000002)
-texture = SubResource("PlaceholderTexture2D_masvn")
+texture = SubResource("PlaceholderTexture2D_ervsl")
 
 [node name="CollisionShape2D7" type="CollisionShape2D" parent="StaticBody2D" unique_id=597206888]
 position = Vector2(-56, -44)
@@ -95,17 +101,23 @@ scale = Vector2(15.999985, 56.000004)
 texture = SubResource("PlaceholderTexture2D_xw0xf")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D" unique_id=1232293990]
-polygon = PackedVector2Array(147, -8, 175, -4, 201, 3, 214, 16, 224, 41, 224, -8)
+polygon = PackedVector2Array(147, -8, 175, -4, 208, 8, 214, 16, 224, 41, 224, -8)
 
 [node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="StaticBody2D" unique_id=200881885]
 polygon = PackedVector2Array(224, -58, 213, -68, 197, -72, 224, -72)
 
 [node name="CollisionPolygon2D3" type="CollisionPolygon2D" parent="StaticBody2D" unique_id=340987696]
 polygon = PackedVector2Array(-48, -38, -39, -56, -23, -67, 6, -72, -48, -72)
+script = ExtResource("2_g7lkb")
+
+[node name="Polygon2D" type="Polygon2D" parent="StaticBody2D/CollisionPolygon2D3" unique_id=1837981970]
 
 [node name="CollisionPolygon2D4" type="CollisionPolygon2D" parent="StaticBody2D" unique_id=1889408995]
 position = Vector2(-9, 0)
 polygon = PackedVector2Array(49, -72, 60, -64, 68, -56, 73, -47, 81, -56, 87, -61, 93, -59, 98, -53, 102, -57, 104, -62, 109, -65, 113, -72)
+script = ExtResource("2_8okyy")
+
+[node name="Polygon2D" type="Polygon2D" parent="StaticBody2D/CollisionPolygon2D4" unique_id=70478284]
 
 [node name="CollisionPolygon2D5" type="CollisionPolygon2D" parent="StaticBody2D" unique_id=1998144875]
 polygon = PackedVector2Array(-64, 16, 56, 16, 56, 24, 56, 32, 0, 32, -8, 40, -8, 64, 56, 64, 56, 80, 144, 80, 144, 56, 184, 56, 184, 80, 240, 80, 240, 104, -64, 104)
@@ -143,3 +155,6 @@ z_index = 1
 position = Vector2(208, 136)
 scale = Vector2(64, 31.999998)
 texture = SubResource("PlaceholderTexture2D_ruc1u")
+
+[node name="charge_ability" parent="." unique_id=333438941 instance=ExtResource("4_7i8v8")]
+position = Vector2(344, 128)
