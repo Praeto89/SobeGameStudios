@@ -63,6 +63,18 @@ region = Rect2(64, 224, 32, 32)
 atlas = ExtResource("2_3li8b")
 region = Rect2(96, 224, 32, 32)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_3li8b"]
+atlas = ExtResource("2_3li8b")
+region = Rect2(64, 192, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mdl7e"]
+atlas = ExtResource("2_3li8b")
+region = Rect2(64, 160, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qu4a1"]
+atlas = ExtResource("2_3li8b")
+region = Rect2(64, 224, 32, 32)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_85g3d"]
 atlas = ExtResource("2_3li8b")
 region = Rect2(0, 192, 32, 32)
@@ -203,6 +215,10 @@ region = Rect2(192, 96, 32, 32)
 atlas = ExtResource("2_3li8b")
 region = Rect2(224, 96, 32, 32)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_v6fml"]
+atlas = ExtResource("2_3li8b")
+region = Rect2(160, 160, 32, 32)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_qu4a1"]
 animations = [{
 "frames": [{
@@ -278,6 +294,20 @@ animations = [{
 }],
 "loop": false,
 "name": &"death",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3li8b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mdl7e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qu4a1")
+}],
+"loop": true,
+"name": &"double_jump",
 "speed": 5.0
 }, {
 "frames": [{
@@ -409,6 +439,14 @@ animations = [{
 "loop": true,
 "name": &"run",
 "speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v6fml")
+}],
+"loop": true,
+"name": &"wallcrawl",
+"speed": 5.0
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_70d11"]
@@ -430,7 +468,7 @@ shape = SubResource("CapsuleShape2D_v6fml")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharacterBody2D" unique_id=1743012011]
 position = Vector2(-17, -16)
 sprite_frames = SubResource("SpriteFrames_qu4a1")
-animation = &"charge"
+animation = &"double_jump"
 
 [node name="Camera2D" type="Camera2D" parent="CharacterBody2D" unique_id=657665206]
 position = Vector2(-1, 0)

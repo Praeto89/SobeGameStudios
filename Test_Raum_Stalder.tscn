@@ -7,8 +7,12 @@
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=902395481]
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D" unique_id=1709599056]
-polygon = PackedVector2Array(0, 0, 8, -8, 8, 0, 16, -8, 16, 8, 32, 8, 32, 32, -16, 32, -32, 16, -8, 0)
+position = Vector2(-424, -352)
+scale = Vector2(0.94, 1)
+polygon = PackedVector2Array(403.40027, 172.04993, 488.52368, 86.92654, 488.52368, 172.04993, 573.6471, 86.92654, 573.6471, 257.17334, 743.89386, 257.17334, 743.89386, 512.5436, 233.1535, 512.5436, 62.906647, 342.29675, 318.27686, 172.04993)
 
 [node name="Polygon2D" type="Polygon2D" parent="StaticBody2D" unique_id=119229442]
+position = Vector2(-456, -352)
 texture = ExtResource("1_pauf6")
-polygon = PackedVector2Array(0, 0, 8, -8, 8, 0, 16, -8, 16, 8, 32, 8, 32, 32, -16, 32, -32, 16, -8, 0)
+polygon = PackedVector2Array(403.40027, 172.04993, 488.52368, 86.92654, 488.52368, 172.04993, 573.6471, 86.92654, 573.6471, 257.17334, 743.89386, 257.17334, 743.89386, 512.5436, 233.1535, 512.5436, 62.906647, 342.29675, 318.27686, 172.04993)
+uv = PackedVector2Array(630.61316, 435.2, 808.10645, 271.36002)

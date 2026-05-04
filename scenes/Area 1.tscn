@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://dnh3mwhpyxfy3" path="res://scripts/collision_polygon_2d_4.gd" id="2_8okyy"]
 [ext_resource type="Script" uid="uid://brau1j2dyhdv2" path="res://scripts/collision_polygon_2d_3.gd" id="2_g7lkb"]
 [ext_resource type="PackedScene" uid="uid://0lmbkrm3yis5" path="res://scenes/wallcrawl_ability.tscn" id="4_7i8v8"]
+[ext_resource type="PackedScene" uid="uid://dnmnbcdkt56ma" path="res://scenes/doublejump_ability.tscn" id="5_ervsl"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7i8v8"]
 size = Vector2(80, 16)
@@ -156,5 +157,8 @@ position = Vector2(208, 136)
 scale = Vector2(64, 31.999998)
 texture = SubResource("PlaceholderTexture2D_ruc1u")
 
-[node name="charge_ability" parent="." unique_id=333438941 instance=ExtResource("4_7i8v8")]
-position = Vector2(344, 128)
+[node name="doublejump_ability" parent="." unique_id=333438941 instance=ExtResource("5_ervsl")]
+position = Vector2(232, 88)
+
+[node name="wallcrawl_ability" parent="." unique_id=564001056 instance=ExtResource("4_7i8v8")]
+position = Vector2(344, 136)
