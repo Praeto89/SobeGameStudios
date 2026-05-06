@@ -145,6 +145,7 @@ collision_mask = 5
 script = ExtResource("1_vqynf")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1344520829]
+scale = Vector2(1, 0.9959411)
 sprite_frames = SubResource("SpriteFrames_cvh1n")
 animation = &"death"
 frame = 5
@@ -152,10 +153,12 @@ frame_progress = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1517650821]
 position = Vector2(0, 5.5)
+scale = Vector2(1, 0.9959411)
 shape = SubResource("RectangleShape2D_y6yh0")
 
 [node name="Hitbox" type="Area2D" parent="." unique_id=1558615358]
 position = Vector2(0, 5)
+scale = Vector2(1, 0.9959411)
 collision_layer = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=1407305757]
