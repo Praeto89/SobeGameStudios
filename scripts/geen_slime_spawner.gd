@@ -1,8 +1,8 @@
 extends Node2D
 
 @export var slime_scene: PackedScene
-@export var spawn_interval := 3.0
-@export var max_slimes := 5
+@export var spawn_interval := 2.0
+@export var max_slimes := 50
 
 @onready var timer := $Timer
 
