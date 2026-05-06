@@ -20,14 +20,14 @@
 #   coin_collected(new_count)    -> wird von der UI abgehoert
 # =============================================================================
 
-extends CharacterBody2D
+class_name Player extends CharacterBody2D
 
 # -----------------------------------------------------------------------------
 # Bewegungs-Konstanten
 # -----------------------------------------------------------------------------
-const SPEED = 300.0                 # Horizontale Laufgeschwindigkeit am Boden
-const AIR_SPEED = 270.0             # Horizontale Geschwindigkeit in der Luft (leicht reduziert)
-const JUMP_VELOCITY = -520.0        # Initialer Aufwaertsimpuls beim Springen (negativ = nach oben)
+const SPEED = 150.0                 # Horizontale Laufgeschwindigkeit am Boden
+const AIR_SPEED = 180.0             # Horizontale Geschwindigkeit in der Luft (leicht reduziert)
+const JUMP_VELOCITY = -400.0        # Initialer Aufwaertsimpuls beim Springen (negativ = nach oben)
 const JUMP_RELEASE_MULTIPLIER = 2.5 # Gravity-Multiplikator wenn Sprung losgelassen wird (variable Hoehe)
 const ROLL_SPEED = 300.0            # Geschwindigkeit waehrend des Rolls
 const CHARGE_SPEED = 700.0          # Geschwindigkeit waehrend des Charge-Dashs

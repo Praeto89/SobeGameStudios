@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://boitbps7ju6lx" path="res://scripts/character_body_2d.gd" id="1_sugp2"]
 [ext_resource type="PackedScene" uid="uid://dph3vsxklsitn" path="res://scenes/geen_slime_spawner.tscn" id="3_85g3d"]
 [ext_resource type="PackedScene" uid="uid://dnmnbcdkt56ma" path="res://scenes/doublejump_ability.tscn" id="3_a8y0u"]
-[ext_resource type="Texture2D" uid="uid://ctbiesjqnr38r" path="res://assets/sprites/PurpleDragons Spirte set/Ground/rockgrey_tilemap.png" id="3_choun"]
+[ext_resource type="Texture2D" uid="uid://ctbiesjqnr38r" path="res://assets/PurpleDragons Spirte set/Ground/rockgrey_tilemap.png" id="3_choun"]
 [ext_resource type="PackedScene" uid="uid://jhiuqdedq0l3" path="res://scenes/coin.tscn" id="3_tbgi4"]
 [ext_resource type="PackedScene" uid="uid://0lmbkrm3yis5" path="res://scenes/wallcrawl_ability.tscn" id="4_jkv2x"]
 [ext_resource type="Texture2D" uid="uid://cf8xs3d6osbrn" path="res://assets/sprites/world_tileset.png" id="4_jyhfs"]
@@ -720,7 +720,7 @@ position = Vector2(220, 232)
 position = Vector2(566, -29)
 
 [node name="GeenSlimeSpawner" parent="." unique_id=1423220628 instance=ExtResource("3_85g3d")]
-position = Vector2(209, -80)
+position = Vector2(-307, 17)
 
 [node name="TileMapLayer2" type="TileMapLayer" parent="." unique_id=1562886161]
 visible = false

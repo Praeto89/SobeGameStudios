@@ -453,6 +453,7 @@ animations = [{
 radius = 11.0
 
 [node name="Node2D" type="Node2D" unique_id=1773745841]
+position = Vector2(209, 94)
 
 [node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=2028502886 groups=["player"]]
 top_level = true

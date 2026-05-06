@@ -1,11 +1,12 @@
 [gd_scene format=4 uid="uid://d2enef1p1b2pm"]
 
-[ext_resource type="Texture2D" uid="uid://0v6pgbxip6n6" path="res://assets/sprites/PurpleDragons Spirte set/Ground/dirtice_tilemap.png" id="1_3kobl"]
+[ext_resource type="Texture2D" uid="uid://0v6pgbxip6n6" path="res://assets/PurpleDragons Spirte set/Ground/dirtice_tilemap.png" id="1_3kobl"]
 [ext_resource type="PackedScene" uid="uid://dshu4ly8aip0h" path="res://scenes/green_platform.tscn" id="2_5dp1l"]
 [ext_resource type="Script" uid="uid://b23qof6kxv6dn" path="res://scripts/green_platform_vertikal.gd" id="3_vqffp"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nnl3m"]
 texture = ExtResource("1_3kobl")
+separation = Vector2i(1, 1)
 0:0/0 = 0
 1:0/0 = 0
 2:0/0 = 0

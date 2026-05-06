@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://difxhkurpfrkn"]
+
+[ext_resource type="AudioStream" uid="uid://r7h513q17ogb" path="res://assets/music/for_a_school_game.mp3" id="1_olq4t"]
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" unique_id=596068738]
+stream = ExtResource("1_olq4t")
+autoplay = true
+stream_paused = true
