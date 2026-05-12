@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dnmnbcdkt56ma"]
 
-[ext_resource type="Script" uid="uid://vtg6sjpitwdf" path="res://scenes/doublejump_ability.gd" id="1_bkp1k"]
+[ext_resource type="Script" uid="uid://vtg6sjpitwdf" path="res://scripts/doublejump_ability.gd" id="1_bkp1k"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_dt5ky"]
 

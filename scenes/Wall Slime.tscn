@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dvndy5yhbn1n3"]
 
-[ext_resource type="Script" uid="uid://dtbh4bcfwyyq5" path="res://scenes/wall_slime.gd" id="1_phduw"]
+[ext_resource type="Script" uid="uid://dtbh4bcfwyyq5" path="res://scripts/wall_slime.gd" id="1_phduw"]
 [ext_resource type="Texture2D" uid="uid://c8684x7sg1j6a" path="res://assets/sprites/slime_green.png" id="2_ly8bu"]
 [ext_resource type="Texture2D" uid="uid://c34qirtgt3kg1" path="res://assets/PurpleDragons Spirte set/obstacle/Purple_slime.png" id="3_cfyfk"]
 
