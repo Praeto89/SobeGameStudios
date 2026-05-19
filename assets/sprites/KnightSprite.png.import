@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bi1e56gjxfgkw"
-path="res://.godot/imported/platforms.png-f0fd96f55ec949f640aa3943afcbb90b.ctex"
+uid="uid://cecy8p8eyvngi"
+path="res://.godot/imported/KnightSprite.png-07b2d79fc0db8f0286c97310c9f3da55.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/PurpleDragons Spirte set/enviroment/platforms.png"
-dest_files=["res://.godot/imported/platforms.png-f0fd96f55ec949f640aa3943afcbb90b.ctex"]
+source_file="res://assets/sprites/KnightSprite.png"
+dest_files=["res://.godot/imported/KnightSprite.png-07b2d79fc0db8f0286c97310c9f3da55.ctex"]
 
 [params]
 
