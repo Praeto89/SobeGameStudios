@@ -115,7 +115,9 @@ signal coin_collected(new_count)
 # =============================================================================
 func _ready() -> void:
 	spawn_position = global_position
-	roll_hitbox.monitoring = true
+	# Roll-Hitbox nur waehrend des Rolls aktiv (siehe Roll-Block in _physics_process).
+	# Verhindert unnoetige Kollisions-Checks und Gegner-Treffer ausserhalb des Rolls.
+	roll_hitbox.monitoring = false
 
 # =============================================================================
 # respawn()
@@ -124,13 +126,17 @@ func _ready() -> void:
 # Wird nach dem Tod aufgerufen.
 # =============================================================================
 func respawn() -> void:
+	# Solange _die() noch laeuft (Death-Animation), keinen Respawn ausloesen.
+	# Sonst kann z. B. eine Death-Area waehrend der Animation den Spieler
+	# wiederbeleben und _die() raeumt danach nochmal auf -> inkonsistenter Zustand.
+	if is_dead:
+		return
 	global_position = spawn_position
 	velocity = Vector2.ZERO
 	is_rolling = false
 	is_charging = false
 	charge_timer = 0.0
 	charge_time_active = 0.0
-	is_dead = false
 	is_hit = false
 	hit_timer = 0.0
 	is_wall_crawling = false
@@ -140,6 +146,7 @@ func respawn() -> void:
 	jump_buffer_timer = 0.0
 	was_on_floor = false
 	is_jumping = false
+	roll_hitbox.monitoring = false
 	$CollisionShape2D.set_deferred("disabled", false)
 
 # =============================================================================
@@ -181,11 +188,15 @@ func _die() -> void:
 	charge_timer = 0.0
 	charge_time_active = 0.0
 	velocity.x = 0
+	roll_hitbox.monitoring = false
 	$CollisionShape2D.set_deferred("disabled", true)
 	Engine.time_scale = 0.5
 	animated_sprite.play("death")
 	await animated_sprite.animation_finished
 	Engine.time_scale = 1.0
+	# is_dead VOR respawn() zuruecksetzen, damit respawn() nicht durch
+	# seinen eigenen is_dead-Schutz abgewiesen wird.
+	is_dead = false
 	respawn()
 	current_health = max_health
 	emit_signal("health_changed", current_health)
@@ -315,10 +326,14 @@ func _physics_process(delta: float) -> void:
 
 	# --- 8. Roll ---
 	# Nur am Boden auslösbar. Waehrend des Rolls werden Gegner per Hitbox getroffen.
+	# Hitbox wird mit dem Roll aktiviert/deaktiviert, damit sie ausserhalb des Rolls
+	# keine Gegner toetet.
 	if Input.is_action_just_pressed("ui_shift") and is_on_floor():
 		is_rolling = true
+		roll_hitbox.monitoring = true
 	if Input.is_action_just_released("ui_shift"):
 		is_rolling = false
+		roll_hitbox.monitoring = false
 
 	# --- 9. Charge ---
 	# "charge" halten laedt auf. Nach CHARGE_DURATION wird der Dash ausgeloest.

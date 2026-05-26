@@ -34,6 +34,7 @@ var player: Node2D = null               # Referenz auf den Spieler (wird in _rea
 var patrol_direction := 1.0             # Aktuelle Laufrichtung: 1.0 = rechts, -1.0 = links
 var wall_cooldown := 0.0                # Wartezeit nach Wandkontakt (verhindert Flackern)
 var activated := false                  # True sobald die Aktivierungsanimation einmal abgespielt wurde
+var is_activating := false              # True waehrend die Aktivierungs-Animation laeuft (verhindert Mehrfach-Start)
 var is_dead := false                    # True waehrend und nach der Todesanimation
 
 # =============================================================================
@@ -100,7 +101,14 @@ func _physics_process(delta):
 	if wall_cooldown > 0:
 		wall_cooldown -= delta
 
-	# --- 4. Spieler-Naehe pruefen ---
+	# --- 4. Aktivierung laeuft noch: warten bis Animation fertig ist ---
+	# Ohne diesen Check wuerde _state_activation in jedem Frame erneut
+	# gestartet werden, weil await die Funktion sofort zurueckgibt.
+	if is_activating:
+		move_and_slide()
+		return
+
+	# --- 5. Spieler-Naehe pruefen ---
 	var player_near = player and global_position.distance_to(player.global_position) < detection_range
 	if player_near and not activated:
 		_state_activation()
@@ -116,12 +124,14 @@ func _physics_process(delta):
 # laeuft normal weiter.
 # =============================================================================
 func _state_activation():
+	is_activating = true
 	var direction = sign(player.global_position.x - global_position.x)
 	velocity.x = direction * speed
 	sprite.flip_h = direction < 0
 	sprite.play("activation")
 	await sprite.animation_finished
 	activated = true
+	is_activating = false
 
 # =============================================================================
 # _state_patrol()

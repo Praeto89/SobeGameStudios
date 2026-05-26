@@ -36,6 +36,10 @@ func _on_body_entered(body: Node) -> void:
 	if body is CharacterBody2D:
 		body.collect_coin()          # Zaehler im Spieler erhoehen
 		audio.play()
-		# Warten bis der Sound komplett abgespielt ist, dann Muenze loeschen
-		await get_tree().create_timer(audio.stream.get_length()).timeout
+		# Muenze sofort visuell + kollisionsmaessig entfernen,
+		# aber Node erst freigeben wenn der Sound fertig ist
+		# (sonst wird der Sound mit der Node abgeschnitten)
+		$AnimatedSprite2D.visible = false
+		set_deferred("monitoring", false)
+		await audio.finished
 		queue_free()
