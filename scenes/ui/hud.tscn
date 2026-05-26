@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://c41gavgbv0wpq"]
 
-[ext_resource type="Script" uid="uid://b7sys1w0f7fwv" path="res://scripts/hud.gd" id="1_ahhtf"]
+[ext_resource type="Script" uid="uid://b7sys1w0f7fwv" path="res://scripts/ui/hud.gd" id="1_ahhtf"]
 
 [node name="CanvasLayer" type="CanvasLayer" unique_id=672277396]
 layer = 10

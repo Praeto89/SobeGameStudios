@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dph3vsxklsitn"]
 
-[ext_resource type="Script" uid="uid://gllva8w3nk3y" path="res://scripts/geen_slime_spawner.gd" id="1_6s5hs"]
-[ext_resource type="PackedScene" uid="uid://e3cei7lyh8et" path="res://scenes/green_slime.tscn" id="2_ko27n"]
+[ext_resource type="Script" uid="uid://gllva8w3nk3y" path="res://scripts/enemies/geen_slime_spawner.gd" id="1_6s5hs"]
+[ext_resource type="PackedScene" uid="uid://e3cei7lyh8et" path="res://scenes/enemies/green_slime.tscn" id="2_ko27n"]
 
 [node name="GeenSlimeSpawner" type="Node2D" unique_id=1423220628]
 script = ExtResource("1_6s5hs")

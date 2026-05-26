@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://ck6q6oyovvakg"]
 
-[ext_resource type="Script" uid="uid://boitbps7ju6lx" path="res://scripts/character_body_2d.gd" id="1_v6fml"]
+[ext_resource type="Script" uid="uid://boitbps7ju6lx" path="res://scripts/player/character_body_2d.gd" id="1_v6fml"]
 [ext_resource type="Texture2D" uid="uid://crjdpwtu7xsko" path="res://assets/sprites/knight.png" id="2_3li8b"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_v6fml"]
