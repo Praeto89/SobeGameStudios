@@ -808,8 +808,8 @@ position = Vector2(-651, 138)
 [node name="charge_ability" parent="." unique_id=199195650 instance=ExtResource("10_choun")]
 position = Vector2(-569, 76)
 
-[node name="Portal" parent="." unique_id=559695772 groups=["player", "portals"] instance=ExtResource("16_muem4")]
+[node name="Portal" parent="." unique_id=559695772 groups=["portals"] instance=ExtResource("16_muem4")]
 position = Vector2(-524, 74)
 portal_id = "main_a"
 target_portal_id = "turm_a"
-target_scene = "res://scenes/Turm.tscn"
+target_scene = "res://scenes/levels/Turm.tscn"

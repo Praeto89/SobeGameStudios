@@ -34,9 +34,14 @@ func _ready() -> void:
 	add_to_group("portals")
 	body_entered.connect(_on_body_entered)
 
-	# Spieler kam gerade aus diesem Portal -> kurz sperren
-	# (verhindert sofortiges Zurueckteleportieren)
+	# Spieler kam gerade aus diesem Portal (durch einen Level-Wechsel):
+	# - Spieler an die Portal-Position setzen (sonst spawnt er an seiner
+	#   Default-Position aus Player.tscn, irgendwo im Level)
+	# - Portal kurz sperren, damit es ihn nicht sofort zurueckteleportiert
 	if GameManager.came_from_portal_id == portal_id:
+		var player = get_tree().get_first_node_in_group("player")
+		if player:
+			player.global_position = global_position
 		GameManager.came_from_portal_id = ""
 		_start_cooldown()
 

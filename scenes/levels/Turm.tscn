@@ -58,11 +58,11 @@ script = ExtResource("3_vqffp")
 speed = 50.0
 distance = 45.0
 
-[node name="Portal" parent="." unique_id=559695772 groups=["player", "portals"] instance=ExtResource("4_5dp1l")]
+[node name="Portal" parent="." unique_id=559695772 groups=["portals"] instance=ExtResource("4_5dp1l")]
 position = Vector2(301, 547)
 portal_id = "turm_a"
 target_portal_id = "main_a"
-target_scene = "res://scenes/main.tscn"
+target_scene = "res://scenes/levels/main.tscn"
 
 [node name="Node2D" parent="." unique_id=1773745841 instance=ExtResource("5_vqffp")]
 position = Vector2(534, 628)
