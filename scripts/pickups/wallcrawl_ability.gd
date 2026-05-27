@@ -17,6 +17,10 @@ extends Area2D
 # Verbindet das body_entered-Signal.
 # =============================================================================
 func _ready() -> void:
+	# Falls die Ability bereits eingesammelt wurde, Pickup nicht erneut anzeigen.
+	if GameManager.has_wallcrawl:
+		queue_free()
+		return
 	body_entered.connect(_on_body_entered)
 
 # =============================================================================

@@ -118,6 +118,11 @@ func _ready() -> void:
 	# Roll-Hitbox nur waehrend des Rolls aktiv (siehe Roll-Block in _physics_process).
 	# Verhindert unnoetige Kollisions-Checks und Gegner-Treffer ausserhalb des Rolls.
 	roll_hitbox.monitoring = false
+	# Abilities aus dem GameManager laden, damit sie ueber Szenen-Wechsel
+	# hinweg erhalten bleiben (Player wird beim Wechsel neu instanziiert).
+	has_charge = GameManager.has_charge
+	has_wallcrawl = GameManager.has_wallcrawl
+	has_double_jump = GameManager.has_double_jump
 
 # =============================================================================
 # respawn()
@@ -217,12 +222,15 @@ func collect_coin() -> void:
 # =============================================================================
 func unlock_charge() -> void:
 	has_charge = true
+	GameManager.has_charge = true
 
 func unlock_wallcrawl() -> void:
 	has_wallcrawl = true
+	GameManager.has_wallcrawl = true
 
 func unlock_double_jump() -> void:
 	has_double_jump = true
+	GameManager.has_double_jump = true
 
 # =============================================================================
 # _physics_process(delta)
