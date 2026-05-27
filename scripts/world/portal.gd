@@ -56,6 +56,13 @@ func _on_body_entered(body: Node2D) -> void:
 	GameManager.came_from_portal_id = target_portal_id
 
 	if target_scene != "":
+		# Wenn der Spieler in die Galerie zurueckgeht, die aktuelle Szene
+		# als "besucht" markieren -- die Galerie zeigt darueber ein ⭐
+		# am entsprechenden Slot-Portal an.
+		if target_scene == "res://scenes/levels/Galerie.tscn":
+			var current = get_tree().current_scene
+			if current != null:
+				GameManager.mark_scene_visited(current.scene_file_path)
 		# ── Level-Wechsel ──────────────────────────────────
 		get_tree().change_scene_to_file(target_scene)
 	else:
