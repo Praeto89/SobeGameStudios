@@ -1,0 +1,97 @@
+[gd_scene format=3 uid="uid://b8s4ndb0xpl4ye"]
+
+[ext_resource type="PackedScene" uid="uid://ck6q6oyovvakg" path="res://scenes/player/Player.tscn" id="1_player"]
+[ext_resource type="PackedScene" uid="uid://jhiuqdedq0l3" path="res://scenes/pickups/coin.tscn" id="2_coin"]
+[ext_resource type="PackedScene" uid="uid://dshu4ly8aip0h" path="res://scenes/world/green_platform.tscn" id="3_platform"]
+[ext_resource type="PackedScene" uid="uid://e3cei7lyh8et" path="res://scenes/enemies/green_slime.tscn" id="4_slime"]
+[ext_resource type="PackedScene" uid="uid://b8dstnsvjshbn" path="res://scenes/pickups/charge_ability.tscn" id="5_charge"]
+[ext_resource type="PackedScene" uid="uid://dnmnbcdkt56ma" path="res://scenes/pickups/doublejump_ability.tscn" id="6_djump"]
+[ext_resource type="PackedScene" uid="uid://0lmbkrm3yis5" path="res://scenes/pickups/wallcrawl_ability.tscn" id="7_wcrawl"]
+[ext_resource type="PackedScene" uid="uid://7ck1dr5e5kg0" path="res://scenes/world/portal.tscn" id="8_portal"]
+[ext_resource type="PackedScene" uid="uid://md1jdcoedfs" path="res://scenes/world/death.tscn" id="9_death"]
+
+[node name="Sandbox" type="Node2D"]
+
+[node name="Anleitung" type="Label" parent="."]
+offset_left = -460.0
+offset_top = -200.0
+offset_right = 860.0
+offset_bottom = -40.0
+text = "SANDBOX – Spielwiese\n1. Ziehe Prefabs aus dem FileSystem-Tab (links) in diese Szene\n   z. B. scenes/pickups/coin.tscn fuer eine Muenze\n2. F6 = nur diese Szene starten\n3. Strg+S = speichern\nPortal links unten: Galerie  |  Portal rechts unten: Hauptlevel"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Boden" type="StaticBody2D" parent="."]
+position = Vector2(0, 80)
+
+[node name="Floor" type="CollisionPolygon2D" parent="Boden"]
+polygon = PackedVector2Array(-500, 0, 900, 0, 900, 200, -500, 200)
+
+[node name="WandLinks" type="CollisionPolygon2D" parent="Boden"]
+polygon = PackedVector2Array(-500, -400, -468, -400, -468, 0, -500, 0)
+
+[node name="WandRechts" type="CollisionPolygon2D" parent="Boden"]
+polygon = PackedVector2Array(868, -400, 900, -400, 900, 0, 868, 0)
+
+[node name="Decke" type="CollisionPolygon2D" parent="Boden"]
+polygon = PackedVector2Array(-500, -440, 900, -440, 900, -400, -500, -400)
+
+[node name="Player" parent="." instance=ExtResource("1_player")]
+position = Vector2(50, 30)
+
+[node name="coin1" parent="." instance=ExtResource("2_coin")]
+position = Vector2(180, 50)
+
+[node name="coin2" parent="." instance=ExtResource("2_coin")]
+position = Vector2(220, 50)
+
+[node name="coin3" parent="." instance=ExtResource("2_coin")]
+position = Vector2(260, 50)
+
+[node name="green_platform" parent="." instance=ExtResource("3_platform")]
+position = Vector2(400, 30)
+speed = 60.0
+distance = 80.0
+
+[node name="green_slime" parent="." instance=ExtResource("4_slime")]
+position = Vector2(620, 60)
+
+[node name="charge_ability" parent="." instance=ExtResource("5_charge")]
+position = Vector2(150, -40)
+
+[node name="doublejump_ability" parent="." instance=ExtResource("6_djump")]
+position = Vector2(220, -40)
+
+[node name="wallcrawl_ability" parent="." instance=ExtResource("7_wcrawl")]
+position = Vector2(290, -40)
+
+[node name="PortalGalerie" parent="." groups=["portals"] instance=ExtResource("8_portal")]
+position = Vector2(-440, 60)
+portal_id = "sandbox_entry"
+target_portal_id = "galerie_entry"
+target_scene = "res://scenes/levels/Galerie.tscn"
+
+[node name="PortalGalerieLabel" type="Label" parent="."]
+offset_left = -480.0
+offset_top = 30.0
+offset_right = -400.0
+offset_bottom = 50.0
+text = "Galerie"
+horizontal_alignment = 1
+
+[node name="PortalMain" parent="." groups=["portals"] instance=ExtResource("8_portal")]
+position = Vector2(840, 60)
+portal_id = "sandbox_to_main"
+target_portal_id = "main_a"
+target_scene = "res://scenes/levels/main.tscn"
+
+[node name="PortalMainLabel" type="Label" parent="."]
+offset_left = 800.0
+offset_top = 30.0
+offset_right = 880.0
+offset_bottom = 50.0
+text = "Hauptlevel"
+horizontal_alignment = 1
+
+[node name="Death" parent="." instance=ExtResource("9_death")]
+position = Vector2(200, 320)
