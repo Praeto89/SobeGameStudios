@@ -39,6 +39,8 @@ Druecke **F6**.
 
 Du laeufst mit Pfeiltasten und springst mit Leertaste. Probiere die Portale unten links (Galerie) und unten rechts (Hauptlevel) aus.
 
+> **F1 druecken** – die Steuerung wird als Overlay eingeblendet. Nochmal F1 = wieder weg.
+
 Spiel schliessen mit dem **X** oben rechts.
 
 ---

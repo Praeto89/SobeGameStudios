@@ -3,9 +3,7 @@
 [ext_resource type="Script" uid="uid://lp4uj71hwawo" path="res://scripts/world/portal.gd" id="1_v0xau"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1ffj6"]
-size = Vector2(25, 23)
-
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_jr6l0"]
+size = Vector2(32, 44)
 
 [node name="Portal" type="Area2D" unique_id=559695772]
 script = ExtResource("1_v0xau")
@@ -13,7 +11,18 @@ script = ExtResource("1_v0xau")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=549405800]
 shape = SubResource("RectangleShape2D_1ffj6")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=791270504]
-position = Vector2(0.3750006, 0.1250006)
-scale = Vector2(23.25, 21.75)
-texture = SubResource("PlaceholderTexture2D_jr6l0")
+[node name="Frame" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-16, -22, 16, -22, 16, 22, -16, 22)
+color = Color(1, 0.85, 0.3, 1)
+
+[node name="Inner" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-13, -19, 13, -19, 13, 19, -13, 19)
+color = Color(0.45, 0.2, 0.85, 0.9)
+
+[node name="Highlight" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-10, -16, 10, -16, 8, -12, -8, -12)
+color = Color(1, 1, 1, 0.35)
+
+[node name="Arrow" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-7, -34, 7, -34, 0, -26)
+color = Color(1, 0.95, 0.5, 0.95)
