@@ -4,7 +4,8 @@
 # HUD (Heads-Up-Display) – die Spieler-Oberflaeche.
 #
 # Zeigt an:
-#   - Lebenspunkte als Herz-Icons (rot = voll, grau = leer)
+#   - Lebenspunkte als animierte Schwert-Klingen (Healthbar.tscn)
+#       4 Blade-Segmente; pro fehlendem Leben wird ein Segment "zerbrochen"
 #   - Anzahl gesammelter Muenzen als Text-Label
 #
 # Wird als Autoload (Singleton) geladen -> existiert in jedem Level,
@@ -17,11 +18,24 @@
 
 extends CanvasLayer
 
+# Frame-Index im Blade-SpriteFrames fuer "Klinge intakt" bzw. "Klinge zerbrochen".
+# Atlas-Layout (siehe Healthbar.tscn):
+#   Frame 0 = Region (17, 0)   -> intakt
+#   Frame 3 = Region (34, 16)  -> ganz zerbrochen
+const _BLADE_FRAME_FULL := 0
+const _BLADE_FRAME_BROKEN := 3
+
 # -----------------------------------------------------------------------------
 # Node-Referenzen
 # -----------------------------------------------------------------------------
-@onready var heart_container = $HBoxContainer  # Container mit den Herz-Sprites (ColorRect-Nodes)
-@onready var coin_label = $CoinLabel           # Label-Node fuer den Muenzzaehler
+@onready var _hilt: AnimatedSprite2D = $"Healthbar/HBoxContainer/Hilt"
+@onready var _blades: Array = [
+	$"Healthbar/HBoxContainer/Blade 1",
+	$"Healthbar/HBoxContainer/Blade 2",
+	$"Healthbar/HBoxContainer/Blade 3",
+	$"Healthbar/HBoxContainer/Blade 4",
+]
+@onready var coin_label: Label = $CoinLabel
 
 # Referenz auf den aktuell verbundenen Player, damit wir bei Szenen-
 # Wechseln nicht erneut mit derselben Instanz connecten.
@@ -29,10 +43,17 @@ var _connected_player: Node = null
 
 # =============================================================================
 # _ready()
-# Verbindet sich initial mit dem Spieler und hoert auf neue Player-Nodes,
-# damit nach einem Szenen-Wechsel automatisch neu verbunden wird.
+# Stoppt die automatischen Sprite-Animationen (sonst flackern die Blades
+# endlos durch alle Frames) und verbindet sich mit dem Spieler.
 # =============================================================================
 func _ready() -> void:
+	# Animationen anhalten -- wir setzen die Frames manuell je nach HP
+	_hilt.stop()
+	_hilt.frame = 0
+	for blade in _blades:
+		blade.stop()
+		blade.frame = _BLADE_FRAME_FULL
+	# Bei jedem neu hinzugefuegten Player-Node neu connecten
 	get_tree().node_added.connect(_on_node_added)
 	_connect_to_player()
 
@@ -73,15 +94,14 @@ func _connect_to_player() -> void:
 # =============================================================================
 # _on_health_changed(new_health)
 # Wird aufgerufen wenn der Spieler Schaden nimmt oder geheilt wird.
-# Faerbt die Herz-Icons: rot fuer volle Herzen, dunkelgrau fuer leere.
+# Setzt jedes Blade-Segment auf "intakt" oder "zerbrochen" je nach HP.
 #
 # new_health: Aktuelle Anzahl der Lebenspunkte
 # =============================================================================
 func _on_health_changed(new_health: int) -> void:
-	var hearts = heart_container.get_children()
-	for i in range(hearts.size()):
-		# Herzen bis new_health sind rot (voll), der Rest ist grau (leer)
-		hearts[i].color = Color.RED if i < new_health else Color(0.3, 0.3, 0.3)
+	for i in range(_blades.size()):
+		# Blade i ist intakt, wenn HP groesser als i, sonst zerbrochen
+		_blades[i].frame = _BLADE_FRAME_FULL if i < new_health else _BLADE_FRAME_BROKEN
 
 # =============================================================================
 # _on_coin_collected(new_count)
