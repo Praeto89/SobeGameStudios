@@ -474,7 +474,6 @@ animation = &"double_jump"
 [node name="Camera2D" type="Camera2D" parent="CharacterBody2D" unique_id=657665206]
 position = Vector2(-1, 0)
 zoom = Vector2(3, 3)
-limit_bottom = 200
 
 [node name="RollHitbox" type="Area2D" parent="CharacterBody2D" unique_id=1399185887]
 collision_layer = 0
