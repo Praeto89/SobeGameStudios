@@ -11,7 +11,6 @@
 [ext_resource type="Texture2D" uid="uid://cf8xs3d6osbrn" path="res://assets/sprites/world_tileset.png" id="4_jyhfs"]
 [ext_resource type="PackedScene" uid="uid://e3cei7lyh8et" path="res://scenes/enemies/green_slime.tscn" id="6_tefeu"]
 [ext_resource type="PackedScene" uid="uid://md1jdcoedfs" path="res://scenes/world/death.tscn" id="7_o6xl0"]
-[ext_resource type="PackedScene" uid="uid://c41gavgbv0wpq" path="res://scenes/ui/hud.tscn" id="8_tipki"]
 [ext_resource type="PackedScene" uid="uid://b8dstnsvjshbn" path="res://scenes/pickups/charge_ability.tscn" id="10_choun"]
 [ext_resource type="PackedScene" uid="uid://dshu4ly8aip0h" path="res://scenes/world/green_platform.tscn" id="11_eb6dy"]
 [ext_resource type="Script" uid="uid://co8dnnplbt1aa" path="res://scripts/world/green_platform.gd" id="12_trceg"]
@@ -769,8 +768,6 @@ position = Vector2(27, -8)
 
 [node name="death" parent="." unique_id=960584487 instance=ExtResource("7_o6xl0")]
 position = Vector2(220, 232)
-
-[node name="CanvasLayer" parent="." unique_id=672277396 instance=ExtResource("8_tipki")]
 
 [node name="CharacterBody2D2" parent="." unique_id=705821222 instance=ExtResource("6_tefeu")]
 position = Vector2(566, -29)
