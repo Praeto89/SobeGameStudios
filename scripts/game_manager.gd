@@ -35,6 +35,20 @@ var coin_count: int = 0
 var collected_coin_ids: Array[String] = []
 # IDs der Gegner die bereits besiegt wurden.
 var defeated_enemy_ids: Array[String] = []
+# Szenen-Pfade die der Spieler in dieser Session betreten UND wieder verlassen hat.
+# Wird vom portal.gd befuellt wenn ein Portal in die Galerie fuehrt.
+# Die Galerie liest diese Liste in galerie.gd, um ⭐-Sticker an besuchten
+# Slot-Portalen anzuzeigen.
+var visited_scenes: Array[String] = []
+
+# =============================================================================
+# mark_scene_visited(scene_path)
+# Markiert eine Szene als "besucht" (Spieler war drin und ist wieder raus).
+# Doppelte Eintraege werden ignoriert.
+# =============================================================================
+func mark_scene_visited(scene_path: String) -> void:
+	if scene_path != "" and not scene_path in visited_scenes:
+		visited_scenes.append(scene_path)
 
 # =============================================================================
 # get_persistent_id(node)
