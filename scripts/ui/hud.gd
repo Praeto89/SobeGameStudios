@@ -217,3 +217,55 @@ func show_ability_message(text: String, duration: float = 3.0) -> void:
 	_ability_tween.tween_interval(hold_time)
 	_ability_tween.tween_property(_ability_label, "modulate:a", 0.0, _ABILITY_FADE_TIME)
 	_ability_tween.tween_callback(_ability_label.queue_free)
+
+# =============================================================================
+# Help-Overlay (F1)
+# =============================================================================
+# Einblendbares Hilfe-Panel mit Steuerung und Tipps. Wird beim ersten
+# F1-Druck erzeugt und kann jederzeit ein-/ausgeblendet werden.
+# Liegt im HUD, weil das HUD autoloaded ist und damit in jedem Level
+# verfuegbar bleibt.
+# =============================================================================
+
+const _HELP_TEXT := "STEUERUNG\n\n  Pfeiltasten:     Laufen\n  Leertaste:       Springen (kurz/lang fuer Sprunghoehe)\n  SHIFT:           Rollen (schadet Gegnern)\n  E (halten):      Charge-Dash aufladen + loslassen\n  Pfeil unten:     Schnellfall (in der Luft)\n\nABILITIES (per Pickup freigeschaltet)\n  Double-Jump:     Leertaste 2x\n  Wallcrawl:       automatisch an Waenden\n\nHILFE\n  F1:  dieses Fenster ein-/ausblenden"
+
+var _help_panel: PanelContainer = null
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed and not event.echo:
+		if event.keycode == KEY_F1:
+			toggle_help()
+			get_viewport().set_input_as_handled()
+
+func toggle_help() -> void:
+	if _help_panel == null:
+		_create_help_panel()
+	_help_panel.visible = not _help_panel.visible
+
+func _create_help_panel() -> void:
+	_help_panel = PanelContainer.new()
+	_help_panel.set_anchors_preset(Control.PRESET_CENTER)
+	_help_panel.offset_left = -260.0
+	_help_panel.offset_top = -200.0
+	_help_panel.offset_right = 260.0
+	_help_panel.offset_bottom = 200.0
+	_help_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 24)
+	margin.add_theme_constant_override("margin_right", 24)
+	margin.add_theme_constant_override("margin_top", 20)
+	margin.add_theme_constant_override("margin_bottom", 20)
+	_help_panel.add_child(margin)
+
+	var label := Label.new()
+	label.text = _HELP_TEXT
+	label.add_theme_font_size_override("font_size", 18)
+	label.add_theme_color_override("font_color", Color(1, 0.97, 0.9))
+	label.add_theme_color_override("font_outline_color", Color.BLACK)
+	label.add_theme_constant_override("outline_size", 4)
+	margin.add_child(label)
+
+	add_child(_help_panel)
+	_help_panel.visible = false
+

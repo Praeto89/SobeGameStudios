@@ -4,6 +4,7 @@ Ein gemeinsames Lernprojekt in Godot 4.6. Ziel ist es, durch die Entwicklung ein
 
 > **Neu hier und noch nie mit Godot gearbeitet?**
 > → Lies zuerst [QUICKSTART.md](QUICKSTART.md) – in 10 Minuten zum ersten eigenen Beitrag, ganz ohne Code.
+> → Danach [CONTRIBUTING.md](CONTRIBUTING.md) für gestufte Beitragspfade (Stufe 1 = Asset tauschen, Stufe 5 = eigenes Skript).
 
 ---
 

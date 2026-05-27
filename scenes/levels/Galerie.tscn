@@ -19,7 +19,7 @@ offset_left = -300.0
 offset_top = -170.0
 offset_right = 800.0
 offset_bottom = -90.0
-text = "Such dir einen Slot und bau dein eigenes Level!\nPortal links unten = zurueck zur Sandbox."
+text = "Such dir einen Slot und bau dein eigenes Level!\nPortal links unten = zurueck zur Sandbox.   F1 = Hilfe."
 horizontal_alignment = 1
 
 [node name="Boden" type="StaticBody2D" parent="."]
