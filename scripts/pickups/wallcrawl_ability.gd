@@ -31,4 +31,5 @@ func _ready() -> void:
 func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):
 		body.unlock_wallcrawl()     # Ability im Spieler-Skript aktivieren
+		Hud.show_ability_message("Wallcrawl freigeschaltet!\nAn Waenden klettern und abspringen")
 		queue_free()                # Pickup aus der Szene entfernen

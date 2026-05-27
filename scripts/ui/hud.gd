@@ -92,3 +92,50 @@ func _on_health_changed(new_health: int) -> void:
 # =============================================================================
 func _on_coin_collected(new_count: int) -> void:
 	coin_label.text = "Coins: " + str(new_count)
+
+# =============================================================================
+# show_ability_message(text, duration)
+# Zeigt kurz einen Schriftzug an (typisch beim Aufsammeln einer Ability).
+# Wird vom HUD selbst gezeichnet -- die Pickups rufen einfach
+#   Hud.show_ability_message("...")
+# auf. Mehrere Aufrufe stapeln sich nicht; ein vorhandener Hinweis wird
+# durch den neuen ersetzt.
+#
+# text:     Der anzuzeigende Schriftzug (mehrzeilig moeglich mit "\n")
+# duration: Gesamtdauer in Sekunden inkl. Ein-/Ausblenden (Default 3.0)
+# =============================================================================
+const _ABILITY_FADE_TIME := 0.4   # Sekunden fuer Ein- und Ausblendung
+
+var _ability_label: Label = null
+var _ability_tween: Tween = null
+
+func show_ability_message(text: String, duration: float = 3.0) -> void:
+	# Vorhandene Nachricht stoppen und entfernen
+	if _ability_tween != null and _ability_tween.is_valid():
+		_ability_tween.kill()
+	if _ability_label != null and is_instance_valid(_ability_label):
+		_ability_label.queue_free()
+	# Neues Label aufbauen -- volle Bildschirmbreite, mittig oben unter dem HBox
+	_ability_label = Label.new()
+	_ability_label.text = text
+	_ability_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_ability_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_ability_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	# Per Anchor zentriert oben einsetzen
+	_ability_label.set_anchors_preset(Control.PRESET_TOP_WIDE)
+	_ability_label.offset_top = 90
+	_ability_label.offset_bottom = 200
+	# Visuelles Styling: groesserer Text mit dunklem Outline gegen jeden BG
+	_ability_label.add_theme_font_size_override("font_size", 28)
+	_ability_label.add_theme_color_override("font_color", Color(1, 0.95, 0.5))
+	_ability_label.add_theme_color_override("font_outline_color", Color.BLACK)
+	_ability_label.add_theme_constant_override("outline_size", 6)
+	_ability_label.modulate.a = 0.0
+	add_child(_ability_label)
+	# Ein-/Halte-/Ausblenden via Tween
+	var hold_time = max(0.0, duration - 2.0 * _ABILITY_FADE_TIME)
+	_ability_tween = create_tween()
+	_ability_tween.tween_property(_ability_label, "modulate:a", 1.0, _ABILITY_FADE_TIME)
+	_ability_tween.tween_interval(hold_time)
+	_ability_tween.tween_property(_ability_label, "modulate:a", 0.0, _ABILITY_FADE_TIME)
+	_ability_tween.tween_callback(_ability_label.queue_free)

@@ -30,4 +30,5 @@ func _ready() -> void:
 func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):
 		body.unlock_double_jump()   # Ability im Spieler-Skript aktivieren
+		Hud.show_ability_message("Doppelsprung freigeschaltet!\nIn der Luft erneut springen")
 		queue_free()                # Pickup aus der Szene entfernen
