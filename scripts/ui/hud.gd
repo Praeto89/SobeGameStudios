@@ -94,14 +94,61 @@ func _connect_to_player() -> void:
 # =============================================================================
 # _on_health_changed(new_health)
 # Wird aufgerufen wenn der Spieler Schaden nimmt oder geheilt wird.
-# Setzt jedes Blade-Segment auf "intakt" oder "zerbrochen" je nach HP.
+# Bei Schaden laeuft die "verlorene" Klinge animiert durch alle Zwischen-
+# frames (intakt -> leicht -> stark beschaedigt -> zerbrochen). Bei Heilen
+# (oder Initial) werden die Frames direkt gesetzt.
 #
 # new_health: Aktuelle Anzahl der Lebenspunkte
 # =============================================================================
+const _BLADE_BREAK_STEP := 0.08   # Sekunden zwischen den Zwischenframes
+
+var _last_health: int = -1
+var _blade_tweens: Array = []     # Laufende Schadensanimationen pro Blade
+
 func _on_health_changed(new_health: int) -> void:
-	for i in range(_blades.size()):
-		# Blade i ist intakt, wenn HP groesser als i, sonst zerbrochen
-		_blades[i].frame = _BLADE_FRAME_FULL if i < new_health else _BLADE_FRAME_BROKEN
+	# Laufende Animationen abbrechen, damit sie keine alten Frames mehr
+	# setzen, wenn der Spieler zwischendurch geheilt wird.
+	for t in _blade_tweens:
+		if t != null and t.is_valid():
+			t.kill()
+	_blade_tweens.clear()
+
+	if _last_health == -1 or new_health >= _last_health:
+		# Initial-Aufruf oder Heilung -> alle Blades direkt setzen
+		for i in range(_blades.size()):
+			_blades[i].frame = _BLADE_FRAME_FULL if i < new_health else _BLADE_FRAME_BROKEN
+	else:
+		# Schaden: Blades innerhalb des neuen HP-Werts sind intakt,
+		# Blades jenseits des alten HP-Werts sind schon zerbrochen,
+		# die "frisch verlorenen" Blades dazwischen werden animiert.
+		for i in range(_blades.size()):
+			if i < new_health:
+				_blades[i].frame = _BLADE_FRAME_FULL
+			elif i >= _last_health:
+				_blades[i].frame = _BLADE_FRAME_BROKEN
+		for i in range(new_health, _last_health):
+			_animate_blade_break(_blades[i])
+
+	_last_health = new_health
+
+# =============================================================================
+# _animate_blade_break(blade)
+# Laesst eine Klinge animiert zerbrechen: Frame 1 -> 2 -> 3 mit kurzen
+# Pausen. Lambda-frei umgesetzt ueber tween_callback + bind, damit die
+# Animation auch dann sauber laeuft, wenn der Spieler mehrfach hintereinander
+# Schaden bekommt.
+# =============================================================================
+func _animate_blade_break(blade: AnimatedSprite2D) -> void:
+	var tween = create_tween()
+	# Frames 1, 2, 3 in Reihe abspielen
+	for f in [1, 2, _BLADE_FRAME_BROKEN]:
+		tween.tween_callback(_set_blade_frame.bind(blade, f))
+		tween.tween_interval(_BLADE_BREAK_STEP)
+	_blade_tweens.append(tween)
+
+func _set_blade_frame(blade: AnimatedSprite2D, frame_idx: int) -> void:
+	if is_instance_valid(blade):
+		blade.frame = frame_idx
 
 # =============================================================================
 # _on_coin_collected(new_count)
