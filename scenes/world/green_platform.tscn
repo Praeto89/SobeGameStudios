@@ -5,7 +5,8 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wpm1x"]
 size = Vector2(53, 5)
 
-[node name="green_platform" type="StaticBody2D" unique_id=562638760]
+[node name="green_platform" type="AnimatableBody2D" unique_id=562638760]
+sync_to_physics = false
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1662126015]
 position = Vector2(5, -3)

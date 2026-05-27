@@ -1,16 +1,19 @@
 # =============================================================================
 # green_platform_vertikal.gd
 # =============================================================================
-# Vertikal bewegliche Plattform (Node2D).
+# Vertikal bewegliche Plattform (AnimatableBody2D).
 #
 # Funktioniert identisch zu green_platform.gd, aber bewegt sich auf der
 # Y-Achse (auf und ab) statt auf der X-Achse (links und rechts).
+#
+# Wichtig: extends AnimatableBody2D + Bewegung in _physics_process, damit
+# der Spieler beim Draufstehen mit der Plattform mitfaehrt.
 #
 # Die Plattform pendelt gleichmaessig zwischen zwei Punkten:
 #   Startposition - distance  <-->  Startposition + distance
 # =============================================================================
 
-extends Node2D
+extends AnimatableBody2D
 
 # -----------------------------------------------------------------------------
 # Export-Variablen (im Godot-Editor einstellbar)
@@ -32,10 +35,12 @@ func _ready():
 	start_y = position.y
 
 # =============================================================================
-# _process(delta)
+# _physics_process(delta)
 # Bewegt die Plattform vertikal und kehrt die Richtung um wenn die Grenze erreicht wird.
+# Position-Aenderung muss im Physik-Tick passieren, damit der Spieler
+# (CharacterBody2D) korrekt mitgenommen wird.
 # =============================================================================
-func _process(delta):
+func _physics_process(delta):
 	position.y += speed * direction * delta
 
 	# Richtung umkehren wenn Grenzwert ueberschritten
