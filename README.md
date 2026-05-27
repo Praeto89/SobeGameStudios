@@ -2,6 +2,9 @@
 
 Ein gemeinsames Lernprojekt in Godot 4.6. Ziel ist es, durch die Entwicklung eines eigenen Spiels grundlegende Konzepte der Spieleentwicklung zu erlernen: Physik, KI, Signale, Szenenmanagement und mehr.
 
+> **Neu hier und noch nie mit Godot gearbeitet?**
+> → Lies zuerst [QUICKSTART.md](QUICKSTART.md) – in 10 Minuten zum ersten eigenen Beitrag, ganz ohne Code.
+
 ---
 
 ## Starten
