@@ -24,6 +24,12 @@ extends Area2D
 # Startet die Dreh-Animation und verbindet das body_entered-Signal.
 # =============================================================================
 func _ready() -> void:
+	# Falls diese Muenze bereits eingesammelt wurde (Persistenz),
+	# sich sofort selbst entfernen.
+	var id = GameManager.get_persistent_id(self)
+	if id != "" and id in GameManager.collected_coin_ids:
+		queue_free()
+		return
 	$AnimatedSprite2D.play("spin")
 	body_entered.connect(_on_body_entered)
 
@@ -35,6 +41,10 @@ func _ready() -> void:
 func _on_body_entered(body: Node) -> void:
 	if body is CharacterBody2D:
 		body.collect_coin()          # Zaehler im Spieler erhoehen
+		# Diese Muenze als gesammelt persistieren (verschwindet beim Re-Entry)
+		var id = GameManager.get_persistent_id(self)
+		if id != "" and not id in GameManager.collected_coin_ids:
+			GameManager.collected_coin_ids.append(id)
 		audio.play()
 		# Muenze sofort visuell + kollisionsmaessig entfernen,
 		# aber Node erst freigeben wenn der Sound fertig ist

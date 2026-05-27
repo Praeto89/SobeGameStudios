@@ -52,5 +52,10 @@ func _on_timer_timeout() -> void:
 		return
 
 	var slime = slime_scene.instantiate()
+	# Markieren BEVOR der Slime in den Baum kommt, damit sein _ready()
+	# ihn nicht persistiert. Sonst gaebe es nach erstem Tod eines Spawn-
+	# Slimes keine neuen Spawns mehr im Level.
+	if "is_spawned" in slime:
+		slime.is_spawned = true
 	slime.global_position = global_position
 	get_parent().add_child(slime)

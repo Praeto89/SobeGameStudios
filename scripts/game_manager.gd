@@ -20,3 +20,33 @@ var came_from_portal_id: String = ""
 var has_charge: bool = false
 var has_wallcrawl: bool = false
 var has_double_jump: bool = false
+
+# -------------------------------------------------------
+# Persistenter Spieler-Zustand
+# -------------------------------------------------------
+const MAX_HEALTH: int = 4
+var current_health: int = MAX_HEALTH
+var coin_count: int = 0
+
+# -------------------------------------------------------
+# Persistente Welt-Aenderungen
+# -------------------------------------------------------
+# IDs der Coins die bereits eingesammelt wurden (Format siehe get_persistent_id).
+var collected_coin_ids: Array[String] = []
+# IDs der Gegner die bereits besiegt wurden.
+var defeated_enemy_ids: Array[String] = []
+
+# =============================================================================
+# get_persistent_id(node)
+# Erzeugt eine eindeutige, ueber Szenen-Wechsel stabile ID fuer einen Node.
+# Format: "<scene_pfad>::<node_name>"
+#   z. B. "res://scenes/levels/main.tscn::coin"
+#
+# Nur fuer Nodes die FEST in einer Szene platziert sind -- zur Laufzeit
+# gespawnte Nodes haben automatisch generierte Namen, die nicht stabil sind.
+# =============================================================================
+func get_persistent_id(node: Node) -> String:
+	var scene = get_tree().current_scene
+	if scene == null:
+		return ""
+	return scene.scene_file_path + "::" + node.name

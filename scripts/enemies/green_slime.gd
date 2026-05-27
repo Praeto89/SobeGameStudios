@@ -37,6 +37,13 @@ var activated := false                  # True sobald die Aktivierungsanimation 
 var is_activating := false              # True waehrend die Aktivierungs-Animation laeuft (verhindert Mehrfach-Start)
 var is_dead := false                    # True waehrend und nach der Todesanimation
 
+# Persistenz-Flags
+# Vom Spawner gesetzt, BEVOR der Slime dem Baum hinzugefuegt wird.
+# Gespawnte Slimes sollen nicht persistiert werden -- sonst gibt es nach
+# erstem Tod keine neuen Spawns mehr.
+var is_spawned: bool = false
+var _persistent_id: String = ""
+
 # =============================================================================
 # _ready()
 # Wird einmalig beim Start aufgerufen.
@@ -47,6 +54,12 @@ func _ready():
 	add_to_group("enemy")
 	player = get_tree().get_first_node_in_group("player")
 	hitbox.body_entered.connect(_on_hitbox_body_entered)
+	# Persistenz: nur fest platzierte Slimes (nicht vom Spawner) checken,
+	# ob sie schon mal besiegt wurden.
+	if not is_spawned:
+		_persistent_id = GameManager.get_persistent_id(self)
+		if _persistent_id != "" and _persistent_id in GameManager.defeated_enemy_ids:
+			queue_free()
 
 # =============================================================================
 # _on_hitbox_body_entered(body)
@@ -70,6 +83,9 @@ func die() -> void:
 	if is_dead:
 		return
 	is_dead = true
+	# Persistierten Slime als besiegt markieren (taucht beim Re-Entry nicht mehr auf)
+	if _persistent_id != "" and not _persistent_id in GameManager.defeated_enemy_ids:
+		GameManager.defeated_enemy_ids.append(_persistent_id)
 	$CollisionShape2D.set_deferred("disabled", true)  # Deferred weil wir im Physik-Frame sind
 	hitbox.monitoring = false
 	sprite.play("death")

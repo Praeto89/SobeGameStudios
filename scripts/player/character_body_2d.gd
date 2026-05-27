@@ -118,11 +118,16 @@ func _ready() -> void:
 	# Roll-Hitbox nur waehrend des Rolls aktiv (siehe Roll-Block in _physics_process).
 	# Verhindert unnoetige Kollisions-Checks und Gegner-Treffer ausserhalb des Rolls.
 	roll_hitbox.monitoring = false
-	# Abilities aus dem GameManager laden, damit sie ueber Szenen-Wechsel
-	# hinweg erhalten bleiben (Player wird beim Wechsel neu instanziiert).
+	# Persistierten Zustand aus dem GameManager laden, damit Abilities,
+	# Leben und Muenzen ueber Szenen-Wechsel hinweg erhalten bleiben.
 	has_charge = GameManager.has_charge
 	has_wallcrawl = GameManager.has_wallcrawl
 	has_double_jump = GameManager.has_double_jump
+	current_health = GameManager.current_health
+	coin_count = GameManager.coin_count
+	# HUD initial befuellen (sonst zeigt es kurz die Default-Werte)
+	call_deferred("emit_signal", "health_changed", current_health)
+	call_deferred("emit_signal", "coin_collected", coin_count)
 
 # =============================================================================
 # respawn()
@@ -167,6 +172,7 @@ func take_damage(amount: int, knockback_direction: float = 0.0) -> void:
 		return
 	current_health -= amount
 	current_health = clamp(current_health, 0, max_health)
+	GameManager.current_health = current_health
 	emit_signal("health_changed", current_health)
 	velocity.x = knockback_direction * 400.0
 	velocity.y = -200.0
@@ -204,6 +210,7 @@ func _die() -> void:
 	is_dead = false
 	respawn()
 	current_health = max_health
+	GameManager.current_health = max_health
 	emit_signal("health_changed", current_health)
 
 # =============================================================================
@@ -213,6 +220,7 @@ func _die() -> void:
 # =============================================================================
 func collect_coin() -> void:
 	coin_count += 1
+	GameManager.coin_count = coin_count
 	emit_signal("coin_collected", coin_count)
 
 # =============================================================================
