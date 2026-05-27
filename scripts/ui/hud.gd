@@ -20,10 +20,17 @@ extends CanvasLayer
 
 # Frame-Index im Blade-SpriteFrames fuer "Klinge intakt" bzw. "Klinge zerbrochen".
 # Atlas-Layout (siehe Healthbar.tscn):
-#   Frame 0 = Region (17, 0)   -> intakt
-#   Frame 3 = Region (34, 16)  -> ganz zerbrochen
-const _BLADE_FRAME_FULL := 0
-const _BLADE_FRAME_BROKEN := 3
+#   Frame 0 = Klingen-Mittelteil intakt
+#   Frame 1 = Schwertspitze intakt
+#   Frame 2 = Klingen-Mittelteil zerbrochen
+#   Frame 3 = Schwertspitze zerbrochen
+# Blade 1-3 sind Mittelteile, Blade 4 ist die Spitze (am rechten Ende).
+const _BLADE_FRAMES := [
+	[0, 2],   # Blade 1 - Mittelteil
+	[0, 2],   # Blade 2 - Mittelteil
+	[0, 2],   # Blade 3 - Mittelteil
+	[1, 3],   # Blade 4 - Schwertspitze
+]
 
 # -----------------------------------------------------------------------------
 # Node-Referenzen
@@ -50,9 +57,9 @@ func _ready() -> void:
 	# Animationen anhalten -- wir setzen die Frames manuell je nach HP
 	_hilt.stop()
 	_hilt.frame = 0
-	for blade in _blades:
-		blade.stop()
-		blade.frame = _BLADE_FRAME_FULL
+	for i in range(_blades.size()):
+		_blades[i].stop()
+		_blades[i].frame = _BLADE_FRAMES[i][0]   # initial: intakt-Frame der jeweiligen Blade-Position
 	# Bei jedem neu hinzugefuegten Player-Node neu connecten
 	get_tree().node_added.connect(_on_node_added)
 	_connect_to_player()
@@ -94,16 +101,18 @@ func _connect_to_player() -> void:
 # =============================================================================
 # _on_health_changed(new_health)
 # Wird aufgerufen wenn der Spieler Schaden nimmt oder geheilt wird.
-# Bei Schaden laeuft die "verlorene" Klinge animiert durch alle Zwischen-
-# frames (intakt -> leicht -> stark beschaedigt -> zerbrochen). Bei Heilen
-# (oder Initial) werden die Frames direkt gesetzt.
+# Setzt jedes Blade-Segment auf "intakt" oder "zerbrochen" je nach HP --
+# Mittelteile und Spitze nutzen unterschiedliche Atlas-Frames (siehe
+# _BLADE_FRAMES). Bei Schaden gibt es zusaetzlich ein rotes Aufblitzen
+# als visuelles Feedback.
 #
 # new_health: Aktuelle Anzahl der Lebenspunkte
 # =============================================================================
-const _BLADE_BREAK_STEP := 0.08   # Sekunden zwischen den Zwischenframes
+const _BLADE_FLASH_HOLD := 0.08    # Sekunden bis Frame zu "zerbrochen" wechselt
+const _BLADE_FLASH_FADE := 0.3     # Sekunden bis das rote Aufblitzen ausfadet
 
 var _last_health: int = -1
-var _blade_tweens: Array = []     # Laufende Schadensanimationen pro Blade
+var _blade_tweens: Array = []      # Laufende Schadensanimationen pro Blade
 
 func _on_health_changed(new_health: int) -> void:
 	# Laufende Animationen abbrechen, damit sie keine alten Frames mehr
@@ -113,37 +122,39 @@ func _on_health_changed(new_health: int) -> void:
 			t.kill()
 	_blade_tweens.clear()
 
-	if _last_health == -1 or new_health >= _last_health:
-		# Initial-Aufruf oder Heilung -> alle Blades direkt setzen
-		for i in range(_blades.size()):
-			_blades[i].frame = _BLADE_FRAME_FULL if i < new_health else _BLADE_FRAME_BROKEN
-	else:
-		# Schaden: Blades innerhalb des neuen HP-Werts sind intakt,
-		# Blades jenseits des alten HP-Werts sind schon zerbrochen,
-		# die "frisch verlorenen" Blades dazwischen werden animiert.
-		for i in range(_blades.size()):
-			if i < new_health:
-				_blades[i].frame = _BLADE_FRAME_FULL
-			elif i >= _last_health:
-				_blades[i].frame = _BLADE_FRAME_BROKEN
+	var damage_taken := _last_health != -1 and new_health < _last_health
+
+	# Frames direkt setzen (intakt fuer "noch lebend", zerbrochen fuer "verloren").
+	# Modulate reset, falls vorher durch einen Flash veraendert.
+	for i in range(_blades.size()):
+		var intact_frame: int = _BLADE_FRAMES[i][0]
+		var broken_frame: int = _BLADE_FRAMES[i][1]
+		_blades[i].frame = intact_frame if i < new_health else broken_frame
+		_blades[i].modulate = Color.WHITE
+
+	# Bei Schaden: rotes Aufblitzen + verzoegerter Frame-Wechsel auf den
+	# "frisch verlorenen" Blades, damit man den Treffer visuell wahrnimmt.
+	if damage_taken:
 		for i in range(new_health, _last_health):
-			_animate_blade_break(_blades[i])
+			_animate_blade_break(_blades[i], _BLADE_FRAMES[i][0], _BLADE_FRAMES[i][1])
 
 	_last_health = new_health
 
 # =============================================================================
-# _animate_blade_break(blade)
-# Laesst eine Klinge animiert zerbrechen: Frame 1 -> 2 -> 3 mit kurzen
-# Pausen. Lambda-frei umgesetzt ueber tween_callback + bind, damit die
-# Animation auch dann sauber laeuft, wenn der Spieler mehrfach hintereinander
-# Schaden bekommt.
+# _animate_blade_break(blade, intact_frame, broken_frame)
+# Spielt einen kurzen Schadens-Effekt fuer ein einzelnes Klingen-Segment:
+#   1. Klinge ist noch intakt, faerbt sich rot
+#   2. Nach _BLADE_FLASH_HOLD wechselt der Frame zum zerbrochenen Zustand
+#   3. Die rote Faerbung fadet ueber _BLADE_FLASH_FADE zurueck zu Weiss
 # =============================================================================
-func _animate_blade_break(blade: AnimatedSprite2D) -> void:
+func _animate_blade_break(blade: AnimatedSprite2D, intact_frame: int, broken_frame: int) -> void:
+	# Startet im intakten Zustand, leuchtend rot
+	blade.frame = intact_frame
+	blade.modulate = Color(2.5, 0.6, 0.6)
 	var tween = create_tween()
-	# Frames 1, 2, 3 in Reihe abspielen
-	for f in [1, 2, _BLADE_FRAME_BROKEN]:
-		tween.tween_callback(_set_blade_frame.bind(blade, f))
-		tween.tween_interval(_BLADE_BREAK_STEP)
+	tween.tween_interval(_BLADE_FLASH_HOLD)
+	tween.tween_callback(_set_blade_frame.bind(blade, broken_frame))
+	tween.tween_property(blade, "modulate", Color.WHITE, _BLADE_FLASH_FADE)
 	_blade_tweens.append(tween)
 
 func _set_blade_frame(blade: AnimatedSprite2D, frame_idx: int) -> void:
