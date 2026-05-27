@@ -73,7 +73,7 @@ tile_map_data = PackedByteArray("AAAEAAYAAQABAAMAAAAFAAYAAQAAAAAAAAAGAAYAAQAAAAA
 tile_set = SubResource("TileSet_q82pi")
 
 [node name="green_platform" parent="." unique_id=562638760 instance=ExtResource("2_5dp1l")]
-position = Vector2(65, 530)
+position = Vector2(711, 487)
 script = ExtResource("6_horiz")
 speed = 60.0
 distance = 80.0
@@ -91,7 +91,7 @@ speed = 50.0
 distance = 80.0
 
 [node name="Portal" parent="." unique_id=559695772 groups=["portals"] instance=ExtResource("4_5dp1l")]
-position = Vector2(816, 541)
+position = Vector2(58, 542)
 portal_id = "turm_a"
 target_portal_id = "main_a"
 target_scene = "res://scenes/levels/main.tscn"

@@ -1,0 +1,103 @@
+[gd_scene format=3 uid="uid://5r6xfs6r3afx"]
+
+[ext_resource type="Texture2D" uid="uid://cn8efkxaix5d3" path="res://assets/sprites/PurpleDragons Spirte set/Player+Hud/Healthbar.png" id="1_x8sm2"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h022r"]
+atlas = ExtResource("1_x8sm2")
+region = Rect2(0, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4jqwt"]
+atlas = ExtResource("1_x8sm2")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kicr4"]
+atlas = ExtResource("1_x8sm2")
+region = Rect2(34, 16, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_3521x"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h022r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4jqwt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kicr4")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bo48s"]
+atlas = ExtResource("1_x8sm2")
+region = Rect2(17, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8qguk"]
+atlas = ExtResource("1_x8sm2")
+region = Rect2(34, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_136eg"]
+atlas = ExtResource("1_x8sm2")
+region = Rect2(17, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oj5la"]
+atlas = ExtResource("1_x8sm2")
+region = Rect2(34, 16, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_rmyp1"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bo48s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8qguk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_136eg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oj5la")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Node2D" type="Node2D" unique_id=1871899091]
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=332850096]
+offset_left = 87.0
+offset_top = -35.0
+offset_right = 227.0
+offset_bottom = 35.0
+
+[node name="Hilt" type="AnimatedSprite2D" parent="HBoxContainer" unique_id=1937708481]
+position = Vector2(-162, 30)
+scale = Vector2(10.008, 10.008)
+sprite_frames = SubResource("SpriteFrames_3521x")
+
+[node name="Blade 1" type="AnimatedSprite2D" parent="HBoxContainer" unique_id=1143054115]
+position = Vector2(-61.999992, 30)
+scale = Vector2(10.007812, 10.007812)
+sprite_frames = SubResource("SpriteFrames_rmyp1")
+
+[node name="Blade 2" type="AnimatedSprite2D" parent="HBoxContainer" unique_id=1520313998]
+position = Vector2(-2, 30.000004)
+scale = Vector2(10.007812, 10.007812)
+sprite_frames = SubResource("SpriteFrames_rmyp1")
+
+[node name="Blade 3" type="AnimatedSprite2D" parent="HBoxContainer" unique_id=1189576710]
+position = Vector2(58, 30.000004)
+scale = Vector2(10.007812, 10.007812)
+sprite_frames = SubResource("SpriteFrames_rmyp1")
+
+[node name="Blade 4" type="AnimatedSprite2D" parent="HBoxContainer" unique_id=1314316305]
+position = Vector2(128, 30.000004)
+scale = Vector2(10.007812, 10.007812)
+sprite_frames = SubResource("SpriteFrames_rmyp1")
+frame = 1
+frame_progress = 0.94984573

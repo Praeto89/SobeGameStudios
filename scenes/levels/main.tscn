@@ -806,7 +806,7 @@ position = Vector2(-651, 138)
 position = Vector2(-569, 76)
 
 [node name="Portal" parent="." unique_id=559695772 groups=["portals"] instance=ExtResource("16_muem4")]
-position = Vector2(-524, 74)
+position = Vector2(-804, 53)
 portal_id = "main_a"
 target_portal_id = "turm_a"
 target_scene = "res://scenes/levels/Turm.tscn"
