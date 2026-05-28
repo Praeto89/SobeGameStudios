@@ -11,6 +11,20 @@ Jeder Slot ist ein eigenes Mini-Level, das ueber die **Galerie** erreichbar ist.
 
 > **Tipp:** Schreib in den `Hinweis`-Label deinen Namen rein, damit alle wissen wessen Level das ist.
 
+### ✅ Checkliste bevor du pushst
+
+Hast du alles?
+
+- [ ] `Hinweis`-Label traegt deinen Namen
+- [ ] `ReturnPortal` ist im Level (Spieler kommt sonst nicht zurueck!)
+  - `portal_id = "from_galerie"`
+  - `target_portal_id = "galerie_entry"`
+  - `target_scene = "res://scenes/levels/galerie.tscn"`
+- [ ] Mind. eine Todeszone (`scenes/world/death.tscn`) platziert
+- [ ] Level laeuft ohne Fehlermeldungen (F6 druecken, Output-Panel pruefen)
+- [ ] `MEIN_SLOT.md` ausgefuellt (Vorlage: `scenes/levels/student_levels/MEIN_SLOT_vorlage.md`)
+- [ ] In der Liste unten eingetragen wer welchen Slot haelt
+
 ## Welcher Slot ist frei?
 
 - Slot 1 – frei

@@ -9,6 +9,27 @@ die zu deinem aktuellen Wissen passt. Jede Stufe ist ein abgeschlossener Beitrag
 
 ---
 
+## Stufe 0 – Im Editor tunen, kein Code, kein Git (5 Minuten)
+
+Kein Schreiben, kein Git, kein Terminal. Nur klicken und ausprobieren.
+
+1. Godot oeffnen, `scenes/levels/sandbox.tscn` doppelklicken
+2. Eine **Plattform** in der Szene anklicken → rechts im **Inspector** scrollen
+3. `speed` auf **200** setzen → **Strg+S** → **F6**
+4. Beobachten: die Plattform rast jetzt. Zurueck auf 50 → wieder langsam.
+
+Funktioniert auch mit dem **Slime**:
+- Slime in der Szene anklicken → Inspector → `detection_range` auf **500** → F6  
+- Der Slime reagiert jetzt schon von weit weg auf den Spieler.
+
+**Was du dabei lernst:** Jeder `@export`-Wert im Code ist direkt im Editor
+aenderbar. Das ist Godots Weg, Daten von Logik zu trennen.
+
+> Wenn du nichts kaputt machen willst: Strg+Z setzt jede Aenderung zurueck.
+> Oder einfach die Szene ohne Speichern schliessen – dann ist alles wie vorher.
+
+---
+
 ## Stufe 1 – Assets austauschen (kein Code)
 
 Tausche ein Sprite, einen Sound oder die Musik aus. Du brauchst nur einen
@@ -132,9 +153,18 @@ Egal welche Stufe – so kommen deine Aenderungen ins gemeinsame Spiel:
 
 ---
 
+## Debuggen lernen
+
+Fehlersuche ist eine Kernkompetenz. In [`BUGCHASE.md`](BUGCHASE.md) findest du
+5 eingebaute Bugs mit Symptom-Beschreibung, Suchhilfe und aufklappbarer Loesung.
+Empfehlung: Versuche jeden Bug selbst zu finden, bevor du die Loesung anschaust.
+
+---
+
 ## Wer hilft mir?
 
 - README im jeweiligen Ordner (`scenes/levels/student_levels/README.md` usw.)
-- Kommentare in den `.gd`-Dateien – die sind ausfuehrlich auf Deutsch
+- Kommentare in den `.gd`-Dateien – die sind ausfuehrlich auf Deutsch, oft mit WARUM-Erklaerungen
 - F1 im laufenden Spiel = Steuerungs-Hilfe
+- [`BUGCHASE.md`](BUGCHASE.md) – Bugs finden und verstehen
 - In der Klasse: nachfragen!

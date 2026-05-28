@@ -22,15 +22,23 @@
 
 class_name Player extends CharacterBody2D
 
+# ╔═══════════════════════════════════════════════════════════════════════════╗
+# ║  DEIN SPIELFELD – hier kannst du sicher experimentieren!                ║
+# ║  Aendere einen Wert, druecke F5 und schau was passiert.                 ║
+# ║  Nichts kann hier kaputt gehen – Strg+Z setzt alles zurueck.            ║
+# ║  Tipp: immer nur EINEN Wert auf einmal aendern, sonst weisst du         ║
+# ║  nicht welche Aenderung welchen Effekt hatte.                           ║
+# ╚═══════════════════════════════════════════════════════════════════════════╝
+
 # -----------------------------------------------------------------------------
 # Bewegungs-Konstanten
 # -----------------------------------------------------------------------------
-const SPEED = 150.0                 # Horizontale Laufgeschwindigkeit am Boden
-const AIR_SPEED = 140.0             # Horizontale Geschwindigkeit in der Luft (leicht reduziert)
-const JUMP_VELOCITY = -400.0        # Initialer Aufwaertsimpuls beim Springen (negativ = nach oben)
+const SPEED = 150.0                 # Laufgeschwindigkeit  <- probier: 80 (langsam) oder 300 (schnell)
+const AIR_SPEED = 140.0             # Geschwindigkeit in der Luft  <- kleiner als SPEED = traegere Luft
+const JUMP_VELOCITY = -400.0        # Sprungkraft (negativ = nach oben!)  <- probier: -250 oder -600
 const JUMP_RELEASE_MULTIPLIER  = 2.5 # Gravity-Multiplikator wenn Sprung losgelassen wird (variable Hoehe)
 const ROLL_SPEED = 300.0            # Geschwindigkeit waehrend des Rolls
-const CHARGE_SPEED = 700.0          # Geschwindigkeit waehrend des Charge-Dashs
+const CHARGE_SPEED = 700.0          # Geschwindigkeit waehrend des Charge-Dashs  <- probier: 400 oder 1200
 const CHARGE_DURATION = 0.5         # Sekunden die "charge" gehalten werden muss um auszuloesen
 const CHARGE_MAX_TIME = 0.5         # Maximale Dauer des Charge-Dashs in Sekunden
 const WALL_CRAWL_SPEED = 120.0      # Vertikale Klettergeschwindigkeit an der Wand
@@ -42,7 +50,7 @@ const KNOCKBACK_VELOCITY = Vector2(400.0, -200.0) # Rueckstoss bei einem Treffer
 # -----------------------------------------------------------------------------
 # Gravity-Konstanten
 # -----------------------------------------------------------------------------
-const GRAVITY = 1800.0              # Basis-Gravity beim Steigen und normalen Fallen
+const GRAVITY = 1800.0              # Schwerkraft beim Aufstieg  <- probier: 500 (Mondgravity) oder 4000 (Bleiklotz)
 const FALL_GRAVITY = 3000.0         # Erhoehte Gravity nach dem Sprung-Peak (schwereres Fallen)
 const MAX_FALL_SPEED = 900.0        # Maximale Fallgeschwindigkeit (Terminal Velocity)
 const FAST_FALL_SPEED = 1400.0      # Fallgeschwindigkeit bei Schnellfall (Pfeiltaste unten)
@@ -174,6 +182,11 @@ func respawn() -> void:
 	was_on_floor = false
 	is_jumping = false
 	roll_hitbox.monitoring = false
+	# WARUM set_deferred statt .disabled = false direkt?
+	# Wir sind im Physik-Frame (move_and_slide laeuft gerade). Kollisions-
+	# Shapes darf man dort nicht direkt aendern – Godot wirft sonst einen
+	# Fehler. set_deferred("disabled", false) verzoegert die Aenderung
+	# auf den naechsten sicheren Moment (nach dem Physik-Schritt).
 	$CollisionShape2D.set_deferred("disabled", false)
 
 # =============================================================================
@@ -290,8 +303,12 @@ func _physics_process(delta: float) -> void:
 			is_hit = false
 
 	# --- 3. Coyote Time ---
-	# Wenn der Spieler gerade vom Boden weggelaufen ist (nicht gesprungen),
-	# startet ein kurzes Zeitfenster in dem noch gesprungen werden kann.
+	# Laeufst du ueber den Rand einer Plattform, bist du fuer einen kurzen
+	# Moment in der Luft, obwohl du subjektiv "noch auf der Plattform" warst.
+	# Ohne Coyote Time wuerde der Sprung in diesem Moment versagen – das
+	# fuehlt sich ungerecht an. Mit COYOTE_TIME = 0.12 s vergibt das Spiel
+	# diesen Fehler und erlaubt den Sprung trotzdem. Das ist ein Standard-
+	# Trick in fast jedem kommerziellen 2D-Plattformer.
 	if was_on_floor and not is_on_floor() and not is_jumping:
 		coyote_timer = COYOTE_TIME
 	if coyote_timer > 0:
@@ -299,7 +316,10 @@ func _physics_process(delta: float) -> void:
 	was_on_floor = is_on_floor()
 
 	# --- 4. Jump Buffer ---
-	# Sprung-Taste wird registriert auch wenn man noch nicht ganz gelandet ist.
+	# Drueckst du Springen kurz BEVOR du landest, merkt das Spiel es trotzdem.
+	# Ohne Buffer muesste das Timing pixelgenau stimmen – das ist frustrierend.
+	# Mit JUMP_BUFFER_TIME = 0.12 s gilt: "Ich wollte springen" gilt auch fuer
+	# die naechsten 120 ms, falls du gerade noch in der Luft warst.
 	if Input.is_action_just_pressed("ui_accept"):
 		jump_buffer_timer = JUMP_BUFFER_TIME
 	if jump_buffer_timer > 0:

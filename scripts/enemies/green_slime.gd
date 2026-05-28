@@ -14,12 +14,18 @@
 
 extends CharacterBody2D
 
+# ╔═══════════════════════════════════════════════════════════════════════════╗
+# ║  DEIN SPIELFELD – diese Werte kannst du im Godot-Editor tunen,          ║
+# ║  ohne eine einzige Zeile Code anzufassen:                               ║
+# ║  Slime im Level anklicken → rechts im Inspector scrollen.               ║
+# ╚═══════════════════════════════════════════════════════════════════════════╝
+
 # -----------------------------------------------------------------------------
 # Export-Variablen (im Godot-Editor einstellbar)
 # -----------------------------------------------------------------------------
-@export var speed := 80.0               # Bewegungsgeschwindigkeit in Pixel/Sekunde
-@export var gravity := 800.0            # Schwerkraft – haelt den Slime auf dem Boden
-@export var detection_range := 200.0    # Abstand in Pixeln ab dem der Spieler erkannt wird
+@export var speed := 80.0               # Laufgeschwindigkeit  <- probier: 200 (hektisch) oder 20 (schleichend)
+@export var gravity := 800.0            # Schwerkraft  <- 0 = schwebt, 2000 = faellt sehr schnell
+@export var detection_range := 200.0    # Erkennungsreichweite in Pixeln  <- 0 = blind, 500 = scharfaeuging
 
 # -----------------------------------------------------------------------------
 # Node-Referenzen
@@ -86,9 +92,18 @@ func die() -> void:
 	# Persistierten Slime als besiegt markieren (taucht beim Re-Entry nicht mehr auf)
 	if _persistent_id != "" and not _persistent_id in GameManager.defeated_enemy_ids:
 		GameManager.defeated_enemy_ids.append(_persistent_id)
-	$CollisionShape2D.set_deferred("disabled", true)  # Deferred weil wir im Physik-Frame sind
+	# WARUM set_deferred?
+	# Diese Funktion wird aus einem Kollisions-Callback heraus aufgerufen
+	# (der Spieler trifft den Slime). Mitten in einem Physik-Frame darf
+	# man Kollisions-Shapes nicht direkt aendern – daher set_deferred,
+	# das die Aenderung auf nach dem Frame verschiebt.
+	$CollisionShape2D.set_deferred("disabled", true)
 	hitbox.monitoring = false
 	sprite.play("death")
+	# WARUM await?
+	# await haelt diese Funktion an, bis die Animation fertig ist,
+	# ohne das ganze Spiel zu blockieren. Godot fuehrt in der Zwischenzeit
+	# alle anderen Frames normal weiter – das ist eine sog. Coroutine.
 	await sprite.animation_finished
 	queue_free()
 

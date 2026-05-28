@@ -140,12 +140,46 @@ Tod (ausgelöst durch Roll oder Charge des Spielers)
 
 ## Signale
 
-Das Projekt nutzt Godot-Signale zur Kommunikation zwischen Spieler und UI:
+Godot-Signale sind wie Klingeln: jemand klingelt (emit_signal), jemand anderes
+öffnet die Tür (_on_...). Sender und Empfänger kennen sich **nicht direkt** –
+das hält den Code entkoppelt und wartbar.
+
+```
+Spieler nimmt Schaden
+        │
+        ▼
+emit_signal("health_changed", 3)
+        │
+        └──► HUD._on_health_changed(3)
+                     │
+                     ▼
+               Blade 4 wird rot + bricht
+```
+
+```
+Spieler beruehrt Muenze
+        │
+        ▼
+collect_coin()  →  emit_signal("coin_collected", 5)
+        │
+        └──► HUD._on_coin_collected(5)
+                     │
+                     ▼
+               CoinLabel zeigt "Coins: 5"
+```
 
 | Signal | Sender | Empfänger | Beschreibung |
 |---|---|---|---|
 | `health_changed(new_health)` | Spieler | HUD | Lebenspunkte haben sich geändert |
 | `coin_collected(new_count)` | Spieler | HUD | Münze wurde aufgesammelt |
+
+---
+
+## Debuggen lernen
+
+Fehlersuche ist eine Kernkompetenz. Im [`BUGCHASE.md`](BUGCHASE.md) findest du
+5 absichtliche Bugs mit Symptom-Beschreibung, Suchhilfe und aufklappbarer Lösung.
+Ideal als Einstieg bevor du eigenen Code schreibst.
 
 ---
 

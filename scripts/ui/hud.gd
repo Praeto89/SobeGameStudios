@@ -60,7 +60,13 @@ func _ready() -> void:
 	for i in range(_blades.size()):
 		_blades[i].stop()
 		_blades[i].frame = _BLADE_FRAMES[i][0]   # initial: intakt-Frame der jeweiligen Blade-Position
-	# Bei jedem neu hinzugefuegten Player-Node neu connecten
+	# WARUM node_added statt den Player direkt zu referenzieren?
+	# Das HUD ist ein Autoload-Singleton – es existiert ueber Szenen-Wechsel
+	# hinweg. Der Player aber wird bei jedem Levelwechsel neu erzeugt. Wir
+	# koennen also nicht einmalig $Player speichern; wir muessen WARTEN bis
+	# der neue Player zum Szenenbaum hinzugefuegt wird, und ihn dann neu
+	# verbinden. node_added feuert fuer jeden neuen Node – wir pruefen dann
+	# ob es ein Player ist.
 	get_tree().node_added.connect(_on_node_added)
 	_connect_to_player()
 
