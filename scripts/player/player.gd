@@ -35,6 +35,9 @@ const CHARGE_DURATION = 0.5         # Sekunden die "charge" gehalten werden muss
 const CHARGE_MAX_TIME = 0.5         # Maximale Dauer des Charge-Dashs in Sekunden
 const WALL_CRAWL_SPEED = 120.0      # Vertikale Klettergeschwindigkeit an der Wand
 const WALL_JUMP_VELOCITY = Vector2(350.0, -450.0) # Horizontaler / vertikaler Impuls beim Wall Jump
+const WALL_CRAWL_PRESS_FORCE = 50.0 # Leichter Andruck in die Wand waehrend des Kletterns
+const CHARGE_LAUNCH_VELOCITY = -900.0 # Aufwaerts-Impuls im Moment der Charge-Ausloesung
+const KNOCKBACK_VELOCITY = Vector2(400.0, -200.0) # Rueckstoss bei einem Treffer (x wird mit Richtung multipliziert)
 
 # -----------------------------------------------------------------------------
 # Gravity-Konstanten
@@ -68,13 +71,14 @@ var charge_time_active := 0.0       # Wie lange der Charge-Dash bereits laeuft
 # Zustandsvariablen — Spieler-Status
 # -----------------------------------------------------------------------------
 var spawn_position: Vector2         # Spawn-Position fuer Respawn
-var max_health = 4                  # Maximale Lebenspunkte
-var current_health = 4              # Aktuelle Lebenspunkte
+var max_health = GameManager.MAX_HEALTH  # Maximale Lebenspunkte (eine Quelle der Wahrheit: GameManager)
+var current_health = GameManager.MAX_HEALTH  # Aktuelle Lebenspunkte
 var coin_count = 0                  # Gesammelte Muenzen
 var is_hit := false                 # Ob der Spieler gerade im Treffer-Zustand ist
 var hit_timer := 0.0                # Verbleibende Zeit des Treffer-Zustands
 const HIT_DURATION = 0.6            # Dauer des Treffer-Zustands in Sekunden
 var is_dead := false                # Ob der Spieler tot ist
+var _death_slowmo := false          # Ob gerade die Death-Zeitlupe (Engine.time_scale) aktiv ist
 
 # -----------------------------------------------------------------------------
 # Ability-Flags — werden per Pickup freigeschaltet
@@ -130,6 +134,19 @@ func _ready() -> void:
 	call_deferred("emit_signal", "coin_collected", coin_count)
 
 # =============================================================================
+# _exit_tree()
+# Sicherheitsnetz: Wird der Spieler waehrend der Death-Zeitlupe aus dem Baum
+# entfernt (z. B. durch einen Szenenwechsel mitten in der Death-Animation),
+# kommt das await in _die() nie zurueck und Engine.time_scale bliebe bei 0.5
+# haengen -> das ganze Spiel liefe dauerhaft in Zeitlupe. Hier setzen wir die
+# globale Zeit defensiv wieder auf Normalgeschwindigkeit zurueck.
+# =============================================================================
+func _exit_tree() -> void:
+	if _death_slowmo:
+		Engine.time_scale = 1.0
+		_death_slowmo = false
+
+# =============================================================================
 # respawn()
 # Setzt den Spieler auf den Spawn-Punkt zurueck und stellt alle
 # Zustandsvariablen auf ihren Ausgangswert zurueck.
@@ -174,8 +191,8 @@ func take_damage(amount: int, knockback_direction: float = 0.0) -> void:
 	current_health = clamp(current_health, 0, max_health)
 	GameManager.current_health = current_health
 	emit_signal("health_changed", current_health)
-	velocity.x = knockback_direction * 400.0
-	velocity.y = -200.0
+	velocity.x = knockback_direction * KNOCKBACK_VELOCITY.x
+	velocity.y = KNOCKBACK_VELOCITY.y
 	if current_health <= 0:
 		_die()
 		return
@@ -201,10 +218,12 @@ func _die() -> void:
 	velocity.x = 0
 	roll_hitbox.monitoring = false
 	$CollisionShape2D.set_deferred("disabled", true)
+	_death_slowmo = true
 	Engine.time_scale = 0.5
 	animated_sprite.play("death")
 	await animated_sprite.animation_finished
 	Engine.time_scale = 1.0
+	_death_slowmo = false
 	# is_dead VOR respawn() zuruecksetzen, damit respawn() nicht durch
 	# seinen eigenen is_dead-Schutz abgewiesen wird.
 	is_dead = false
@@ -359,7 +378,7 @@ func _physics_process(delta: float) -> void:
 		if charge_timer >= CHARGE_DURATION:
 			is_charging = true
 			charge_timer = 0.0
-			velocity.y = -900.0
+			velocity.y = CHARGE_LAUNCH_VELOCITY
 	if Input.is_action_just_released("charge") and not is_charging:
 		charge_timer = 0.0
 
@@ -370,7 +389,7 @@ func _physics_process(delta: float) -> void:
 		# Wallcrawl: nur vertikale Bewegung, leichter Druck in die Wand
 		var vertical := Input.get_axis("ui_up", "ui_down")
 		velocity.y = vertical * WALL_CRAWL_SPEED
-		velocity.x = -last_wall_normal.x * 50.0
+		velocity.x = -last_wall_normal.x * WALL_CRAWL_PRESS_FORCE
 	elif is_rolling:
 		# Roll: fixe Geschwindigkeit in Blickrichtung, Gegner-Hitbox pruefen
 		var roll_dir = -1.0 if animated_sprite.flip_h else 1.0

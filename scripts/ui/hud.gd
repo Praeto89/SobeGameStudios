@@ -4,7 +4,7 @@
 # HUD (Heads-Up-Display) – die Spieler-Oberflaeche.
 #
 # Zeigt an:
-#   - Lebenspunkte als animierte Schwert-Klingen (Healthbar.tscn)
+#   - Lebenspunkte als animierte Schwert-Klingen (healthbar.tscn)
 #       4 Blade-Segmente; pro fehlendem Leben wird ein Segment "zerbrochen"
 #   - Anzahl gesammelter Muenzen als Text-Label
 #
@@ -19,7 +19,7 @@
 extends CanvasLayer
 
 # Frame-Index im Blade-SpriteFrames fuer "Klinge intakt" bzw. "Klinge zerbrochen".
-# Atlas-Layout (siehe Healthbar.tscn):
+# Atlas-Layout (siehe healthbar.tscn):
 #   Frame 0 = Klingen-Mittelteil intakt
 #   Frame 1 = Schwertspitze intakt
 #   Frame 2 = Klingen-Mittelteil zerbrochen

@@ -33,6 +33,4 @@ func _on_body_entered(body):
 		body.unlock_charge()    # Ability im Spieler-Skript aktivieren
 		# Spieler-Hinweis: was die Ability tut + Tasten-Hinweis
 		Hud.show_ability_message("Charge freigeschaltet!\n'E' gedrueckt halten fuer einen schnellen Dash")
-		# Diese Muenze als gesammelt persistieren wird bei Coin gemacht;
-		# fuer Abilities reicht GameManager.has_charge (in unlock_charge gesetzt)
 		queue_free()            # Pickup aus der Szene entfernen

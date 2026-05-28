@@ -23,7 +23,7 @@ Im Editor links siehst du den **FileSystem**-Tab. Klick dich durch:
 res://
 └── scenes/
     └── levels/
-        └── Sandbox.tscn      ← Doppelklick!
+        └── sandbox.tscn      ← Doppelklick!
 ```
 
 Du siehst eine Spielwiese mit Boden, Spieler, ein paar Muenzen und Plattformen.
@@ -98,8 +98,8 @@ Alles aus diesen Ordnern funktioniert per Drag-and-Drop:
 | Muenze | `scenes/pickups/coin.tscn` | Einsammelbar, gibt einen Punkt |
 | Bewegliche Plattform | `scenes/world/green_platform.tscn` | Pendelt automatisch |
 | Boden-Slime | `scenes/enemies/green_slime.tscn` | Patrouilliert, kann besiegt werden |
-| Wand-Slime | `scenes/enemies/Wall Slime.tscn` | Klebt an Waenden |
-| Gegner-Spawner | `scenes/enemies/geen_slime_spawner.tscn` | Spawnt regelmaessig Gegner |
+| Wand-Slime | `scenes/enemies/wall_slime.tscn` | Klebt an Waenden |
+| Gegner-Spawner | `scenes/enemies/green_slime_spawner.tscn` | Spawnt regelmaessig Gegner |
 | Charge-Ability | `scenes/pickups/charge_ability.tscn` | Schaltet Dash frei |
 | Double-Jump | `scenes/pickups/doublejump_ability.tscn` | Schaltet 2. Sprung frei |
 | Wallcrawl | `scenes/pickups/wallcrawl_ability.tscn` | Klettern an Waenden |

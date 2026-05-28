@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://b3fmywqfcrq3g"]
 
-[ext_resource type="PackedScene" uid="uid://ck6q6oyovvakg" path="res://scenes/player/Player.tscn" id="1_c5o7e"]
+[ext_resource type="PackedScene" uid="uid://ck6q6oyovvakg" path="res://scenes/player/player.tscn" id="1_c5o7e"]
 [ext_resource type="PackedScene" uid="uid://0lmbkrm3yis5" path="res://scenes/pickups/wallcrawl_ability.tscn" id="4_7i8v8"]
 [ext_resource type="PackedScene" uid="uid://dnmnbcdkt56ma" path="res://scenes/pickups/doublejump_ability.tscn" id="5_ervsl"]
 [ext_resource type="Texture2D" uid="uid://ctbiesjqnr38r" path="res://assets/sprites/PurpleDragons Spirte set/Ground/rockgrey_tilemap.png" id="6_7ekqj"]
-[ext_resource type="PackedScene" uid="uid://dvndy5yhbn1n3" path="res://scenes/enemies/Wall Slime.tscn" id="6_xjso5"]
+[ext_resource type="PackedScene" uid="uid://dvndy5yhbn1n3" path="res://scenes/enemies/wall_slime.tscn" id="6_xjso5"]
 [ext_resource type="PackedScene" uid="uid://cbxwfiysrsyxr" path="res://scenes/world/fade_area.tscn" id="7_masvn"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8iv4n"]

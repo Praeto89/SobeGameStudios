@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://sl0t02klassezz2"]
 
 [ext_resource type="PackedScene" uid="uid://7ck1dr5e5kg0" path="res://scenes/world/portal.tscn" id="1_portal"]
-[ext_resource type="PackedScene" uid="uid://ck6q6oyovvakg" path="res://scenes/player/Player.tscn" id="2_player"]
+[ext_resource type="PackedScene" uid="uid://ck6q6oyovvakg" path="res://scenes/player/player.tscn" id="2_player"]
 [ext_resource type="PackedScene" uid="uid://md1jdcoedfs" path="res://scenes/world/death.tscn" id="3_death"]
 
 [node name="Slot2" type="Node2D"]
@@ -36,7 +36,7 @@ position = Vector2(150, 30)
 position = Vector2(-440, 60)
 portal_id = "from_galerie"
 target_portal_id = "galerie_entry"
-target_scene = "res://scenes/levels/Galerie.tscn"
+target_scene = "res://scenes/levels/galerie.tscn"
 
 [node name="ReturnLabel" type="Label" parent="."]
 offset_left = -480.0

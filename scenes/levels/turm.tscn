@@ -4,8 +4,8 @@
 [ext_resource type="PackedScene" uid="uid://dshu4ly8aip0h" path="res://scenes/world/green_platform.tscn" id="2_5dp1l"]
 [ext_resource type="Script" uid="uid://b23qof6kxv6dn" path="res://scripts/world/green_platform_vertikal.gd" id="3_vqffp"]
 [ext_resource type="PackedScene" uid="uid://7ck1dr5e5kg0" path="res://scenes/world/portal.tscn" id="4_5dp1l"]
-[ext_resource type="PackedScene" uid="uid://ck6q6oyovvakg" path="res://scenes/player/Player.tscn" id="5_vqffp"]
-[ext_resource type="PackedScene" uid="uid://dph3vsxklsitn" path="res://scenes/enemies/geen_slime_spawner.tscn" id="6_h8sst"]
+[ext_resource type="PackedScene" uid="uid://ck6q6oyovvakg" path="res://scenes/player/player.tscn" id="5_vqffp"]
+[ext_resource type="PackedScene" uid="uid://dph3vsxklsitn" path="res://scenes/enemies/green_slime_spawner.tscn" id="6_h8sst"]
 [ext_resource type="Script" uid="uid://co8dnnplbt1aa" path="res://scripts/world/green_platform.gd" id="6_horiz"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nnl3m"]

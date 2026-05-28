@@ -64,3 +64,21 @@ func get_persistent_id(node: Node) -> String:
 	if scene == null:
 		return ""
 	return scene.scene_file_path + "::" + node.name
+
+# =============================================================================
+# reset_game()
+# Setzt den kompletten Session-Zustand auf die Startwerte zurueck:
+# Abilities, Leben, Muenzen sowie alle eingesammelten/besiegten Marker.
+# Aufrufen, bevor ein frisches Spiel gestartet wird (z. B. aus einem
+# Start-/Game-Over-Menue oder per "Neu starten").
+# =============================================================================
+func reset_game() -> void:
+	came_from_portal_id = ""
+	has_charge = false
+	has_wallcrawl = false
+	has_double_jump = false
+	current_health = MAX_HEALTH
+	coin_count = 0
+	collected_coin_ids.clear()
+	defeated_enemy_ids.clear()
+	visited_scenes.clear()

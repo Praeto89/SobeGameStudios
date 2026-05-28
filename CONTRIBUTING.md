@@ -56,7 +56,7 @@ Aenderungen an Verhalten ohne Code zu schreiben.
 3. Werte aendern, Strg+S, F6 zum Testen
 
 Funktioniert auch bei:
-- **Gegner-Spawner** (`scenes/enemies/geen_slime_spawner.tscn`): Spawn-Intervall, Max-Gegner
+- **Gegner-Spawner** (`scenes/enemies/green_slime_spawner.tscn`): Spawn-Intervall, Max-Gegner
 - **Portal** (`scenes/world/portal.tscn`): Cooldown, Ziel-IDs
 
 **Wo finde ich die `@export`-Werte im Code?**

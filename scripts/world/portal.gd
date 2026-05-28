@@ -36,7 +36,7 @@ func _ready() -> void:
 
 	# Spieler kam gerade aus diesem Portal (durch einen Level-Wechsel):
 	# - Spieler an die Portal-Position setzen (sonst spawnt er an seiner
-	#   Default-Position aus Player.tscn, irgendwo im Level)
+	#   Default-Position aus player.tscn, irgendwo im Level)
 	# - Portal kurz sperren, damit es ihn nicht sofort zurueckteleportiert
 	if GameManager.came_from_portal_id == portal_id:
 		var player = get_tree().get_first_node_in_group("player")
@@ -59,7 +59,7 @@ func _on_body_entered(body: Node2D) -> void:
 		# Wenn der Spieler in die Galerie zurueckgeht, die aktuelle Szene
 		# als "besucht" markieren -- die Galerie zeigt darueber ein ⭐
 		# am entsprechenden Slot-Portal an.
-		if target_scene == "res://scenes/levels/Galerie.tscn":
+		if target_scene == "res://scenes/levels/galerie.tscn":
 			var current = get_tree().current_scene
 			if current != null:
 				GameManager.mark_scene_visited(current.scene_file_path)

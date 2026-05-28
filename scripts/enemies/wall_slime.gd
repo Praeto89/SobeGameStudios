@@ -111,7 +111,7 @@ func _physics_process(delta):
 		return
 
 	# Da detection_range = 0, ist player_near immer false -> nur Patrouille
-	var player_near = player and global_position.distance_to(player.global_position) < detection_range
+	var player_near = player and is_instance_valid(player) and global_position.distance_to(player.global_position) < detection_range
 	if player_near and not activated:
 		_state_activation()
 	else:

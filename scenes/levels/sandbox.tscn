@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://b8s4ndb0xpl4ye"]
 
-[ext_resource type="PackedScene" uid="uid://ck6q6oyovvakg" path="res://scenes/player/Player.tscn" id="1_player"]
+[ext_resource type="PackedScene" uid="uid://ck6q6oyovvakg" path="res://scenes/player/player.tscn" id="1_player"]
 [ext_resource type="PackedScene" uid="uid://jhiuqdedq0l3" path="res://scenes/pickups/coin.tscn" id="2_coin"]
 [ext_resource type="PackedScene" uid="uid://dshu4ly8aip0h" path="res://scenes/world/green_platform.tscn" id="3_platform"]
 [ext_resource type="PackedScene" uid="uid://e3cei7lyh8et" path="res://scenes/enemies/green_slime.tscn" id="4_slime"]
@@ -108,7 +108,7 @@ position = Vector2(290, -40)
 position = Vector2(-440, 60)
 portal_id = "sandbox_entry"
 target_portal_id = "galerie_entry"
-target_scene = "res://scenes/levels/Galerie.tscn"
+target_scene = "res://scenes/levels/galerie.tscn"
 
 [node name="PortalGalerieLabel" type="Label" parent="."]
 offset_left = -480.0

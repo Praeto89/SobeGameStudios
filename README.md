@@ -48,19 +48,19 @@ Pickups liegen im Level verteilt. Einmal aufgesammelt, ist die Ability dauerhaft
 ```
 SobeGameStudios/
 ├── scripts/
-│   ├── player/        character_body_2d.gd  (Spieler-Controller)
-│   ├── enemies/       green_slime.gd, wall_slime.gd, geen_slime_spawner.gd
+│   ├── player/        player.gd  (Spieler-Controller)
+│   ├── enemies/       green_slime.gd, wall_slime.gd, green_slime_spawner.gd
 │   ├── pickups/       charge_ability.gd, doublejump_ability.gd, wallcrawl_ability.gd, coin.gd
 │   ├── world/         green_platform.gd, green_platform_vertikal.gd, death.gd, fade_area.gd, portal.gd
 │   ├── ui/            hud.gd
 │   └── game_manager.gd  (Singleton / Autoload)
 ├── scenes/
-│   ├── levels/        main.tscn, Area 1.tscn, Turm.tscn
-│   ├── player/        Player.tscn
-│   ├── enemies/       green_slime.tscn, Wall Slime.tscn, geen_slime_spawner.tscn, …
+│   ├── levels/        main.tscn, area_1.tscn, turm.tscn
+│   ├── player/        player.tscn
+│   ├── enemies/       green_slime.tscn, wall_slime.tscn, green_slime_spawner.tscn, …
 │   ├── pickups/       charge_ability.tscn, doublejump_ability.tscn, coin.tscn, …
 │   ├── world/         green_platform.tscn, death.tscn, fade_area.tscn, portal.tscn
-│   └── ui/            hud.tscn, BackgroundMusic.tscn
+│   └── ui/            hud.tscn, background_music.tscn
 ├── assets/
 │   ├── sprites/       Charakter- und Welt-Sprites
 │   ├── sounds/        Soundeffekte
@@ -77,7 +77,7 @@ SobeGameStudios/
 
 | Datei | Beschreibung |
 |---|---|
-| `scripts/player/character_body_2d.gd` | **Spieler-Controller** – Bewegung, Sprung, Abilities, Schaden, Tod |
+| `scripts/player/player.gd` | **Spieler-Controller** – Bewegung, Sprung, Abilities, Schaden, Tod |
 | `scripts/game_manager.gd` | **Singleton** – speichert den Portal-Zustand zwischen Szenen |
 | `scripts/world/portal.gd` | **Portal** – Teleportiert den Spieler (gleiche Szene oder Level-Wechsel) |
 | `scripts/ui/hud.gd` | **HUD** – Zeigt Herzen und Münzen an, reagiert auf Spieler-Signale |
@@ -85,7 +85,7 @@ SobeGameStudios/
 | `scripts/world/death.gd` | **Todeszone** – Löst Respawn aus wenn der Spieler eintritt |
 | `scripts/enemies/green_slime.gd` | **Boden-Slime** – Patrouilliert, erkennt Spieler, kann sterben |
 | `scripts/enemies/wall_slime.gd` | **Wand-Slime** – Wie Boden-Slime, aber ohne Schwerkraft |
-| `scripts/enemies/geen_slime_spawner.gd` | **Spawner** – Erzeugt Gegner in Intervallen bis zum Maximum |
+| `scripts/enemies/green_slime_spawner.gd` | **Spawner** – Erzeugt Gegner in Intervallen bis zum Maximum |
 | `scripts/world/green_platform.gd` | **Horizontale Plattform** – Pendelt links/rechts |
 | `scripts/world/green_platform_vertikal.gd` | **Vertikale Plattform** – Pendelt auf/ab |
 | `scripts/world/fade_area.gd` | **Fade-Bereich** – Blendet Plattform aus wenn Spieler dahinter steht |
@@ -130,7 +130,7 @@ Tod (ausgelöst durch Roll oder Charge des Spielers)
   → Aus Szene entfernen
 ```
 
-### Spawner (geen_slime_spawner.gd)
+### Spawner (green_slime_spawner.gd)
 
 - Erzeugt Gegner an seiner Position in einem einstellbaren Zeitintervall
 - Respektiert eine maximale Gegneranzahl

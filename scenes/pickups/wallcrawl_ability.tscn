@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://0lmbkrm3yis5"]
 
-[ext_resource type="Script" uid="uid://b7vhionr3s5u2" path="res://scripts/pickups/charge_ability.gd" id="1_yhgvd"]
+[ext_resource type="Script" uid="uid://biigvlqnlox6a" path="res://scripts/pickups/wallcrawl_ability.gd" id="1_yhgvd"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_dt5ky"]
 
