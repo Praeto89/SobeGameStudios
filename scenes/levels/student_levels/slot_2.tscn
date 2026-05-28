@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://sl0t02klassezz2"]
+
+[ext_resource type="PackedScene" uid="uid://7ck1dr5e5kg0" path="res://scenes/world/portal.tscn" id="1_portal"]
+[ext_resource type="PackedScene" uid="uid://ck6q6oyovvakg" path="res://scenes/player/player.tscn" id="2_player"]
+[ext_resource type="PackedScene" uid="uid://md1jdcoedfs" path="res://scenes/world/death.tscn" id="3_death"]
+
+[node name="Slot2" type="Node2D"]
+
+[node name="Hinweis" type="Label" parent="."]
+offset_left = -300.0
+offset_top = -200.0
+offset_right = 700.0
+offset_bottom = -100.0
+text = "SLOT 2 – dein Level\nZiehe Prefabs aus dem FileSystem-Tab rein.\nPortal links unten = zurueck zur Galerie."
+horizontal_alignment = 1
+
+[node name="Boden" type="StaticBody2D" parent="."]
+position = Vector2(0, 80)
+
+[node name="Floor" type="CollisionPolygon2D" parent="Boden"]
+polygon = PackedVector2Array(-500, 0, 900, 0, 900, 200, -500, 200)
+
+[node name="WandLinks" type="CollisionPolygon2D" parent="Boden"]
+polygon = PackedVector2Array(-500, -400, -468, -400, -468, 0, -500, 0)
+
+[node name="WandRechts" type="CollisionPolygon2D" parent="Boden"]
+polygon = PackedVector2Array(868, -400, 900, -400, 900, 0, 868, 0)
+
+[node name="Decke" type="CollisionPolygon2D" parent="Boden"]
+polygon = PackedVector2Array(-500, -440, 900, -440, 900, -400, -500, -400)
+
+[node name="Player" parent="." instance=ExtResource("2_player")]
+position = Vector2(150, 30)
+
+[node name="ReturnPortal" parent="." groups=["portals"] instance=ExtResource("1_portal")]
+position = Vector2(-440, 60)
+portal_id = "from_galerie"
+target_portal_id = "galerie_entry"
+target_scene = "res://scenes/levels/galerie.tscn"
+
+[node name="ReturnLabel" type="Label" parent="."]
+offset_left = -480.0
+offset_top = 30.0
+offset_right = -400.0
+offset_bottom = 50.0
+text = "Galerie"
+horizontal_alignment = 1
+
+[node name="Death" parent="." instance=ExtResource("3_death")]
+position = Vector2(200, 320)
