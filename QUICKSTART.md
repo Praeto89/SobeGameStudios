@@ -132,6 +132,7 @@ Alles aus diesen Ordnern funktioniert per Drag-and-Drop:
 | Charge-Ability | `scenes/pickups/charge_ability.tscn` | Schaltet Dash frei |
 | Double-Jump | `scenes/pickups/doublejump_ability.tscn` | Schaltet 2. Sprung frei |
 | Wallcrawl | `scenes/pickups/wallcrawl_ability.tscn` | Klettern an Waenden |
+| Heil-Pickup | `scenes/pickups/heal_pickup.tscn` | Fuellt Leben auf (`heal_amount` im Inspector) |
 | Todeszone | `scenes/world/death.tscn` | Respawnt den Spieler |
 | Portal | `scenes/world/portal.tscn` | Teleport (siehe README im Slot-Ordner) |
 

@@ -110,6 +110,11 @@ Spieler gefunden".
 Baue ein Pickup, das den Spieler heilt (1 Herz auffüllt), statt eine Ability
 freizuschalten.
 
+> Es gibt bereits ein **fertiges Beispiel** dazu: `scripts/pickups/heal_pickup.gd`
+> + `scenes/pickups/heal_pickup.tscn`. Versuch es trotzdem zuerst selbst –
+> danach kannst du deine Lösung damit vergleichen oder eine eigene Variante
+> bauen (z. B. ein Pickup, das den Spieler schneller macht).
+
 **Konzept:** Vorhandenes Muster kopieren und anpassen + Methodenaufruf auf
 dem Spieler.
 

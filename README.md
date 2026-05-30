@@ -111,6 +111,7 @@ SobeGameStudios/
 | `scripts/pickups/charge_ability.gd` | **Pickup** – Schaltet Charge-Ability frei |
 | `scripts/pickups/doublejump_ability.gd` | **Pickup** – Schaltet Double-Jump frei |
 | `scripts/pickups/wallcrawl_ability.gd` | **Pickup** – Schaltet Wallcrawl-Ability frei |
+| `scripts/pickups/heal_pickup.gd` | **Pickup** – Füllt die Lebenspunkte des Spielers auf |
 
 ---
 

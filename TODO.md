@@ -86,8 +86,11 @@ lokal bestätigen:
 - [x] `heal(amount := 1)` in `scripts/player/player.gd` ergänzt (Gegenstück zu
       `take_damage`, begrenzt auf `max_health`, sendet `health_changed`).
 - [x] Lösung in A4 angepasst – die Methode ist jetzt vorhanden, A4 ist lösbar.
-- [ ] (Optional, im Editor) Ein `heal_pickup.tscn` als fertiges Prefab anlegen,
-      damit man das Heil-Pickup auch per Drag-and-Drop nutzen kann.
+- [x] Fertiges Prefab `scenes/pickups/heal_pickup.tscn` + `heal_pickup.gd`
+      angelegt (per Drag-and-Drop nutzbar, `heal_amount` im Inspector).
+- [ ] (Optional, im Editor) **Sprite ersetzen:** Das Heil-Pickup nutzt aktuell
+      eine weiße Platzhalter-Grafik (`CanvasTexture`). Im Editor das `Sprite2D`
+      anklicken und eine richtige Heil-Grafik (z. B. ein Herz) zuweisen.
 
 ---
 
