@@ -144,6 +144,7 @@ Egal welche Stufe – so kommen deine Aenderungen ins gemeinsame Spiel:
    git push -u origin feature/dein-name-was-du-baust
    ```
 4. Auf GitHub einen **Pull Request** erstellen → andere koennen draufschauen
+   (eine Vorlage mit „Was habe ich gelernt?" wird automatisch eingefuegt)
 5. Nach Review: in `main` mergen
 
 **Bitte nicht:**
@@ -158,6 +159,10 @@ Egal welche Stufe – so kommen deine Aenderungen ins gemeinsame Spiel:
 Fehlersuche ist eine Kernkompetenz. In [`BUGCHASE.md`](BUGCHASE.md) findest du
 5 eingebaute Bugs mit Symptom-Beschreibung, Suchhilfe und aufklappbarer Loesung.
 Empfehlung: Versuche jeden Bug selbst zu finden, bevor du die Loesung anschaust.
+
+Lust, selbst etwas zu bauen? In [`AUFGABEN.md`](AUFGABEN.md) gibt es kleine,
+klar umrissene Code-Herausforderungen (Stufe 3–5) – die Marker `📝 AUFGABE`
+stehen direkt im passenden Skript.
 
 ---
 

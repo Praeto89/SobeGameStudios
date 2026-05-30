@@ -1,0 +1,10 @@
+# Steuert das "New Issue"-Menü auf GitHub.
+# blank_issues_enabled: true erlaubt weiterhin ein komplett leeres Issue.
+blank_issues_enabled: true
+contact_links:
+  - name: 📖 Erst mal reinschnuppern (ohne Issue)
+    url: https://github.com/praeto89/sobegamestudios/blob/main/QUICKSTART.md
+    about: Neu hier? Starte mit dem QUICKSTART – in 10 Minuten zum ersten Beitrag, ganz ohne Code.
+  - name: 🐞 Bugs zum Üben (BUGCHASE)
+    url: https://github.com/praeto89/sobegamestudios/blob/main/BUGCHASE.md
+    about: 5 eingebaute Bugs mit Hinweisen und Lösung – ideal zum Debuggen-Lernen.

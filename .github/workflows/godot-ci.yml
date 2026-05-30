@@ -44,5 +44,8 @@ jobs:
               echo "::error file=$f::GDScript-Syntaxfehler"
               fail=1
             fi
-          done < <(find scripts -name '*.gd')
+          done < <(find scripts tests -name '*.gd')
           exit $fail
+
+      - name: Logik-Tests ausfuehren
+        run: godot --headless --path . --script res://tests/run_tests.gd
