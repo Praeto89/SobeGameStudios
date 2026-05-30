@@ -88,6 +88,7 @@ SobeGameStudios/
 | [GLOSSAR.md](GLOSSAR.md) | Englische Fachbegriffe kurz erklärt |
 | [Concepts & ideas/DESIGN.md](Concepts%20%26%20ideas/DESIGN.md) | Design-Entscheidungen und ihr „Warum" |
 | [tests/README.md](tests/README.md) | Wie die Tests laufen und wie man eigene schreibt |
+| [TODO.md](TODO.md) | Offene Aufgaben, die im Editor/von Hand zu erledigen sind (z. B. Screenshots) |
 
 ---
 
