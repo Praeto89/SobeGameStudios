@@ -154,6 +154,35 @@ Egal welche Stufe – so kommen deine Aenderungen ins gemeinsame Spiel:
 
 ---
 
+## Git ohne Terminal (im Godot-Editor)
+
+Angst vorm Terminal? Brauchst du nicht. Godot hat Git eingebaut – dieses
+Projekt nutzt es bereits (das **Version Control**-Panel ist aktiviert).
+
+So gehst du vor – komplett mit der Maus:
+
+1. **Unten** im Editor auf den Tab **„Version Control"** klicken
+   (neben Output/Debugger/Audio). Falls nicht sichtbar:
+   Menue **Projekt → Versionsverwaltung** oeffnen.
+2. Links siehst du unter **„Unstaged Changes"** alle geaenderten Dateien.
+   Mit dem **Pfeil hoch / „Stage Selected"** schiebst du sie nach
+   **„Staged Changes"** (= „diese will ich hochladen").
+   > Tipp: am besten nur **deine** Dateien stagen, nicht alles.
+3. Unten ins **Commit-Feld** eine kurze Nachricht schreiben, z. B.
+   `feat: Slot 2 mit Parkour gebaut` → **„Commit Changes"** klicken.
+4. Oben rechts im Panel auf **„Push"** klicken – fertig, deine Aenderung ist
+   hochgeladen.
+
+Wenn du auf einem **eigenen Branch** arbeiten willst (empfohlen, siehe oben),
+laesst sich der Branch ebenfalls im Version-Control-Panel anlegen und wechseln.
+
+> **Kein Version-Control-Tab?** Dann nutz den Terminal-Weg oben – oder frag in
+> der Klasse. Der eingebaute Git-Bereich ist bequem, aber kein Muss.
+
+<!-- 📷 docs/img/07_git_panel.png – Version-Control-Panel mit markiertem Commit-Feld -->
+
+---
+
 ## Debuggen lernen
 
 Fehlersuche ist eine Kernkompetenz. In [`BUGCHASE.md`](BUGCHASE.md) findest du

@@ -3,6 +3,22 @@
 Du hast Godot noch nie benutzt? Perfekt. Wir bauen jetzt zusammen dein erstes
 eigenes Mini-Level. Kein Programmieren noetig, nur klicken und ziehen.
 
+> **Editor-Begriffe unklar** (Inspector? FileSystem-Dock?) →
+> [ORIENTIERUNG.md](ORIENTIERUNG.md) zeigt dir die Oberflaeche in 2 Minuten.
+> **Klemmt etwas?** → [FAQ.md](FAQ.md).
+
+### Deine erste Session – Checkliste
+
+Hak ab, was du geschafft hast. Mehr braucht's fuer den Anfang nicht:
+
+- [ ] Godot 4.6 installiert
+- [ ] Projekt geoeffnet (`project.godot` importiert)
+- [ ] `sandbox.tscn` mit **F6** gestartet und herumgelaufen
+- [ ] Eine Muenze per Drag-and-Drop hinzugefuegt
+- [ ] Einen `@export`-Wert im Inspector geaendert
+- [ ] (optional) Eigenen Slot in der Galerie beschriftet
+- [ ] (optional) Aenderung hochgeladen (Push)
+
 ---
 
 ## Schritt 1: Projekt oeffnen (1 min)
@@ -12,6 +28,10 @@ eigenes Mini-Level. Kein Programmieren noetig, nur klicken und ziehen.
 3. Godot starten → **Projekt importieren** → die Datei `project.godot` waehlen → **Importieren & Bearbeiten**
 
 Du siehst jetzt den Godot-Editor mit dem leeren Spiel.
+
+<!-- 📷 docs/img/01_import.png – Import-Dialog mit ausgewaehlter project.godot -->
+
+> Neu im Editor? [ORIENTIERUNG.md](ORIENTIERUNG.md) erklaert die Bereiche.
 
 ---
 
@@ -28,6 +48,9 @@ res://
 
 Du siehst eine Spielwiese mit Boden, Spieler, ein paar Muenzen und Plattformen.
 
+<!-- 📷 docs/img/02_filesystem_sandbox.png – FileSystem-Dock mit markiertem Pfad -->
+<!-- 📷 docs/img/06_layout_overview.png – beschriftete Editor-Bereiche -->
+
 ---
 
 ## Schritt 3: Spielen (10 sek)
@@ -36,6 +59,8 @@ Druecke **F6**.
 
 > **F6** = nur diese Szene starten
 > **F5** = das ganze Spiel starten (Main-Szene)
+
+<!-- 📷 docs/img/03_play_buttons.png – F5/F6-Buttons oben rechts markiert -->
 
 Du laeufst mit Pfeiltasten und springst mit Leertaste. Probiere die Portale unten links (Galerie) und unten rechts (Hauptlevel) aus.
 
@@ -55,6 +80,8 @@ Du bist wieder im Editor. Jetzt baust du etwas Eigenes in die Sandbox.
 4. **Strg+S** zum Speichern
 5. **F6** zum Testen
 
+<!-- 📷 docs/img/04_drag_coin.png – coin.tscn wird ins Viewport gezogen -->
+
 Sammle deine neue Muenze ein. Klingelt's? Glueckwunsch, du hast etwas zum Spiel beigetragen.
 
 ---
@@ -69,6 +96,8 @@ Scroll runter zu:
 - `distance` (wie weit sie pendelt) – probier mal **150**
 
 **Strg+S**, dann **F6**. Schon eine richtige Achterbahn.
+
+<!-- 📷 docs/img/05_inspector_export.png – Inspector mit speed/distance markiert -->
 
 ---
 
@@ -114,7 +143,8 @@ Bei jedem Prefab kannst du im Inspector die **@export**-Werte aendern
 ## Aenderungen teilen
 
 1. **Strg+S** in allen geaenderten Szenen
-2. Im Terminal (oder ueber Godot's Git-Plugin): committen + pushen
+2. Committen + pushen – am einfachsten **ohne Terminal** direkt im Editor:
+   [CONTRIBUTING.md → „Git ohne Terminal"](CONTRIBUTING.md#git-ohne-terminal-im-godot-editor)
 3. Fertig – beim naechsten Klassen-Start sehen alle dein Level in der Galerie
 
 ---
@@ -124,5 +154,7 @@ Bei jedem Prefab kannst du im Inspector die **@export**-Werte aendern
 - **Spieler faellt durch den Boden** – die Bodenflaeche ist zu klein oder die Wand fehlt. Sandbox-Boden ist gross genug.
 - **Portal "kein Partner gefunden"** – `portal_id` und `target_portal_id` muessen zusammenpassen. Details in `scenes/levels/student_levels/README.md`.
 - **Spiel startet nicht** – mit **F6** statt F5 nur die aktuelle Szene starten.
+
+Mehr Stolpersteine + Lösungen: [FAQ.md](FAQ.md).
 
 Tieferen Einstieg in Code findest du im Haupt-`README.md` und in den `.gd`-Dateien unter `scripts/`.

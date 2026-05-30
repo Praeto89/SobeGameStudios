@@ -3,10 +3,11 @@
 Ein gemeinsames Lernprojekt in Godot 4.6. Ziel ist es, durch die Entwicklung eines eigenen Spiels grundlegende Konzepte der Spieleentwicklung zu erlernen: Physik, KI, Signale, Szenenmanagement und mehr.
 
 > **Neu hier und noch nie mit Godot gearbeitet?**
-> → Lies zuerst [QUICKSTART.md](QUICKSTART.md) – in 10 Minuten zum ersten eigenen Beitrag, ganz ohne Code.
+> → Erst die Oberfläche kennenlernen: [ORIENTIERUNG.md](ORIENTIERUNG.md) (2 Min).
+> → Dann [QUICKSTART.md](QUICKSTART.md) – in 10 Minuten zum ersten eigenen Beitrag, ganz ohne Code.
 > → Danach [CONTRIBUTING.md](CONTRIBUTING.md) für gestufte Beitragspfade (Stufe 1 = Asset tauschen, Stufe 5 = eigenes Skript).
 > → Lust auf eine konkrete Mini-Herausforderung? [AUFGABEN.md](AUFGABEN.md).
-> → Englischer Fachbegriff unklar? [GLOSSAR.md](GLOSSAR.md).
+> → Englischer Fachbegriff unklar? [GLOSSAR.md](GLOSSAR.md). Klemmt etwas? [FAQ.md](FAQ.md).
 
 ---
 
@@ -78,7 +79,9 @@ SobeGameStudios/
 
 | Datei | Wofür |
 |---|---|
+| [ORIENTIERUNG.md](ORIENTIERUNG.md) | Die Godot-Oberfläche verstehen (Inspector, FileSystem …) |
 | [QUICKSTART.md](QUICKSTART.md) | In 10 Minuten zum ersten Beitrag, ohne Code |
+| [FAQ.md](FAQ.md) | Häufige Stolpersteine + schnelle Lösungen |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | 5 Beitragsstufen (Asset → eigenes Skript) |
 | [AUFGABEN.md](AUFGABEN.md) | Kleine Code-Herausforderungen mit Lösung |
 | [BUGCHASE.md](BUGCHASE.md) | 5 eingebaute Bugs zum Suchen |
