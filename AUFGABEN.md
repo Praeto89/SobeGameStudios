@@ -116,8 +116,8 @@ dem Spieler.
 <details>
 <summary>▸ Lösung</summary>
 
-Im Spieler braucht es eine Heil-Methode (falls noch nicht vorhanden) – schau in
-`player.gd` nach `take_damage`/`health` und ergänze sinngemäß:
+Im Spieler gibt es bereits eine passende Methode `heal(amount)` (siehe
+`scripts/player/player.gd`). Du brauchst also nur ein Pickup, das sie aufruft:
 
 ```gdscript
 # heal_pickup.gd
@@ -126,12 +126,15 @@ func _ready():
     body_entered.connect(_on_body_entered)
 func _on_body_entered(body):
     if body.is_in_group("player") and body.has_method("heal"):
-        body.heal(1)
+        body.heal(1)   # 1 Herz auffuellen (begrenzt auf max. Leben)
         queue_free()
 ```
 
 Wichtig: erst prüfen, ob die Methode existiert (`has_method`), sonst gibt es
 einen Fehler, wenn ein anderer Körper das Pickup berührt.
+
+> Zum Üben: Schau dir `heal()` im Spieler an – sie ist das Gegenstück zu
+> `take_damage()` und begrenzt die Leben auf `max_health`.
 </details>
 
 ---

@@ -79,14 +79,15 @@ lokal bestätigen:
 
 ---
 
-## 4. Aufgabe A4 absichern (Heil-Methode)
+## 4. Aufgabe A4 absichern (Heil-Methode) — ✅ erledigt
 
 [`AUFGABEN.md`](AUFGABEN.md) → A4 („Heil-Pickup") ruft `body.heal(1)` auf.
 
-- [ ] In `scripts/player/player.gd` prüfen, ob es eine `heal(...)`-Methode gibt.
-- [ ] Falls **nicht**: eine einfache Methode ergänzen, die die Leben um den Wert
-      erhöht (max. `MAX_HEALTH`) und das `health_changed`-Signal sendet –
-      analog zu `take_damage(...)`. So ist A4 für Schüler:innen wirklich lösbar.
+- [x] `heal(amount := 1)` in `scripts/player/player.gd` ergänzt (Gegenstück zu
+      `take_damage`, begrenzt auf `max_health`, sendet `health_changed`).
+- [x] Lösung in A4 angepasst – die Methode ist jetzt vorhanden, A4 ist lösbar.
+- [ ] (Optional, im Editor) Ein `heal_pickup.tscn` als fertiges Prefab anlegen,
+      damit man das Heil-Pickup auch per Drag-and-Drop nutzen kann.
 
 ---
 

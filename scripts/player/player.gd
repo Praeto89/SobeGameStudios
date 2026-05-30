@@ -256,6 +256,24 @@ func collect_coin() -> void:
 	emit_signal("coin_collected", coin_count)
 
 # =============================================================================
+# heal(amount)
+# Fuellt Lebenspunkte wieder auf (Gegenstueck zu take_damage).
+# Wird z. B. von einem Heil-Pickup aufgerufen (siehe AUFGABEN.md -> A4).
+#
+# amount: Anzahl der aufzufuellenden Lebenspunkte (Standard: 1)
+#
+# Wie bei take_damage wird auf max_health begrenzt und GameManager + HUD
+# (per health_changed) auf dem aktuellen Stand gehalten. Bei einem toten
+# Spieler passiert nichts.
+# =============================================================================
+func heal(amount: int = 1) -> void:
+	if is_dead:
+		return
+	current_health = clamp(current_health + amount, 0, max_health)
+	GameManager.current_health = current_health
+	emit_signal("health_changed", current_health)
+
+# =============================================================================
 # unlock_charge() / unlock_wallcrawl() / unlock_double_jump()
 # Schaltet die jeweilige Ability frei.
 # Wird vom entsprechenden Pickup-Objekt aufgerufen.
