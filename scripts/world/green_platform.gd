@@ -15,6 +15,11 @@
 #   - In jedem Physik-Frame wird position.x veraendert
 #   - Wenn die Entfernung von der Startposition groesser als "distance" wird,
 #     kehrt sich die Richtung um
+#
+# Schwierigkeit: [EINSTEIGER] – Bewegung in einer einzigen Achse.
+#
+# 📝 AUFGABE (A2, Stufe 4/5): Lass eine Kopie auf und ab pendeln statt links/
+#    rechts (position.y statt position.x). Loesung: AUFGABEN.md -> A2
 # =============================================================================
 
 extends AnimatableBody2D

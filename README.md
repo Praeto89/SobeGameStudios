@@ -5,6 +5,8 @@ Ein gemeinsames Lernprojekt in Godot 4.6. Ziel ist es, durch die Entwicklung ein
 > **Neu hier und noch nie mit Godot gearbeitet?**
 > → Lies zuerst [QUICKSTART.md](QUICKSTART.md) – in 10 Minuten zum ersten eigenen Beitrag, ganz ohne Code.
 > → Danach [CONTRIBUTING.md](CONTRIBUTING.md) für gestufte Beitragspfade (Stufe 1 = Asset tauschen, Stufe 5 = eigenes Skript).
+> → Lust auf eine konkrete Mini-Herausforderung? [AUFGABEN.md](AUFGABEN.md).
+> → Englischer Fachbegriff unklar? [GLOSSAR.md](GLOSSAR.md).
 
 ---
 
@@ -67,9 +69,22 @@ SobeGameStudios/
 │   ├── music/         Hintergrundmusik
 │   ├── fonts/         Schriftarten
 │   └── textures/      Tileset und Texturen
-├── Concepts & ideas/  Ideen und Design-Notizen des Teams
+├── tests/             Automatische Logik-Tests (headless, ohne Addon)
+├── Concepts & ideas/  Ideen + DESIGN.md (das „Warum" hinter dem Spiel)
 └── project.godot      Godot-Projektkonfiguration
 ```
+
+**Lern-Dokumente im Überblick:**
+
+| Datei | Wofür |
+|---|---|
+| [QUICKSTART.md](QUICKSTART.md) | In 10 Minuten zum ersten Beitrag, ohne Code |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | 5 Beitragsstufen (Asset → eigenes Skript) |
+| [AUFGABEN.md](AUFGABEN.md) | Kleine Code-Herausforderungen mit Lösung |
+| [BUGCHASE.md](BUGCHASE.md) | 5 eingebaute Bugs zum Suchen |
+| [GLOSSAR.md](GLOSSAR.md) | Englische Fachbegriffe kurz erklärt |
+| [Concepts & ideas/DESIGN.md](Concepts%20%26%20ideas/DESIGN.md) | Design-Entscheidungen und ihr „Warum" |
+| [tests/README.md](tests/README.md) | Wie die Tests laufen und wie man eigene schreibt |
 
 ---
 
@@ -92,6 +107,33 @@ SobeGameStudios/
 | `scripts/pickups/charge_ability.gd` | **Pickup** – Schaltet Charge-Ability frei |
 | `scripts/pickups/doublejump_ability.gd` | **Pickup** – Schaltet Double-Jump frei |
 | `scripts/pickups/wallcrawl_ability.gd` | **Pickup** – Schaltet Wallcrawl-Ability frei |
+
+---
+
+## Lernkarte – welches Konzept lerne ich wo?
+
+Du musst nicht alles auf einmal verstehen. Diese Karte zeigt, **welches
+Konzept** an **welcher Stelle** im echten Code steckt – und eine kleine Sache,
+die du dort ausprobieren kannst. Von oben (leicht) nach unten (anspruchsvoll).
+
+| Konzept | Wo im Code | Probier es / Aufgabe |
+|---|---|---|
+| **`@export`-Werte tunen** | `world/green_platform.gd`, `enemies/green_slime.gd` | `speed`/`distance` im Inspector ändern (CONTRIBUTING Stufe 0/3) |
+| **Game Feel / Konstanten** | `player/player.gd` (Bereich *DEIN SPIELFELD*) | Sprung „Mond" vs. „bleischwer" → [AUFGABEN.md](AUFGABEN.md) A5 |
+| **Signale** | `player/player.gd` → `ui/hud.gd` | siehe Abschnitt *Signale* unten; ein HUD-Element anschließen |
+| **Pickup-Muster** | `pickups/coin.gd`, `pickups/charge_ability.gd` | Goldmünze bauen → [AUFGABEN.md](AUFGABEN.md) A1 |
+| **Bewegung & Achsen** | `world/green_platform.gd` | vertikal pendeln → [AUFGABEN.md](AUFGABEN.md) A2 |
+| **Coroutine (`await`)** | `pickups/coin.gd`, `enemies/green_slime.gd` | Reihenfolge von Sound & `queue_free` → [BUGCHASE.md](BUGCHASE.md) Bug 3 |
+| **State Machine (KI)** | `enemies/green_slime.gd` | Flucht-Zustand ergänzen → [AUFGABEN.md](AUFGABEN.md) A3 |
+| **Singleton / Persistenz** | `game_manager.gd` | wie überleben Abilities den Szenenwechsel? |
+| **Tests** | `tests/` | eigenen `t.check(...)` schreiben → `tests/README.md` |
+
+> **Schwierigkeits-Tags im Code:** Viele Skripte tragen im Kopf einen Hinweis
+> `Schwierigkeit: [EINSTEIGER]` oder `[FORTGESCHRITTEN]`. So siehst du auf einen
+> Blick, was schon für dich greifbar ist. Such im Editor nach `[EINSTEIGER]`.
+
+Fachbegriffe (Signal, Coroutine, State Machine …) sind im [GLOSSAR.md](GLOSSAR.md)
+kurz erklärt.
 
 ---
 
@@ -181,11 +223,31 @@ Fehlersuche ist eine Kernkompetenz. Im [`BUGCHASE.md`](BUGCHASE.md) findest du
 5 absichtliche Bugs mit Symptom-Beschreibung, Suchhilfe und aufklappbarer Lösung.
 Ideal als Einstieg bevor du eigenen Code schreibst.
 
+Wenn du selbst Hand anlegen willst, warten in [`AUFGABEN.md`](AUFGABEN.md)
+kleine, klar umrissene Code-Herausforderungen – die passenden Marker
+(`📝 AUFGABE`) stehen direkt im Code.
+
+---
+
+## Tests
+
+Das Projekt hat kleine automatische Tests der Spiel-**Logik** (in `tests/`).
+Sie laufen ohne Fenster und ohne Zusatz-Addon:
+
+```
+godot --headless --path . --script res://tests/run_tests.gd
+```
+
+Bei jedem Push/Pull Request laufen sie automatisch in der CI mit. Was sie prüfen
+und wie du eigene Tests schreibst, steht in [`tests/README.md`](tests/README.md).
+
 ---
 
 ## Geplante Features
 
-Design-Ideen und Konzepte des Teams befinden sich im Ordner `Concepts & ideas/`:
+Die Design-Entscheidungen hinter dem Spiel (und ihr „Warum") sind in
+[`Concepts & ideas/DESIGN.md`](Concepts%20%26%20ideas/DESIGN.md) zusammengefasst.
+Rohe Ideen und Konzept-Skizzen des Teams liegen daneben im Ordner `Concepts & ideas/`:
 
 - **Schwert-Angriff** – Nahkampf mit Dash-Komponente
 - **Wall Jump** – Ist bereits implementiert als Teil von Wallcrawl
