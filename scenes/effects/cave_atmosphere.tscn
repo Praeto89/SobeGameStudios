@@ -1,0 +1,46 @@
+[gd_scene load_steps=3 format=3 uid="uid://ccaveatmo0001"]
+
+; Wiederverwendbarer "Untergrund"-Baustein. Einfach per Drag&Drop in
+; ein Level ziehen (als Kind der Level-Wurzel). Bringt drei Dinge mit:
+;   1. CanvasModulate  -> taucht die ganze Szene in Hoehlen-Dunkel
+;   2. WorldEnvironment -> Glow/Bloom, damit helle Dinge leuchten
+;   3. CPUParticles2D   -> langsam schwebender Staub fuer Atmosphaere
+; Alle Werte sind im Inspector frei einstellbar.
+
+[ext_resource type="Texture2D" uid="uid://clightsoft0001" path="res://assets/effects/light_soft.tres" id="1_light"]
+
+[sub_resource type="Environment" id="Environment_cave"]
+background_mode = 3
+glow_enabled = true
+glow_intensity = 1.0
+glow_strength = 1.1
+glow_bloom = 0.15
+glow_blend_mode = 0
+glow_hdr_threshold = 0.85
+
+[node name="CaveAtmosphere" type="Node2D"]
+
+[node name="Dunkelheit" type="CanvasModulate" parent="."]
+; Dunkles Blau-Violett. Heller machen = Zahlen Richtung 1.0 schieben,
+; pechschwarz = Richtung 0.0.
+color = Color(0.34, 0.32, 0.47, 1)
+
+[node name="Glow" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_cave")
+
+[node name="Staub" type="CPUParticles2D" parent="."]
+texture = ExtResource("1_light")
+amount = 36
+lifetime = 7.0
+preprocess = 4.0
+randomness = 0.6
+emission_shape = 3
+emission_rect_extents = Vector2(480, 300)
+direction = Vector2(0.2, 1)
+spread = 25.0
+gravity = Vector2(0, 3)
+initial_velocity_min = 2.0
+initial_velocity_max = 9.0
+scale_amount_min = 0.02
+scale_amount_max = 0.05
+color = Color(0.8, 0.85, 1, 0.28)

@@ -4,9 +4,15 @@
 [ext_resource type="PackedScene" uid="uid://ck6q6oyovvakg" path="res://scenes/player/player.tscn" id="2_player"]
 [ext_resource type="PackedScene" uid="uid://md1jdcoedfs" path="res://scenes/world/death.tscn" id="3_death"]
 [ext_resource type="Script" path="res://scripts/levels/galerie.gd" id="4_galerie"]
+[ext_resource type="PackedScene" uid="uid://ccaveatmo0001" path="res://scenes/effects/cave_atmosphere.tscn" id="5_cave"]
 
 [node name="Galerie" type="Node2D"]
 script = ExtResource("4_galerie")
+
+[node name="CaveAtmosphere" parent="." instance=ExtResource("5_cave")]
+
+[node name="Dunkelheit" parent="CaveAtmosphere" index="0"]
+color = Color(0.72, 0.7, 0.82, 1)
 
 [node name="Titel" type="Label" parent="."]
 offset_left = -300.0

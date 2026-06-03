@@ -5,6 +5,9 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wpm1x"]
 size = Vector2(53, 5)
 
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_plat"]
+polygon = PackedVector2Array(-22, -6, 27, -6, 27, -1, -22, -1)
+
 [node name="green_platform" type="AnimatableBody2D" unique_id=562638760]
 sync_to_physics = false
 
@@ -18,3 +21,6 @@ region_rect = Rect2(0, 0, 48.00003, 7.6666718)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=853420760]
 position = Vector2(4.5, -3.5)
 shape = SubResource("RectangleShape2D_wpm1x")
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="." unique_id=853420761]
+occluder = SubResource("OccluderPolygon2D_plat")

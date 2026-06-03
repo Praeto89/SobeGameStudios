@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://b3fmywqfcrq3g"]
 
 [ext_resource type="PackedScene" uid="uid://ck6q6oyovvakg" path="res://scenes/player/player.tscn" id="1_c5o7e"]
+[ext_resource type="PackedScene" uid="uid://ccaveatmo0001" path="res://scenes/effects/cave_atmosphere.tscn" id="20_cave"]
 [ext_resource type="PackedScene" uid="uid://0lmbkrm3yis5" path="res://scenes/pickups/wallcrawl_ability.tscn" id="4_7i8v8"]
 [ext_resource type="PackedScene" uid="uid://dnmnbcdkt56ma" path="res://scenes/pickups/doublejump_ability.tscn" id="5_ervsl"]
 [ext_resource type="Texture2D" uid="uid://ctbiesjqnr38r" path="res://assets/sprites/PurpleDragons Spirte set/Ground/rockgrey_tilemap.png" id="6_7ekqj"]
@@ -205,6 +206,8 @@ sources/1 = SubResource("TileSetAtlasSource_ac54n")
 
 [node name="Node2D" type="Node2D" unique_id=718214453]
 position = Vector2(16, 8)
+
+[node name="CaveAtmosphere" parent="." instance=ExtResource("20_cave")]
 
 [node name="Node2D" parent="." unique_id=1773745841 instance=ExtResource("1_c5o7e")]
 position = Vector2(157, 118)
