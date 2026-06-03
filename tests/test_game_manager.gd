@@ -53,6 +53,7 @@ func run(t) -> void:
 	gm.has_double_jump = true
 	gm.coin_count = 7
 	gm.current_health = 2
+	gm.current_scene = "res://scenes/levels/turm.tscn"
 	gm.opened_gate_ids.append("res://lvl.tscn::gate_a")
 	gm.collected_coin_ids.append("res://lvl.tscn::coin_a")
 	gm.save_game(tmp_path)
@@ -62,10 +63,12 @@ func run(t) -> void:
 	gm.has_double_jump = false
 	gm.coin_count = 0
 	gm.current_health = gm.MAX_HEALTH
+	gm.current_scene = ""
 	gm.opened_gate_ids.clear()
 	gm.collected_coin_ids.clear()
 
 	t.check(gm.load_game(tmp_path), "load_game meldet Erfolg bei vorhandener Datei")
+	t.check(gm.current_scene == "res://scenes/levels/turm.tscn", "load_game stellt current_scene wieder her")
 	t.check(gm.has_charge == true, "load_game stellt has_charge wieder her")
 	t.check(gm.has_double_jump == true, "load_game stellt has_double_jump wieder her")
 	t.check(gm.coin_count == 7, "load_game stellt coin_count wieder her")

@@ -28,6 +28,11 @@ const MAX_HEALTH: int = 4
 var current_health: int = MAX_HEALTH
 var coin_count: int = 0
 
+# Pfad der zuletzt aktiv gespielten Level-Szene. Wird vom Spieler in _ready()
+# gesetzt und mitgespeichert, damit "Fortsetzen" im Menue wieder im richtigen
+# Level landet.
+var current_scene: String = ""
+
 # -------------------------------------------------------
 # Coin-Combo (nur fuer das "Juice"-Feedback beim Sammeln)
 # -------------------------------------------------------
@@ -119,6 +124,7 @@ func reset_game() -> void:
 	has_double_jump = false
 	current_health = MAX_HEALTH
 	coin_count = 0
+	current_scene = ""
 	collected_coin_ids.clear()
 	defeated_enemy_ids.clear()
 	opened_gate_ids.clear()
@@ -159,6 +165,7 @@ func save_game(path: String = SAVE_PATH) -> void:
 		"has_double_jump": has_double_jump,
 		"current_health": current_health,
 		"coin_count": coin_count,
+		"current_scene": current_scene,
 		"collected_coin_ids": collected_coin_ids,
 		"defeated_enemy_ids": defeated_enemy_ids,
 		"opened_gate_ids": opened_gate_ids,
@@ -190,6 +197,7 @@ func load_game(path: String = SAVE_PATH) -> bool:
 	has_double_jump = data.get("has_double_jump", false)
 	current_health = int(data.get("current_health", MAX_HEALTH))
 	coin_count = int(data.get("coin_count", 0))
+	current_scene = str(data.get("current_scene", ""))
 	# Arrays einzeln uebernehmen, damit die String-Typisierung erhalten bleibt
 	# (JSON liefert untypisierte Arrays zurueck).
 	_load_string_array(collected_coin_ids, data.get("collected_coin_ids", []))
@@ -205,3 +213,15 @@ func _load_string_array(target: Array[String], source) -> void:
 	if source is Array:
 		for item in source:
 			target.append(str(item))
+
+# =============================================================================
+# has_save_file() / delete_save()
+# Kleine Helfer fuers Menue: gibt es einen Spielstand (-> "Fortsetzen"
+# anbieten)? Und ein hartes Loeschen fuer "Neues Spiel".
+# =============================================================================
+func has_save_file(path: String = SAVE_PATH) -> bool:
+	return FileAccess.file_exists(path)
+
+func delete_save(path: String = SAVE_PATH) -> void:
+	if FileAccess.file_exists(path):
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(path))

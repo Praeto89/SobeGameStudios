@@ -153,6 +153,10 @@ func _ready() -> void:
 	# HUD initial befuellen (sonst zeigt es kurz die Default-Werte)
 	call_deferred("emit_signal", "health_changed", current_health)
 	call_deferred("emit_signal", "coin_collected", coin_count)
+	# Aktuelles Level fuer "Fortsetzen" im Menue merken.
+	var scn := get_tree().current_scene
+	if scn != null and scn.scene_file_path != "":
+		GameManager.current_scene = scn.scene_file_path
 
 # =============================================================================
 # _exit_tree()
