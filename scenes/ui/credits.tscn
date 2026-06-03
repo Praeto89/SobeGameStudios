@@ -1,0 +1,80 @@
+[gd_scene load_steps=4 format=3 uid="uid://ccreditsscn0001"]
+
+[ext_resource type="Script" uid="uid://dcreditsscr0001" path="res://scripts/ui/credits.gd" id="1_cred"]
+[ext_resource type="FontFile" uid="uid://dtx2a7s2qqtrp" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="2_font"]
+[ext_resource type="AudioStream" uid="uid://r7h513q17ogb" path="res://assets/music/for_a_school_game.mp3" id="3_music"]
+
+[node name="Credits" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_cred")
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_music")
+autoplay = true
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.08, 0.09, 0.13, 1)
+
+[node name="ScrollText" type="Label" parent="."]
+layout_mode = 1
+anchor_right = 1.0
+offset_bottom = 40.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 32
+theme_override_constants/line_spacing = 12
+text = "SobeGame Studios
+
+
+
+- PLATZHALTER-ABSPANN -
+
+
+
+Spieldesign
+[Name]
+
+Programmierung
+[Name]
+
+Grafik
+[Platzhalter]
+
+Musik
+[Platzhalter]
+
+Level-Design
+[Platzhalter]
+
+
+
+Ein grosses Dankeschoen
+an alle Mitwirkenden!
+
+
+
+Danke fuers Spielen!"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="BackButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 24.0
+offset_top = 24.0
+offset_right = 184.0
+offset_bottom = 72.0
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 24
+text = "Zurueck"
