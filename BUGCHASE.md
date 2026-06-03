@@ -29,7 +29,8 @@ und druecke F5. Was passiert?
 
 **Symptom:** Der gruene Slime rast mit Lichtgeschwindigkeit durch das Level.
 
-**Suche in:** `scripts/enemies/green_slime.gd` oder direkt im Inspector
+**Suche in:** `scripts/enemies/slime_base.gd` (gemeinsames Slime-Verhalten)
+oder direkt im Inspector
 
 **Hinweis:** `@export var speed` – was ist ein sinnvoller Wert?
 Klick den Slime im Editor an → Inspector → schau was dort steht.
