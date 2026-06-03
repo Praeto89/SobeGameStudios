@@ -146,26 +146,26 @@ das hält den Code entkoppelt und wartbar.
 
 ```
 Spieler nimmt Schaden
-        │
-        ▼
+		│
+		▼
 emit_signal("health_changed", 3)
-        │
-        └──► HUD._on_health_changed(3)
-                     │
-                     ▼
-               Blade 4 wird rot + bricht
+		│
+		└──► HUD._on_health_changed(3)
+					 │
+					 ▼
+			   Blade 4 wird rot + bricht
 ```
 
 ```
 Spieler beruehrt Muenze
-        │
-        ▼
+		│
+		▼
 collect_coin()  →  emit_signal("coin_collected", 5)
-        │
-        └──► HUD._on_coin_collected(5)
-                     │
-                     ▼
-               CoinLabel zeigt "Coins: 5"
+		│
+		└──► HUD._on_coin_collected(5)
+					 │
+					 ▼
+			   CoinLabel zeigt "Coins: 5"
 ```
 
 | Signal | Sender | Empfänger | Beschreibung |

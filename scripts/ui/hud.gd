@@ -274,4 +274,3 @@ func _create_help_panel() -> void:
 
 	add_child(_help_panel)
 	_help_panel.visible = false
-
