@@ -1,146 +1,155 @@
 # =============================================================================
 # wall_slime.gd
 # =============================================================================
-# KI-Skript fuer den Wand-Slime (CharacterBody2D).
+# Der Wand-/Decken-Slime – ein SPEZIELLER Gegner.
 #
-# Verhalt sich weitgehend identisch zum gruenen Boden-Slime (green_slime.gd),
-# aber ist speziell fuer Waende ausgelegt:
+# Faehigkeiten:
+#   - Kriecht an einer DECKE oder einer WAND entlang (Schwerkraft aus).
+#   - Laesst sich FALLEN, sobald der Spieler direkt unter ihm steht.
+#   - Nach der Landung wird er zu einem normalen Boden-Slime und kriecht weiter.
 #
-#   - gravity = 0.0          -> der Slime faellt nicht herunter
-#   - speed = 20.0           -> langsamer als der Boden-Slime
-#   - detection_range = 0.0  -> erkennt den Spieler nicht, laeuft also immer nur Patrouille
+# Das gemeinsame Slime-Grundgeruest (Hitbox-Schaden, die(), Persistenz, Spieler-
+# Referenz) kommt aus SlimeBase. Die BEWEGUNG ist hier komplett eigen, weil sich
+# ein Decken-Kriecher voellig anders verhaelt als ein Boden-Slime.
 #
-# Diese Werte sind per @export im Editor anpassbar.
+# Spritesheet: assets/sprites/slime_purple.png
+#   (es gibt im Projekt kein eigenes Kriech-Sheet – die Frames werden je nach
+#    Oberflaeche gespiegelt/orientiert; ein dediziertes Sheet liesse sich in
+#    wall_slime.tscn einfach austauschen.)
+#
+# Schwierigkeit: [PROFI] – mehrere Zustaende, oberflaechenabhaengige Bewegung.
 # =============================================================================
 
-extends CharacterBody2D
+extends SlimeBase
 
 # -----------------------------------------------------------------------------
-# Export-Variablen (im Godot-Editor einstellbar)
+# An welcher Oberflaeche klebt der Slime? Im Editor pro Instanz einstellen,
+# je nachdem wo du ihn platzierst.
 # -----------------------------------------------------------------------------
-@export var speed := 20.0               # Bewegungsgeschwindigkeit in Pixel/Sekunde (langsam)
-@export var gravity := 0.0              # Keine Schwerkraft – Slime bleibt an der Wand
-@export var detection_range := 0.0      # Erkennungsreichweite (0 = kein aktives Verfolgen)
+enum Surface { CEILING, WALL_LEFT, WALL_RIGHT }
+
+@export var surface: Surface = Surface.CEILING   # CEILING = Decke, WALL_* = Wand
+@export var crawl_speed := 30.0                  # Kriech-Geschwindigkeit
+@export var drop_gravity := 800.0                # Fall-Beschleunigung nach dem Loslassen
+@export var drop_trigger_width := 24.0           # Wie genau muss der Spieler "darunter" sein (Pixel)
+@export var drop_delay := 0.15                   # Kurze Anspannung, bevor er faellt (Sekunden)
 
 # -----------------------------------------------------------------------------
-# Node-Referenzen
+# Interne Zustaende des Slimes
 # -----------------------------------------------------------------------------
-@onready var sprite := $AnimatedSprite2D
-@onready var hitbox := $Hitbox          # Area2D die Schaden an den Spieler gibt
-
-# -----------------------------------------------------------------------------
-# Zustandsvariablen
-# -----------------------------------------------------------------------------
-var player: Node2D = null               # Referenz auf den Spieler (nur fuer Aktivierungs-Logik)
-var patrol_direction := 1.0             # Aktuelle Laufrichtung: 1.0 = rechts, -1.0 = links
-var wall_cooldown := 0.0                # Wartezeit nach Wandkontakt (verhindert Flackern)
-var activated := false                  # True sobald die Aktivierungsanimation abgespielt wurde
-var is_activating := false              # True waehrend die Aktivierungs-Animation laeuft (verhindert Mehrfach-Start)
-var is_dead := false                    # True waehrend und nach der Todesanimation
-
-# Persistenz: vom Spawner gesetzt; gespawnte Slimes werden nicht persistiert.
-var is_spawned: bool = false
-var _persistent_id: String = ""
+enum State { CRAWL, PREP, FALL, GROUND }
+var state: int = State.CRAWL
+var crawl_dir := 1.0        # Richtung entlang der Oberflaeche (+1 / -1)
+var prep_timer := 0.0       # Countdown fuer die Anspannung vor dem Fall
 
 # =============================================================================
 # _ready()
-# Wird einmalig beim Start aufgerufen.
-# Fuegt den Slime zur Gruppe "enemy" hinzu,
-# holt die Spieler-Referenz und verbindet das Hitbox-Signal.
+# Erst das SlimeBase-Setup (Gruppe, Spieler, Hitbox, Persistenz), dann den
+# Slime passend zur Oberflaeche ausrichten.
 # =============================================================================
-func _ready():
-	add_to_group("enemy")
-	player = get_tree().get_first_node_in_group("player")
-	hitbox.body_entered.connect(_on_hitbox_body_entered)
-	# Persistenz: nur fest platzierte Slimes auf "schon besiegt" pruefen.
-	if not is_spawned:
-		_persistent_id = GameManager.get_persistent_id(self)
-		if _persistent_id != "" and _persistent_id in GameManager.defeated_enemy_ids:
-			queue_free()
+func _ready() -> void:
+	super()
+	_orient()
 
 # =============================================================================
-# _on_hitbox_body_entered(body)
-# Wird aufgerufen wenn ein Koerper die Hitbox beruehrt.
-# Verursacht 1 Schadenspunkt mit Rueckstoss Richtung weg vom Slime.
+# _orient()
+# Richtet das Sprite zur gewaehlten Oberflaeche aus. An der Decke haengt der
+# Slime "kopfueber" (vertikal gespiegelt).
 # =============================================================================
-func _on_hitbox_body_entered(body: Node) -> void:
-	if body.has_method("take_damage"):
-		var knockback_dir = sign(body.global_position.x - global_position.x)
-		body.take_damage(1, knockback_dir)
-
-# =============================================================================
-# die()
-# Wird vom Spieler ausgeloest (Roll oder Charge trifft den Slime).
-# Deaktiviert Kollision und Hitbox, spielt Todesanimation, entfernt sich.
-# =============================================================================
-func die() -> void:
-	if is_dead:
-		return
-	is_dead = true
-	# Persistierten Slime als besiegt markieren
-	if _persistent_id != "" and not _persistent_id in GameManager.defeated_enemy_ids:
-		GameManager.defeated_enemy_ids.append(_persistent_id)
-	$CollisionShape2D.set_deferred("disabled", true)
-	hitbox.monitoring = false
-	sprite.play("death")
-	await sprite.animation_finished
-	queue_free()
+func _orient() -> void:
+	sprite.flip_v = (surface == Surface.CEILING)
 
 # =============================================================================
 # _physics_process(delta)
-# Hauptschleife – laeuft jeden Physik-Frame.
-# Da gravity = 0, bleibt der Slime an seiner Position auf der Wand.
+# Zustandsautomat: je nach state ein anderes Verhalten.
 # =============================================================================
-func _physics_process(delta):
-	# --- Tot: Schwerkraft anwenden (gravity ist 0, also passiert nichts) ---
+func _physics_process(delta: float) -> void:
+	# Tot: nur noch zu Boden fallen lassen.
 	if is_dead:
-		velocity.y += gravity * delta
+		velocity.y += drop_gravity * delta
 		move_and_slide()
 		return
 
-	if not is_on_floor():
-		velocity.y += gravity * delta
-
-	if wall_cooldown > 0:
-		wall_cooldown -= delta
-
-	# Aktivierung laeuft: warten bis Animation fertig ist
-	# (await gibt _state_activation sofort zurueck, deshalb dieser Guard)
-	if is_activating:
-		move_and_slide()
-		return
-
-	# Da detection_range = 0, ist player_near immer false -> nur Patrouille
-	var player_near = player and is_instance_valid(player) and global_position.distance_to(player.global_position) < detection_range
-	if player_near and not activated:
-		_state_activation()
-	else:
-		_state_patrol()
+	match state:
+		State.CRAWL:
+			_do_crawl()
+		State.PREP:
+			_do_prep(delta)
+		State.FALL:
+			_do_fall(delta)
+		State.GROUND:
+			_do_ground(delta)
 
 	move_and_slide()
 
 # =============================================================================
-# _state_activation()
-# Einmalige Reaktion wenn Spieler nah ist (bei detection_range > 0).
+# _do_crawl()
+# Kriecht an der Oberflaeche entlang und dreht am Ende der "Schiene" um.
+# Sobald der Spieler darunter ist -> Wechsel in die Anspannung (PREP).
 # =============================================================================
-func _state_activation():
-	is_activating = true
-	var direction = sign(player.global_position.x - global_position.x)
-	velocity.x = direction * speed
-	sprite.flip_h = direction < 0
-	sprite.play("activation")
-	await sprite.animation_finished
-	activated = true
-	is_activating = false
+func _do_crawl() -> void:
+	sprite.play("crawl")
+	if surface == Surface.CEILING:
+		# Decke: horizontal kriechen, an Waenden umdrehen.
+		velocity = Vector2(crawl_dir * crawl_speed, 0.0)
+		sprite.flip_h = crawl_dir < 0
+		if is_on_wall():
+			crawl_dir *= -1.0
+	else:
+		# Wand: vertikal kriechen, oben/unten umdrehen.
+		velocity = Vector2(0.0, crawl_dir * crawl_speed)
+		if is_on_floor() or is_on_ceiling():
+			crawl_dir *= -1.0
+
+	if _player_below():
+		state = State.PREP
+		prep_timer = drop_delay
+		velocity = Vector2.ZERO
+		sprite.play("fall")
 
 # =============================================================================
-# _state_patrol()
-# Slime laeuft in patrol_direction und dreht um wenn er auf eine Wand trifft.
+# _do_prep(delta)
+# Kurze Schrecksekunde an Ort und Stelle, dann faellt der Slime.
 # =============================================================================
-func _state_patrol():
-	velocity.x = patrol_direction * speed
-	sprite.flip_h = patrol_direction < 0
-	sprite.play("patrol")
-	if is_on_wall() and wall_cooldown <= 0:
-		patrol_direction *= -1
-		wall_cooldown = 0.3
+func _do_prep(delta: float) -> void:
+	velocity = Vector2.ZERO
+	prep_timer -= delta
+	if prep_timer <= 0.0:
+		state = State.FALL
+
+# =============================================================================
+# _do_fall(delta)
+# Freier Fall. Bei Bodenkontakt wird der Slime zum Boden-Kriecher.
+# =============================================================================
+func _do_fall(delta: float) -> void:
+	sprite.play("fall")
+	velocity.x = move_toward(velocity.x, 0.0, crawl_speed)
+	velocity.y += drop_gravity * delta
+	if is_on_floor():
+		state = State.GROUND
+		sprite.flip_v = false   # steht wieder normal herum
+
+# =============================================================================
+# _do_ground(delta)
+# Nach der Landung verhaelt er sich wie ein gewoehnlicher Boden-Slime:
+# laeuft hin und her und dreht an Waenden um.
+# =============================================================================
+func _do_ground(delta: float) -> void:
+	if not is_on_floor():
+		velocity.y += drop_gravity * delta
+	velocity.x = crawl_dir * crawl_speed
+	sprite.flip_h = crawl_dir < 0
+	sprite.play("crawl")
+	if is_on_wall():
+		crawl_dir *= -1.0
+
+# =============================================================================
+# _player_below() -> bool
+# True, wenn der Spieler unterhalb des Slimes und horizontal nah genug ist.
+# =============================================================================
+func _player_below() -> bool:
+	if player == null or not is_instance_valid(player):
+		return false
+	var dx = abs(player.global_position.x - global_position.x)
+	var is_under = player.global_position.y > global_position.y
+	return is_under and dx <= drop_trigger_width

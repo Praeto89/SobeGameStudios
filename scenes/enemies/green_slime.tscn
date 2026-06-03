@@ -148,9 +148,8 @@ script = ExtResource("1_vqynf")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1344520829]
 scale = Vector2(1, 0.9959411)
 sprite_frames = SubResource("SpriteFrames_cvh1n")
-animation = &"death"
-frame = 5
-frame_progress = 1.0
+animation = &"patrol"
+autoplay = "patrol"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1517650821]
 position = Vector2(0, 5.5)
