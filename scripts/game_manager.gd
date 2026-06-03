@@ -29,6 +29,29 @@ var current_health: int = MAX_HEALTH
 var coin_count: int = 0
 
 # -------------------------------------------------------
+# Ability-Upgrades (im weissen Upgrade-Tor gekauft)
+# -------------------------------------------------------
+# Im "Upgrade-Tor" (scenes/world/upgrade_gate.tscn) kann der Spieler gesammelte
+# Muenzen gegen dauerhaft staerkere Abilities eintauschen. Jedes Upgrade ist
+# EINMAL kaufbar (Festpreis). Die Flags ueberleben -- genau wie die has_*-Flags
+# -- den Szenenwechsel, weil der GameManager als Autoload am Leben bleibt.
+var upgrade_charge: bool = false    # Charge-Dash: schneller & laenger
+var upgrade_jump: bool = false      # Sprung: hoeher
+var upgrade_health: bool = false    # Leben: +HEALTH_UPGRADE_BONUS Herzen
+var upgrade_attack: bool = false    # Attacke: groessere & weiter reichende Hitbox
+
+# Festpreis je Upgrade in Muenzen. Schluessel = Upgrade-Name (siehe upgrade_gate.gd).
+const UPGRADE_COSTS := {
+	"charge": 8,
+	"jump": 6,
+	"health": 10,
+	"attack": 8,
+}
+
+# Wie viele zusaetzliche Herzen das Health-Upgrade gewaehrt.
+const HEALTH_UPGRADE_BONUS: int = 2
+
+# -------------------------------------------------------
 # Persistente Welt-Aenderungen
 # -------------------------------------------------------
 # IDs der Coins die bereits eingesammelt wurden (Format siehe get_persistent_id).
@@ -49,6 +72,15 @@ var visited_scenes: Array[String] = []
 func mark_scene_visited(scene_path: String) -> void:
 	if scene_path != "" and not scene_path in visited_scenes:
 		visited_scenes.append(scene_path)
+
+# =============================================================================
+# get_max_health()
+# Effektives Lebens-Maximum: Basis (MAX_HEALTH) plus Bonus, wenn das
+# Health-Upgrade im Tor gekauft wurde. Eine Quelle der Wahrheit fuer Player
+# (max_health) und HUD (Anzahl der Klingen-Segmente).
+# =============================================================================
+func get_max_health() -> int:
+	return MAX_HEALTH + (HEALTH_UPGRADE_BONUS if upgrade_health else 0)
 
 # =============================================================================
 # get_persistent_id(node)
@@ -77,6 +109,10 @@ func reset_game() -> void:
 	has_charge = false
 	has_wallcrawl = false
 	has_double_jump = false
+	upgrade_charge = false
+	upgrade_jump = false
+	upgrade_health = false
+	upgrade_attack = false
 	current_health = MAX_HEALTH
 	coin_count = 0
 	collected_coin_ids.clear()

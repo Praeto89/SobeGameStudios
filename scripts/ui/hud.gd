@@ -32,6 +32,19 @@ const _BLADE_FRAMES := [
 	[1, 3],   # Blade 4 - Schwertspitze
 ]
 
+# Layout-Werte der Klingen-Segmente, abgelesen aus healthbar.tscn:
+# Mittelteile stehen ab x=-62 im Abstand von 60; die Spitze sitzt 10px weiter.
+# Werden gebraucht, um beim Health-Upgrade dynamisch weitere Segmente zu setzen.
+const _BLADE_START_X := -62.0
+const _BLADE_SPACING := 60.0
+const _BLADE_TIP_EXTRA := 10.0
+const _BLADE_Y := 30.0
+
+# Aktuelles Frame-Layout (Mittelteil [0,2] / Spitze [1,3]) pro Segment.
+# Startet als Kopie von _BLADE_FRAMES und waechst/schrumpft mit der maximalen
+# Lebenszahl des Spielers (siehe _ensure_blade_count).
+var _blade_frames: Array = _BLADE_FRAMES.duplicate(true)
+
 # -----------------------------------------------------------------------------
 # Node-Referenzen
 # -----------------------------------------------------------------------------
@@ -59,7 +72,7 @@ func _ready() -> void:
 	_hilt.frame = 0
 	for i in range(_blades.size()):
 		_blades[i].stop()
-		_blades[i].frame = _BLADE_FRAMES[i][0]   # initial: intakt-Frame der jeweiligen Blade-Position
+		_blades[i].frame = _blade_frames[i][0]   # initial: intakt-Frame der jeweiligen Blade-Position
 	# WARUM node_added statt den Player direkt zu referenzieren?
 	# Das HUD ist ein Autoload-Singleton – es existiert ueber Szenen-Wechsel
 	# hinweg. Der Player aber wird bei jedem Levelwechsel neu erzeugt. Wir
@@ -100,9 +113,48 @@ func _connect_to_player() -> void:
 	_connected_player = player
 	player.health_changed.connect(_on_health_changed)
 	player.coin_collected.connect(_on_coin_collected)
-	# HUD sofort mit den aktuellen Werten befuellen (kein leeres HUD beim Start)
+	# HUD sofort mit den aktuellen Werten befuellen (kein leeres HUD beim Start).
+	# _on_health_changed passt dabei selbst die Anzahl der Klingen-Segmente an
+	# das (ggf. per Upgrade erhoehte) Lebens-Maximum an.
 	_on_health_changed(player.current_health)
 	_on_coin_collected(player.coin_count)
+
+# =============================================================================
+# _ensure_blade_count(count)
+# Stellt sicher, dass genau "count" Klingen-Segmente existieren. Beim Health-
+# Upgrade waechst das Lebens-Maximum (z. B. 4 -> 6), also brauchen wir mehr
+# Segmente. Fehlende werden als Kopie eines vorhandenen Segments erzeugt,
+# ueberzaehlige entfernt. Danach werden Frames (Mittelteil/Spitze) und
+# Positionen aller Segmente neu gesetzt -- die Spitze bleibt das letzte Segment.
+# =============================================================================
+func _ensure_blade_count(count: int) -> void:
+	if count < 1 or _blades.is_empty():
+		return
+	if count == _blades.size():
+		return
+	var hbox: Node = _blades[0].get_parent()
+	var template: AnimatedSprite2D = _blades[0]
+	# Fehlende Segmente hinzufuegen (Vorlage: erstes vorhandenes Segment)
+	while _blades.size() < count:
+		var blade := AnimatedSprite2D.new()
+		blade.sprite_frames = template.sprite_frames
+		blade.scale = template.scale
+		blade.stop()
+		hbox.add_child(blade)
+		_blades.append(blade)
+	# Ueberzaehlige Segmente entfernen
+	while _blades.size() > count:
+		var extra: AnimatedSprite2D = _blades.pop_back()
+		extra.queue_free()
+	# Frames + Positionen neu vergeben: nur das letzte Segment ist die Spitze.
+	_blade_frames.clear()
+	for i in range(count):
+		var is_tip := i == count - 1
+		_blade_frames.append([1, 3] if is_tip else [0, 2])
+		var x := _BLADE_START_X + i * _BLADE_SPACING + (_BLADE_TIP_EXTRA if is_tip else 0.0)
+		_blades[i].position = Vector2(x, _BLADE_Y)
+		_blades[i].stop()
+		_blades[i].frame = _blade_frames[i][0]
 
 # =============================================================================
 # _on_health_changed(new_health)
@@ -121,6 +173,11 @@ var _last_health: int = -1
 var _blade_tweens: Array = []      # Laufende Schadensanimationen pro Blade
 
 func _on_health_changed(new_health: int) -> void:
+	# Segment-Anzahl an das aktuelle Lebens-Maximum des Spielers angleichen
+	# (relevant nach dem Health-Upgrade: aus 4 Segmenten werden z. B. 6).
+	if _connected_player != null and is_instance_valid(_connected_player):
+		_ensure_blade_count(_connected_player.max_health)
+
 	# Laufende Animationen abbrechen, damit sie keine alten Frames mehr
 	# setzen, wenn der Spieler zwischendurch geheilt wird.
 	for t in _blade_tweens:
@@ -133,16 +190,16 @@ func _on_health_changed(new_health: int) -> void:
 	# Frames direkt setzen (intakt fuer "noch lebend", zerbrochen fuer "verloren").
 	# Modulate reset, falls vorher durch einen Flash veraendert.
 	for i in range(_blades.size()):
-		var intact_frame: int = _BLADE_FRAMES[i][0]
-		var broken_frame: int = _BLADE_FRAMES[i][1]
+		var intact_frame: int = _blade_frames[i][0]
+		var broken_frame: int = _blade_frames[i][1]
 		_blades[i].frame = intact_frame if i < new_health else broken_frame
 		_blades[i].modulate = Color.WHITE
 
 	# Bei Schaden: rotes Aufblitzen + verzoegerter Frame-Wechsel auf den
 	# "frisch verlorenen" Blades, damit man den Treffer visuell wahrnimmt.
 	if damage_taken:
-		for i in range(new_health, _last_health):
-			_animate_blade_break(_blades[i], _BLADE_FRAMES[i][0], _BLADE_FRAMES[i][1])
+		for i in range(new_health, min(_last_health, _blades.size())):
+			_animate_blade_break(_blades[i], _blade_frames[i][0], _blade_frames[i][1])
 
 	_last_health = new_health
 
@@ -233,7 +290,7 @@ func show_ability_message(text: String, duration: float = 3.0) -> void:
 # verfuegbar bleibt.
 # =============================================================================
 
-const _HELP_TEXT := "STEUERUNG\n\n  Pfeiltasten:     Laufen\n  Leertaste:       Springen (kurz/lang fuer Sprunghoehe)\n  SHIFT:           Rollen (schadet Gegnern)\n  E (halten):      Charge-Dash aufladen + loslassen\n  Pfeil unten:     Schnellfall (in der Luft)\n\nABILITIES (per Pickup freigeschaltet)\n  Double-Jump:     Leertaste 2x\n  Wallcrawl:       automatisch an Waenden\n\nHILFE\n  F1:  dieses Fenster ein-/ausblenden"
+const _HELP_TEXT := "STEUERUNG\n\n  Pfeiltasten:     Laufen\n  Leertaste:       Springen (kurz/lang fuer Sprunghoehe)\n  SHIFT:           Rollen (schadet Gegnern)\n  E (halten):      Charge-Dash aufladen + loslassen\n  Pfeil unten:     Schnellfall (in der Luft)\n\nABILITIES (per Pickup freigeschaltet)\n  Double-Jump:     Leertaste 2x\n  Wallcrawl:       automatisch an Waenden\n\nUPGRADE-TOR (weisses Tor)\n  Betreten + Tasten 1-4:  Coins gegen staerkere Abilities tauschen\n\nHILFE\n  F1:  dieses Fenster ein-/ausblenden"
 
 var _help_panel: PanelContainer = null
 

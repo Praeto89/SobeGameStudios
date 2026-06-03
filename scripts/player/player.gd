@@ -50,6 +50,18 @@ const ATTACK_DURATION = 0.35        # Sekunden die eine Attacke dauert (Hitbox a
 const ATTACK_HITBOX_OFFSET = 14.0   # Wie weit vor dem Spieler die Angriffs-Hitbox liegt (in Blickrichtung)
 
 # -----------------------------------------------------------------------------
+# Upgrade-Faktoren (Upgrade-Tor, siehe upgrade_gate.gd + GameManager)
+# -----------------------------------------------------------------------------
+# Diese Faktoren werden in apply_upgrades() auf die Basiswerte oben angewendet,
+# wenn das jeweilige Upgrade gekauft wurde. Die Basis-Konstanten bleiben
+# unveraendert -- die effektiven Werte stehen in den var-Variablen weiter unten.
+const JUMP_UPGRADE_MULTIPLIER = 1.18         # Hoeherer Sprung (negativer = hoeher)
+const CHARGE_SPEED_UPGRADE_MULTIPLIER = 1.4  # Schnellerer Charge-Dash
+const CHARGE_TIME_UPGRADE_MULTIPLIER = 1.5   # Laengerer Charge-Dash
+const ATTACK_REACH_UPGRADE = 8.0             # Zusaetzliche Reichweite der Attacke (Offset)
+const ATTACK_HITBOX_UPGRADE_SCALE = 1.6      # Groessere Angriffs-Hitbox
+
+# -----------------------------------------------------------------------------
 # Gravity-Konstanten
 # -----------------------------------------------------------------------------
 const GRAVITY = 1800.0              # Schwerkraft beim Aufstieg  <- probier: 500 (Mondgravity) oder 4000 (Bleiklotz)
@@ -107,6 +119,16 @@ var has_wallcrawl = false           # Wallcrawl-Ability freigeschaltet
 var has_double_jump = false         # Double-Jump-Ability freigeschaltet
 
 # -----------------------------------------------------------------------------
+# Effektive Ability-Werte — Basiswert, ggf. durch ein Upgrade verstaerkt
+# -----------------------------------------------------------------------------
+# Im _physics_process werden diese Variablen statt der Basis-Konstanten benutzt.
+# apply_upgrades() setzt sie beim Start und nach jedem Kauf im Upgrade-Tor.
+var jump_velocity := JUMP_VELOCITY            # effektive Sprungkraft
+var charge_speed := CHARGE_SPEED              # effektive Charge-Geschwindigkeit
+var charge_max_time := CHARGE_MAX_TIME        # effektive Charge-Dauer
+var attack_hitbox_offset := ATTACK_HITBOX_OFFSET  # effektive Angriffs-Reichweite
+
+# -----------------------------------------------------------------------------
 # Wallcrawl-Variablen
 # -----------------------------------------------------------------------------
 var is_wall_crawling = false        # Ob der Spieler gerade an einer Wand klebt
@@ -150,6 +172,8 @@ func _ready() -> void:
 	has_double_jump = GameManager.has_double_jump
 	current_health = GameManager.current_health
 	coin_count = GameManager.coin_count
+	# Gekaufte Upgrades aus dem GameManager auf die effektiven Werte anwenden.
+	apply_upgrades()
 	# HUD initial befuellen (sonst zeigt es kurz die Default-Werte)
 	call_deferred("emit_signal", "health_changed", current_health)
 	call_deferred("emit_signal", "coin_collected", coin_count)
@@ -312,6 +336,36 @@ func unlock_double_jump() -> void:
 	GameManager.has_double_jump = true
 
 # =============================================================================
+# apply_upgrades()
+# Liest die im Upgrade-Tor gekauften Upgrade-Flags aus dem GameManager und
+# berechnet daraus die effektiven Ability-Werte. Wird einmal in _ready() und
+# nach jedem Kauf (upgrade_gate.gd) aufgerufen, damit ein frisch gekauftes
+# Upgrade sofort wirkt.
+# =============================================================================
+func apply_upgrades() -> void:
+	jump_velocity = JUMP_VELOCITY * (JUMP_UPGRADE_MULTIPLIER if GameManager.upgrade_jump else 1.0)
+	charge_speed = CHARGE_SPEED * (CHARGE_SPEED_UPGRADE_MULTIPLIER if GameManager.upgrade_charge else 1.0)
+	charge_max_time = CHARGE_MAX_TIME * (CHARGE_TIME_UPGRADE_MULTIPLIER if GameManager.upgrade_charge else 1.0)
+	attack_hitbox_offset = ATTACK_HITBOX_OFFSET + (ATTACK_REACH_UPGRADE if GameManager.upgrade_attack else 0.0)
+	# Groessere Angriffs-Hitbox: die ganze AttackHitbox-Area skalieren.
+	var atk_scale = ATTACK_HITBOX_UPGRADE_SCALE if GameManager.upgrade_attack else 1.0
+	attack_hitbox.scale = Vector2(atk_scale, atk_scale)
+	# Lebens-Maximum (Health-Upgrade); aktuelle Leben nie ueber das Maximum.
+	max_health = GameManager.get_max_health()
+	current_health = min(current_health, max_health)
+
+# =============================================================================
+# spend_coins(amount)
+# Zieht Muenzen ab (Gegenstueck zu collect_coin) und haelt GameManager + HUD
+# ueber das coin_collected-Signal aktuell. Wird vom Upgrade-Tor beim Kauf
+# aufgerufen.
+# =============================================================================
+func spend_coins(amount: int) -> void:
+	coin_count = max(0, coin_count - amount)
+	GameManager.coin_count = coin_count
+	emit_signal("coin_collected", coin_count)
+
+# =============================================================================
 # _physics_process(delta)
 # Hauptschleife — laeuft jeden Physik-Frame.
 # Verarbeitet in dieser Reihenfolge:
@@ -395,7 +449,7 @@ func _physics_process(delta: float) -> void:
 	var can_jump = is_on_floor() or coyote_timer > 0
 	if jump_buffer_timer > 0 and can_jump and not is_wall_crawling:
 		# Normaler Sprung (mit Jump Buffer und Coyote Time)
-		velocity.y = JUMP_VELOCITY
+		velocity.y = jump_velocity
 		can_double_jump = true
 		is_jumping = true
 		jump_buffer_timer = 0.0
@@ -412,7 +466,7 @@ func _physics_process(delta: float) -> void:
 			sound_jump.play()
 		elif has_double_jump and can_double_jump:
 			# Double Jump: zweiter Sprung in der Luft
-			velocity.y = JUMP_VELOCITY
+			velocity.y = jump_velocity
 			can_double_jump = false
 			is_jumping = true
 			sound_jump.play()
@@ -464,7 +518,7 @@ func _physics_process(delta: float) -> void:
 		sound_attack.play()
 	if is_attacking:
 		# Hitbox in Blickrichtung vor den Spieler setzen
-		attack_hitbox.position.x = -ATTACK_HITBOX_OFFSET if attack_facing_left else ATTACK_HITBOX_OFFSET
+		attack_hitbox.position.x = -attack_hitbox_offset if attack_facing_left else attack_hitbox_offset
 		# Getroffene Gegner toeten (gleiche Logik wie beim Roll)
 		for body in attack_hitbox.get_overlapping_bodies():
 			if body == self:
@@ -513,9 +567,9 @@ func _physics_process(delta: float) -> void:
 		# Charge: schneller Dash in Blickrichtung, Gravity wird gedaempft
 		charge_time_active += delta
 		var charge_dir = -1.0 if animated_sprite.flip_h else 1.0
-		velocity.x = charge_dir * CHARGE_SPEED
+		velocity.x = charge_dir * charge_speed
 		velocity.y = move_toward(velocity.y, 0, 300)
-		if charge_time_active >= CHARGE_MAX_TIME:
+		if charge_time_active >= charge_max_time:
 			is_charging = false
 			charge_time_active = 0.0
 		elif charge_time_active > 0.1:
