@@ -46,6 +46,8 @@ const WALL_JUMP_VELOCITY = Vector2(350.0, -450.0) # Horizontaler / vertikaler Im
 const WALL_CRAWL_PRESS_FORCE = 50.0 # Leichter Andruck in die Wand waehrend des Kletterns
 const CHARGE_LAUNCH_VELOCITY = -900.0 # Aufwaerts-Impuls im Moment der Charge-Ausloesung
 const KNOCKBACK_VELOCITY = Vector2(400.0, -200.0) # Rueckstoss bei einem Treffer (x wird mit Richtung multipliziert)
+const ATTACK_DURATION = 0.35        # Sekunden die eine Attacke dauert (Hitbox aktiv)  <- probier: 0.2 (schnell) oder 0.6 (lang)
+const ATTACK_HITBOX_OFFSET = 14.0   # Wie weit vor dem Spieler die Angriffs-Hitbox liegt (in Blickrichtung)
 
 # -----------------------------------------------------------------------------
 # Gravity-Konstanten
@@ -66,6 +68,7 @@ const JUMP_BUFFER_TIME = 0.12       # Sekunden vor dem Landen wo Sprung vorregis
 # -----------------------------------------------------------------------------
 @onready var animated_sprite = $AnimatedSprite2D
 @onready var roll_hitbox := $"RollHitbox"
+@onready var attack_hitbox := $"AttackHitbox"
 
 # -----------------------------------------------------------------------------
 # Zustandsvariablen — Bewegung & Abilities
@@ -74,6 +77,10 @@ var is_rolling = false              # Ob der Spieler gerade rollt
 var is_charging = false             # Ob der Charge-Dash aktiv ist
 var charge_timer := 0.0             # Wie lange "charge" bereits gehalten wird (vor Ausloesung)
 var charge_time_active := 0.0       # Wie lange der Charge-Dash bereits laeuft
+var is_attacking := false           # Ob der Spieler gerade attackiert (Hitbox aktiv)
+var attack_timer := 0.0             # Verbleibende Zeit der aktuellen Attacke
+var attack_facing_left := false     # Blickrichtung beim Start der Attacke (true = links)
+var attack_from_air := false        # War der Spieler beim Start der Attacke in der Luft? (Luft-Attacke nach unten)
 
 # -----------------------------------------------------------------------------
 # Zustandsvariablen — Spieler-Status
@@ -130,6 +137,8 @@ func _ready() -> void:
 	# Roll-Hitbox nur waehrend des Rolls aktiv (siehe Roll-Block in _physics_process).
 	# Verhindert unnoetige Kollisions-Checks und Gegner-Treffer ausserhalb des Rolls.
 	roll_hitbox.monitoring = false
+	# Angriffs-Hitbox ebenfalls nur waehrend einer Attacke aktiv (siehe Attacke-Block).
+	attack_hitbox.monitoring = false
 	# Persistierten Zustand aus dem GameManager laden, damit Abilities,
 	# Leben und Muenzen ueber Szenen-Wechsel hinweg erhalten bleiben.
 	has_charge = GameManager.has_charge
@@ -172,6 +181,9 @@ func respawn() -> void:
 	is_charging = false
 	charge_timer = 0.0
 	charge_time_active = 0.0
+	is_attacking = false
+	attack_timer = 0.0
+	attack_hitbox.monitoring = false
 	is_hit = false
 	hit_timer = 0.0
 	is_wall_crawling = false
@@ -222,6 +234,9 @@ func _die() -> void:
 	is_dead = true
 	is_rolling = false
 	is_charging = false
+	is_attacking = false
+	attack_timer = 0.0
+	attack_hitbox.monitoring = false
 	is_wall_crawling = false
 	last_wall_normal = Vector2.ZERO
 	can_double_jump = false
@@ -420,6 +435,51 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_released("charge") and not is_charging:
 		charge_timer = 0.0
 
+	# --- 9b. Attacke ---
+	# "attack" (Taste X) loest einen Nahkampf-Schlag aus. Waehrend der Attacke
+	# ist die AttackHitbox vor dem Spieler aktiv und toetet getroffene Gegner.
+	# Nicht ausloesbar waehrend Roll, Charge, Wallcrawl oder im Treffer-Zustand.
+	if Input.is_action_just_pressed("attack") and not is_attacking and not is_rolling and not is_charging and not is_wall_crawling and not is_hit:
+		is_attacking = true
+		attack_timer = ATTACK_DURATION
+		attack_hitbox.monitoring = true
+		# Blickrichtung beim Start merken (flip_h = true bedeutet: schaut nach links)
+		attack_facing_left = animated_sprite.flip_h
+		# In der Luft? -> Attacke nach unten (eigene, einmalige Animation)
+		attack_from_air = not is_on_floor()
+		# Animation sofort starten (auch fuer korrekten is_playing()-Status der
+		# Luft-Attacke schon im selben Frame, sonst wuerde sie unten faelschlich
+		# als "fertig" gewertet, wenn noch der alte Animationszustand anliegt).
+		animated_sprite.flip_h = attack_facing_left
+		animated_sprite.play("attack_from_above" if attack_from_air else "attack")
+	if is_attacking:
+		# Hitbox in Blickrichtung vor den Spieler setzen
+		attack_hitbox.position.x = -ATTACK_HITBOX_OFFSET if attack_facing_left else ATTACK_HITBOX_OFFSET
+		# Getroffene Gegner toeten (gleiche Logik wie beim Roll)
+		for body in attack_hitbox.get_overlapping_bodies():
+			if body == self:
+				continue
+			if body.is_in_group("enemy"):
+				body.die()
+			elif body.get_parent() and body.get_parent().is_in_group("enemy"):
+				body.get_parent().die()
+		# Ende der Attacke:
+		#  - Boden-Attacke: nach fester Dauer (ATTACK_DURATION, Animation loopt)
+		#  - Luft-Attacke:  wenn die einmalige attack_from_above-Animation
+		#                   (Stich -> Schwert herausziehen) durchgelaufen ist
+		var attack_done := false
+		if attack_from_air:
+			attack_done = animated_sprite.animation == "attack_from_above" and not animated_sprite.is_playing()
+		else:
+			attack_timer -= delta
+			attack_done = attack_timer <= 0
+		if attack_done:
+			is_attacking = false
+			attack_hitbox.monitoring = false
+			# Blickrichtung wiederherstellen, damit Idle/Lauf (nutzen flip_h)
+			# danach in die richtige Richtung schauen.
+			animated_sprite.flip_h = attack_facing_left
+
 	# --- 10. Horizontale Bewegung ---
 	var direction := Input.get_axis("ui_left", "ui_right")
 
@@ -469,7 +529,7 @@ func _physics_process(delta: float) -> void:
 # _update_animation()
 # Bestimmt welche Animation abgespielt wird basierend auf dem aktuellen Zustand.
 # Prioritaet (hoch → tief):
-#   Tod → Treffer → Charge-Aufladung → Roll → Charge → Wallcrawl →
+#   Tod → Treffer → Attacke → Charge-Aufladung → Roll → Charge → Wallcrawl →
 #   Double Jump → Sprung → Laufen → Idle
 # =============================================================================
 func _update_animation() -> void:
@@ -480,6 +540,16 @@ func _update_animation() -> void:
 	if is_hit:
 		if animated_sprite.animation != "hit":
 			animated_sprite.play("hit")
+		return
+
+	# Attacke-Animation. Am Boden: "attack" (Schlag zur Seite); in der Luft:
+	# "attack_from_above" (Stich nach unten). Beide zeigen nach rechts und
+	# werden fuer links per flip_h gespiegelt.
+	if is_attacking:
+		animated_sprite.flip_h = attack_facing_left
+		var atk_anim = "attack_from_above" if attack_from_air else "attack"
+		if animated_sprite.animation != atk_anim:
+			animated_sprite.play(atk_anim)
 		return
 
 	# Charge wird aufgeladen (Taste gehalten, noch nicht ausgeloest)

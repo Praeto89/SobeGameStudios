@@ -34,7 +34,7 @@ Inspector einstellen kannst (z. B. eine "Goldmünze" = 5 Coins).
 
 # In _on_body_entered, statt einmal collect_coin():
 for i in wert:
-    body.collect_coin()
+	body.collect_coin()
 ```
 
 Danach im Inspector `wert` auf 5 setzen – fertig ist die Goldmünze.
@@ -58,12 +58,12 @@ auf und ab pendeln.
 ```gdscript
 # start_x -> start_y, und in _physics_process:
 func _ready():
-    start_y = position.y
+	start_y = position.y
 
 func _physics_process(delta):
-    position.y += speed * direction * delta
-    if abs(position.y - start_y) > distance:
-        direction *= -1
+	position.y += speed * direction * delta
+	if abs(position.y - start_y) > distance:
+		direction *= -1
 ```
 
 Es gibt dafür schon `green_platform_vertikal.gd` zum Abgucken –
@@ -88,13 +88,13 @@ Spieler **sehr nah** ist (z. B. < 60 px), läuft der Slime **weg** statt hin.
 # In _physics_process, vor der Aktivierungs-/Patrouille-Logik:
 var dist := global_position.distance_to(player.global_position) if (player and is_instance_valid(player)) else INF
 if dist < 60.0:
-    # weg vom Spieler laufen
-    var flee_dir = sign(global_position.x - player.global_position.x)
-    velocity.x = flee_dir * speed
-    sprite.flip_h = flee_dir < 0
-    sprite.play("patrol")
-    move_and_slide()
-    return
+	# weg vom Spieler laufen
+	var flee_dir = sign(global_position.x - player.global_position.x)
+	velocity.x = flee_dir * speed
+	sprite.flip_h = flee_dir < 0
+	sprite.play("patrol")
+	move_and_slide()
+	return
 ```
 
 Tipp: `INF` ist "unendlich" – praktisch als Startwert für "noch keinen
@@ -128,11 +128,11 @@ Im Spieler gibt es bereits eine passende Methode `heal(amount)` (siehe
 # heal_pickup.gd
 extends Area2D
 func _ready():
-    body_entered.connect(_on_body_entered)
+	body_entered.connect(_on_body_entered)
 func _on_body_entered(body):
-    if body.is_in_group("player") and body.has_method("heal"):
-        body.heal(1)   # 1 Herz auffuellen (begrenzt auf max. Leben)
-        queue_free()
+	if body.is_in_group("player") and body.has_method("heal"):
+		body.heal(1)   # 1 Herz auffuellen (begrenzt auf max. Leben)
+		queue_free()
 ```
 
 Wichtig: erst prüfen, ob die Methode existiert (`has_method`), sonst gibt es

@@ -1,0 +1,155 @@
+[gd_scene format=4 uid="uid://wlrsurlvum14"]
+
+[ext_resource type="PackedScene" uid="uid://ck6q6oyovvakg" path="res://scenes/player/player.tscn" id="1_dqh8m"]
+[ext_resource type="PackedScene" uid="uid://7ck1dr5e5kg0" path="res://scenes/world/portal.tscn" id="2_7rot8"]
+[ext_resource type="PackedScene" uid="uid://md1jdcoedfs" path="res://scenes/world/death.tscn" id="3_c2g5i"]
+[ext_resource type="Texture2D" uid="uid://du5p3fdw4brmt" path="res://assets/sprites/Ground/ground_tilemap_template.png" id="4_1sjbt"]
+[ext_resource type="PackedScene" uid="uid://0lmbkrm3yis5" path="res://scenes/pickups/wallcrawl_ability.tscn" id="5_c2g5i"]
+[ext_resource type="PackedScene" uid="uid://dnmnbcdkt56ma" path="res://scenes/pickups/doublejump_ability.tscn" id="6_1sjbt"]
+[ext_resource type="PackedScene" uid="uid://e3cei7lyh8et" path="res://scenes/enemies/green_slime.tscn" id="7_1sjbt"]
+[ext_resource type="PackedScene" uid="uid://jhiuqdedq0l3" path="res://scenes/pickups/coin.tscn" id="8_ysl4h"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dqh8m"]
+texture = ExtResource("4_1sjbt")
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+1:0/0 = 0
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+2:0/0 = 0
+2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+3:0/0 = 0
+3:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+0:1/0 = 0
+0:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+1:1/0 = 0
+1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+2:1/0 = 0
+2:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+3:1/0 = 0
+3:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+0:2/0 = 0
+0:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+1:2/0 = 0
+1:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+2:2/0 = 0
+2:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+3:2/0 = 0
+3:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+0:3/0 = 0
+0:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+1:3/0 = 0
+1:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+2:3/0 = 0
+2:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+3:3/0 = 0
+3:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+0:4/0 = 0
+0:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+1:4/0 = 0
+1:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+2:4/0 = 0
+2:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+3:4/0 = 0
+3:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+0:5/0 = 0
+0:5/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+1:5/0 = 0
+1:5/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+2:5/0 = 0
+2:5/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+3:5/0 = 0
+3:5/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+
+[sub_resource type="TileSet" id="TileSet_gdikw"]
+physics_layer_0/collision_layer = 1
+sources/2 = SubResource("TileSetAtlasSource_dqh8m")
+
+[node name="Slot2" type="Node2D" unique_id=418140081]
+
+[node name="Boden" type="StaticBody2D" parent="." unique_id=373622212]
+position = Vector2(0, 80)
+
+[node name="WandLinks" type="CollisionPolygon2D" parent="Boden" unique_id=221852130]
+polygon = PackedVector2Array(-500, -400, -468, -400, -468, 0, -500, 0)
+
+[node name="Player" parent="." unique_id=1476620384 instance=ExtResource("1_dqh8m")]
+position = Vector2(-374, -112)
+
+[node name="ReturnPortal" parent="." unique_id=1332023281 groups=["portals"] instance=ExtResource("2_7rot8")]
+position = Vector2(-440, 60)
+portal_id = "from_galerie"
+target_portal_id = "galerie_entry"
+target_scene = "res://scenes/levels/galerie.tscn"
+
+[node name="ReturnLabel" type="Label" parent="." unique_id=1723811202]
+offset_left = -474.0
+offset_top = 17.0
+offset_right = -394.0
+offset_bottom = 40.0
+text = "Galerie"
+horizontal_alignment = 1
+
+[node name="Death" parent="." unique_id=695650598 instance=ExtResource("3_c2g5i")]
+position = Vector2(200, 320)
+
+[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1928068651]
+position = Vector2(-1, 0)
+tile_map_data = PackedByteArray("AADi/wUAAgAAAAAAAADj/wUAAgABAAAAAADk/wUAAgABAAAAAADl/wUAAgABAAAAAADm/wUAAgABAAAAAADn/wUAAgABAAAAAADq/wUAAgABAAAAAADp/wUAAgABAAAAAADo/wUAAgABAAAAAADr/wUAAgABAAAAAADs/wUAAgABAAAAAADt/wUAAgABAAAAAADu/wUAAgABAAAAAADv/wUAAgABAAAAAADw/wUAAgABAAAAAAD0/wUAAgABAAAAAADz/wUAAgABAAAAAADy/wUAAgABAAAAAADx/wUAAgABAAAAAAD//wUAAgABAAAAAAAAAAUAAgABAAAAAAABAAUAAgABAAAAAAACAAUAAgABAAAAAAADAAUAAgABAAAAAAAEAAUAAgABAAAAAAAFAAUAAgABAAAAAAAGAAUAAgABAAAAAAAHAAUAAgABAAAAAAAIAAUAAgABAAAAAAAJAAYAAgABAAAAAAAKAAYAAgABAAAAAAALAAYAAgABAAAAAAAMAAcAAgABAAAAAAANAAcAAgABAAAAAAAOAAcAAgABAAAAAAAPAAYAAgABAAAAAAAQAAUAAgABAAAAAADr/wQAAgABAAIAAADs/wQAAgAAAAMAAADs/wMAAgABAAIAAADt/wMAAgAAAAMAAADt/wIAAgABAAIAAADu/wIAAgABAAIAAADv/wIAAgAAAAMAAADv/wEAAgABAAIAAADw/wEAAgABAAIAAADx/wEAAgAAAAMAAADx/wAAAgABAAIAAADy/wAAAgABAAIAAADz/wAAAgABAAIAAAD0/wAAAgABAAIAAAD0/wEAAgAAAAMAAAD0/wIAAgAAAAMAAAD0/wMAAgAAAAMAAADz/wMAAgAAAAMAAADy/wMAAgAAAAMAAADy/wQAAgAAAAMAAADx/wQAAgAAAAMAAADw/wQAAgAAAAMAAADv/wQAAgAAAAMAAADu/wQAAgAAAAMAAADt/wQAAgAAAAMAAADu/wMAAgAAAAMAAADv/wMAAgAAAAMAAADw/wMAAgAAAAMAAADx/wMAAgAAAAMAAADw/wIAAgAAAAMAAADx/wIAAgAAAAMAAADy/wIAAgAAAAMAAADz/wIAAgAAAAMAAADz/wEAAgAAAAMAAADy/wEAAgAAAAMAAADz/wQAAgAAAAMAAAD0/wQAAgAAAAMAAAD4/wAAAgABAAIAAAD8/wAAAgABAAIAAAD//wIAAgABAAIAAAARAAUAAgABAAAAAAASAAQAAgABAAAAAAAUAAQAAgABAAAAAAATAAQAAgABAAAAAAAVAAQAAgABAAAAAAAWAAQAAgABAAAAAAAXAAMAAgABAAAAAAAYAAMAAgABAAAAAAAZAAMAAgABAAAAAAAaAAIAAgAAAAMAAAAaAAEAAgAAAAMAAAAaAAAAAgAAAAMAAAAaAP//AgAAAAMAAAAaAP7/AgAAAAMAAAAaAP3/AgAAAAMAAAAaAPz/AgAAAAMAAAAbAAIAAgABAAMAAAAbAAEAAgABAAMAAAAbAAAAAgABAAMAAAAbAP//AgABAAMAAAAbAPz/AgABAAMAAAAbAP3/AgABAAMAAAAbAP7/AgABAAMAAAAZAP7/AgABAAAAAAAYAP7/AgABAAAAAAAZAPz/AgABAAAAAAAZAPr/AgABAAAAAAAYAPr/AgABAAAAAAAWAAAAAgABAAAAAAAWAPz/AgABAAAAAAAVAPv/AgABAAAAAAAUAPr/AgABAAAAAAAWAPj/AgABAAAAAAAXAPj/AgABAAAAAAAYAPn/AgABAAAAAAAcAPz/AgABAAMAAAAdAPz/AgABAAMAAAAeAPz/AgABAAMAAAAeAP3/AgABAAMAAAAeAP7/AgABAAMAAAAdAP7/AgABAAMAAAAdAP//AgABAAMAAAAdAAAAAgABAAMAAAAdAAEAAgABAAMAAAAdAAIAAgABAAMAAAAcAAIAAgABAAMAAAAcAAEAAgABAAMAAAAcAAAAAgABAAMAAAAcAP//AgABAAMAAAAcAP7/AgABAAMAAAAcAP3/AgABAAMAAAAdAP3/AgABAAMAAAAeAP//AgABAAMAAAAeAAAAAgABAAMAAAAeAAEAAgABAAMAAAAeAAIAAgABAAMAAAAbAPv/AgABAAMAAAAcAPv/AgABAAMAAAAdAPv/AgABAAMAAAAaAPv/AgAAAAMAAAAeAPv/AgABAAMAAAAaAPr/AgABAAIAAAAbAPr/AgABAAIAAAAcAPr/AgABAAIAAAAdAPr/AgABAAIAAAAeAPr/AgABAAIAAAAfAPr/AgABAAIAAAAgAPr/AgABAAIAAAAhAPr/AgABAAIAAAAiAPr/AgABAAIAAAAjAPr/AgABAAIAAAAkAPr/AgABAAIAAAAlAPr/AgABAAIAAAAmAPr/AgABAAIAAAAmAPn/AgABAAMAAAAmAPj/AgABAAMAAAAmAPf/AgABAAMAAAAmAPb/AgABAAMAAAAmAPX/AgABAAMAAAAmAPT/AgABAAMAAAAmAPP/AgABAAMAAAAmAPL/AgABAAMAAAAmAPH/AgABAAMAAAAmAPD/AgABAAMAAAAmAO//AgABAAMAAAAmAO7/AgABAAMAAAAmAO3/AgABAAMAAAAmAOz/AgABAAMAAAAmAOv/AgABAAMAAAAmAOr/AgABAAMAAAAmAOn/AgABAAMAAAAmAOj/AgABAAMAAAAmAOf/AgABAAMAAAAmAOb/AgABAAIAAAAnAOb/AgABAAIAAAAoAOb/AgABAAIAAAApAOb/AgABAAIAAAAqAOb/AgABAAIAAAArAOb/AgABAAIAAAAvAOb/AgABAAIAAAAyAOb/AgABAAIAAAAyAPr/AgABAAIAAAAzAPr/AgABAAIAAAA0APr/AgABAAIAAAA1APr/AgABAAIAAAA2APr/AgABAAIAAAA3APr/AgABAAIAAAA4APr/AgABAAIAAAA5APr/AgABAAIAAAA6APr/AgABAAIAAAA7APr/AgABAAIAAAA7APn/AgABAAIAAAA8APn/AgABAAIAAAA8APj/AgABAAIAAAA9APj/AgABAAIAAAA+APf/AgABAAIAAAA/APf/AgABAAIAAABAAPf/AgABAAIAAABAAPj/AgABAAIAAABAAPn/AgABAAIAAABBAPn/AgABAAIAAABBAPr/AgABAAIAAABCAPr/AgABAAIAAABDAPr/AgABAAIAAABEAPr/AgABAAIAAABFAPr/AgABAAIAAABGAPr/AgABAAIAAABHAPr/AgABAAIAAABIAPr/AgABAAIAAABJAPr/AgABAAIAAAA+APj/AgABAAMAAAA/APj/AgABAAMAAAA/APn/AgABAAMAAAA+APn/AgABAAMAAAA9APn/AgABAAMAAAA8APr/AgABAAMAAAA9APr/AgABAAMAAAA+APr/AgABAAMAAAA/APr/AgABAAMAAABAAPr/AgABAAMAAAA=")
+tile_set = SubResource("TileSet_gdikw")
+
+[node name="wallcrawl_ability" parent="." unique_id=333438941 instance=ExtResource("5_c2g5i")]
+position = Vector2(466, -107)
+
+[node name="doublejump_ability" parent="." unique_id=483429487 instance=ExtResource("6_1sjbt")]
+position = Vector2(27, 73)
+
+[node name="CharacterBody2D" parent="." unique_id=705821222 instance=ExtResource("7_1sjbt")]
+position = Vector2(271, 68)
+
+[node name="CharacterBody2D2" parent="." unique_id=486801277 instance=ExtResource("7_1sjbt")]
+position = Vector2(153, 85)
+
+[node name="coin" parent="." unique_id=1928490367 instance=ExtResource("8_ysl4h")]
+position = Vector2(-121, -7)
+
+[node name="coin2" parent="." unique_id=89823221 instance=ExtResource("8_ysl4h")]
+position = Vector2(-12, 28)
+
+[node name="coin3" parent="." unique_id=1473050384 instance=ExtResource("8_ysl4h")]
+position = Vector2(292, 59)
+
+[node name="coin4" parent="." unique_id=655634903 instance=ExtResource("8_ysl4h")]
+position = Vector2(311, 59)
+
+[node name="coin5" parent="." unique_id=219542396 instance=ExtResource("8_ysl4h")]
+position = Vector2(325, 60)
+
+[node name="coin6" parent="." unique_id=1046543877 instance=ExtResource("8_ysl4h")]
+position = Vector2(337, 59)
+
+[node name="coin7" parent="." unique_id=851831048 instance=ExtResource("8_ysl4h")]
+position = Vector2(390, -38)
+
+[node name="coin8" parent="." unique_id=1705802293 instance=ExtResource("8_ysl4h")]
+position = Vector2(505, -105)
+
+[node name="coin9" parent="." unique_id=1137918480 instance=ExtResource("8_ysl4h")]
+position = Vector2(527, -105)
+
+[node name="coin10" parent="." unique_id=887002592 instance=ExtResource("8_ysl4h")]
+position = Vector2(616, -420)
+
+[node name="coin11" parent="." unique_id=1753232889 instance=ExtResource("8_ysl4h")]
+position = Vector2(758, -425)
+
+[node name="coin12" parent="." unique_id=355200658 instance=ExtResource("8_ysl4h")]
+position = Vector2(809, -420)
+
+[node name="coin13" parent="." unique_id=426007232 instance=ExtResource("8_ysl4h")]
+position = Vector2(630, -420)
+
+[node name="coin14" parent="." unique_id=320384463 instance=ExtResource("8_ysl4h")]
+position = Vector2(643, -420)
+
+[node name="coin15" parent="." unique_id=780338742 instance=ExtResource("8_ysl4h")]
+position = Vector2(656, -419)

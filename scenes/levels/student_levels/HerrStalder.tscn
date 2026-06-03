@@ -1,0 +1,112 @@
+[gd_scene format=4 uid="uid://wlssurlvum15"]
+
+[ext_resource type="PackedScene" uid="uid://ck6q6oyovvakg" path="res://scenes/player/player.tscn" id="1_pe3hq"]
+[ext_resource type="PackedScene" uid="uid://7ck1dr5e5kg0" path="res://scenes/world/portal.tscn" id="2_uklcc"]
+[ext_resource type="PackedScene" uid="uid://md1jdcoedfs" path="res://scenes/world/death.tscn" id="3_5jy5v"]
+[ext_resource type="Texture2D" uid="uid://cpwyhxa3hw04s" path="res://assets/sprites/PurpleDragons Spirte set/Ground/dirt_tilemap.png" id="4_72epj"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4gnee"]
+texture = ExtResource("4_72epj")
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+1:0/0 = 0
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+2:0/0 = 0
+2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+3:0/0 = 0
+3:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+0:1/0 = 0
+0:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+1:1/0 = 0
+1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+2:1/0 = 0
+2:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+3:1/0 = 0
+3:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+0:2/0 = 0
+0:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+1:2/0 = 0
+1:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+2:2/0 = 0
+2:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+3:2/0 = 0
+3:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+0:3/0 = 0
+0:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+1:3/0 = 0
+1:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+2:3/0 = 0
+2:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+3:3/0 = 0
+3:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+0:4/0 = 0
+0:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+1:4/0 = 0
+1:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+2:4/0 = 0
+2:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+3:4/0 = 0
+3:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+0:5/0 = 0
+0:5/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+1:5/0 = 0
+1:5/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+2:5/0 = 0
+2:5/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+3:5/0 = 0
+3:5/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+
+[sub_resource type="TileSet" id="TileSet_karlo"]
+physics_layer_0/collision_layer = 1
+sources/0 = SubResource("TileSetAtlasSource_4gnee")
+
+[node name="Slot3" type="Node2D" unique_id=199985230]
+
+[node name="Hinweis" type="Label" parent="." unique_id=2110088859]
+offset_left = -300.0
+offset_top = -200.0
+offset_right = 700.0
+offset_bottom = -100.0
+text = "SLOT 3 – dein Level
+Ziehe Prefabs aus dem FileSystem-Tab rein.
+Portal links unten = zurueck zur Galerie."
+horizontal_alignment = 1
+
+[node name="Boden" type="StaticBody2D" parent="." unique_id=386794701]
+position = Vector2(0, 80)
+
+[node name="Floor" type="CollisionPolygon2D" parent="Boden" unique_id=1900560928]
+polygon = PackedVector2Array(-500, 0, 900, 0, 900, 200, -500, 200)
+
+[node name="WandLinks" type="CollisionPolygon2D" parent="Boden" unique_id=1779978954]
+polygon = PackedVector2Array(-500, -400, -468, -400, -468, 0, -500, 0)
+
+[node name="WandRechts" type="CollisionPolygon2D" parent="Boden" unique_id=33878071]
+polygon = PackedVector2Array(868, -400, 900, -400, 900, 0, 868, 0)
+
+[node name="Decke" type="CollisionPolygon2D" parent="Boden" unique_id=1387164286]
+polygon = PackedVector2Array(-500, -440, 900, -440, 900, -400, -500, -400)
+
+[node name="Player" parent="." unique_id=1274572269 instance=ExtResource("1_pe3hq")]
+position = Vector2(146, 28)
+
+[node name="ReturnPortal" parent="." unique_id=1295322799 groups=["portals"] instance=ExtResource("2_uklcc")]
+position = Vector2(-440, 60)
+portal_id = "from_galerie"
+target_portal_id = "galerie_entry"
+target_scene = "res://scenes/levels/galerie.tscn"
+
+[node name="ReturnLabel" type="Label" parent="." unique_id=1561032526]
+offset_left = -480.0
+offset_top = 30.0
+offset_right = -400.0
+offset_bottom = 50.0
+text = "Galerie"
+horizontal_alignment = 1
+
+[node name="Death" parent="." unique_id=1543449471 instance=ExtResource("3_5jy5v")]
+position = Vector2(200, 320)
+
+[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=824443143]
+tile_map_data = PackedByteArray("AAAJAAcAAAAAAAIAAAAKAAcAAAAAAAIAAAALAAcAAAAAAAIAAAAMAAcAAAAAAAIAAAANAAcAAAAAAAIAAAAOAAcAAAAAAAIAAAAPAAcAAAAAAAIAAAAQAAcAAAAAAAIAAAAQAAYAAAAAAAIAAAAQAAUAAAAAAAIAAAARAAUAAAAAAAIAAAASAAUAAAAAAAIAAAATAAUAAAAAAAIAAAAUAAUAAAAAAAIAAAAVAAUAAAAAAAIAAAAWAAQAAAAAAAIAAAAXAAQAAAAAAAIAAAAYAAQAAAAAAAIAAAAZAAQAAAAAAAIAAAAaAAQAAAAAAAIAAAAZAAUAAAAAAAIAAAAYAAUAAAAAAAIAAAAXAAUAAAAAAAIAAAAWAAUAAAAAAAIAAAA=")
+tile_set = SubResource("TileSet_karlo")
