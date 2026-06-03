@@ -34,6 +34,7 @@ func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):
 		body.unlock_wallcrawl()     # Ability im Spieler-Skript aktivieren
 		Hud.show_ability_message("Wallcrawl freigeschaltet!\nAn Waenden klettern und abspringen")
+		Hud.celebrate_unlock()   # kurze Zeitlupe als "Wow"-Moment
 		set_deferred("monitoring", false)
 		$Sprite2D.visible = false
 		audio.play()

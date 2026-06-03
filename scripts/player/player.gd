@@ -302,14 +302,17 @@ func heal(amount: int = 1) -> void:
 func unlock_charge() -> void:
 	has_charge = true
 	GameManager.has_charge = true
+	GameManager.save_game()   # Fortschritt sofort sichern
 
 func unlock_wallcrawl() -> void:
 	has_wallcrawl = true
 	GameManager.has_wallcrawl = true
+	GameManager.save_game()
 
 func unlock_double_jump() -> void:
 	has_double_jump = true
 	GameManager.has_double_jump = true
+	GameManager.save_game()
 
 # =============================================================================
 # _physics_process(delta)

@@ -35,6 +35,7 @@ func _on_body_entered(body):
 		body.unlock_charge()    # Ability im Spieler-Skript aktivieren
 		# Spieler-Hinweis: was die Ability tut + Tasten-Hinweis
 		Hud.show_ability_message("Charge freigeschaltet!\n'E' gedrueckt halten fuer einen schnellen Dash")
+		Hud.celebrate_unlock()   # kurze Zeitlupe als "Wow"-Moment
 		set_deferred("monitoring", false)
 		$Sprite2D.visible = false
 		audio.play()

@@ -225,6 +225,27 @@ func show_ability_message(text: String, duration: float = 3.0) -> void:
 	_ability_tween.tween_callback(_ability_label.queue_free)
 
 # =============================================================================
+# celebrate_unlock()
+# Kurze Zeitlupe als "Wow"-Moment beim Freischalten einer Ability -- der
+# emotionale Hoehepunkt der Progression bekommt so einen Augenblick Gewicht.
+# Bewusst NUR fuer echte Ability-Unlocks (nicht fuer Heilung o. ae.), darum
+# eine eigene Methode statt sie in show_ability_message zu legen.
+# =============================================================================
+var _celebrating := false
+
+func celebrate_unlock() -> void:
+	# Mehrfach-Ausloesung (zwei Pickups gleichzeitig) abfangen.
+	if _celebrating:
+		return
+	_celebrating = true
+	Engine.time_scale = 0.35
+	# Timer mit ignore_time_scale=true (4. Argument), damit die Zeitlupe sich
+	# nicht selbst verlangsamt -- die echte Dauer bleibt ~0.45 s.
+	await get_tree().create_timer(0.45, true, false, true).timeout
+	Engine.time_scale = 1.0
+	_celebrating = false
+
+# =============================================================================
 # Help-Overlay (F1)
 # =============================================================================
 # Einblendbares Hilfe-Panel mit Steuerung und Tipps. Wird beim ersten

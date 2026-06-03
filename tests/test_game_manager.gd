@@ -44,5 +44,40 @@ func run(t) -> void:
 	gm.mark_scene_visited("")                # leerer Pfad -> wird ignoriert
 	t.check(gm.visited_scenes.size() == 2, "mark_scene_visited ignoriert leeren Pfad")
 
+	# --- save_game()/load_game() Roundtrip (auf einen Temp-Pfad) ---
+	# Bewusst NICHT der echte Speicherstand (SAVE_PATH), damit der Test ihn
+	# nicht ueberschreibt.
+	var tmp_path := "user://test_savegame.json"
+	gm.has_charge = true
+	gm.has_wallcrawl = false
+	gm.has_double_jump = true
+	gm.coin_count = 7
+	gm.current_health = 2
+	gm.opened_gate_ids.append("res://lvl.tscn::gate_a")
+	gm.collected_coin_ids.append("res://lvl.tscn::coin_a")
+	gm.save_game(tmp_path)
+
+	# Zustand verfaelschen, dann aus der Datei wiederherstellen
+	gm.has_charge = false
+	gm.has_double_jump = false
+	gm.coin_count = 0
+	gm.current_health = gm.MAX_HEALTH
+	gm.opened_gate_ids.clear()
+	gm.collected_coin_ids.clear()
+
+	t.check(gm.load_game(tmp_path), "load_game meldet Erfolg bei vorhandener Datei")
+	t.check(gm.has_charge == true, "load_game stellt has_charge wieder her")
+	t.check(gm.has_double_jump == true, "load_game stellt has_double_jump wieder her")
+	t.check(gm.coin_count == 7, "load_game stellt coin_count wieder her")
+	t.check(gm.current_health == 2, "load_game stellt current_health wieder her")
+	t.check(gm.opened_gate_ids.has("res://lvl.tscn::gate_a"), "load_game stellt opened_gate_ids wieder her")
+	t.check(gm.collected_coin_ids.has("res://lvl.tscn::coin_a"), "load_game stellt collected_coin_ids wieder her")
+
+	# Fehlende Datei -> false, kein Crash
+	t.check(gm.load_game("user://does_not_exist_42.json") == false, "load_game meldet false ohne Datei")
+
+	# Temp-Datei wieder aufraeumen
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(tmp_path))
+
 	# GameManager erbt von Node -> wieder freigeben, damit nichts leakt.
 	gm.free()

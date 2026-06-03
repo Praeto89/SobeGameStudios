@@ -50,11 +50,19 @@ func _on_body_entered(body: Node) -> void:
 		var id = GameManager.get_persistent_id(self)
 		if id != "" and not id in GameManager.collected_coin_ids:
 			GameManager.collected_coin_ids.append(id)
+		# JUICE: Sammelst du mehrere Muenzen schnell hintereinander, steigt
+		# die Tonhoehe -- ein kleiner eskalierender Belohnungsreiz.
+		audio.pitch_scale = GameManager.next_coin_pitch()
 		audio.play()
-		# Muenze sofort visuell + kollisionsmaessig entfernen,
-		# aber Node erst freigeben wenn der Sound fertig ist
-		# (sonst wird der Sound mit der Node abgeschnitten)
-		$AnimatedSprite2D.visible = false
+		# Kollision sofort aus (kein Doppel-Sammeln), Node aber erst nach
+		# dem Sound freigeben (sonst wird der Sound abgeschnitten).
 		set_deferred("monitoring", false)
+		# JUICE: kurzer Scale-Pop + Ausfaden statt schlichtem Verschwinden.
+		var sprite := $AnimatedSprite2D
+		var pop := create_tween()
+		pop.set_parallel(true)
+		pop.tween_property(sprite, "scale", sprite.scale * 1.7, 0.15) \
+			.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		pop.tween_property(sprite, "modulate:a", 0.0, 0.15)
 		await audio.finished
 		queue_free()

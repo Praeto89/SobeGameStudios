@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=3 uid="uid://ccheckpointscn01"]
+
+[ext_resource type="Script" uid="uid://bcheckpoint01x" path="res://scripts/world/checkpoint.gd" id="1_chk"]
+[ext_resource type="AudioStream" uid="uid://dky6sj4iekgtv" path="res://assets/sounds/tap.wav" id="2_tap"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_chk"]
+size = Vector2(24, 48)
+
+[node name="Checkpoint" type="Area2D"]
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("1_chk")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_chk")
+
+[node name="Pole" type="Polygon2D" parent="."]
+color = Color(0.35, 0.27, 0.2, 1)
+polygon = PackedVector2Array(-2, -24, 2, -24, 2, 24, -2, 24)
+
+[node name="Flag" type="Polygon2D" parent="."]
+color = Color(0.5, 0.5, 0.55, 1)
+polygon = PackedVector2Array(2, -24, 18, -17, 2, -10)
+
+[node name="Sound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_tap")

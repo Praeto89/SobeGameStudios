@@ -54,7 +54,7 @@ SobeGameStudios/
 │   ├── player/        player.gd  (Spieler-Controller)
 │   ├── enemies/       green_slime.gd, wall_slime.gd, green_slime_spawner.gd
 │   ├── pickups/       charge_ability.gd, doublejump_ability.gd, wallcrawl_ability.gd, coin.gd
-│   ├── world/         green_platform.gd, green_platform_vertikal.gd, death.gd, fade_area.gd, portal.gd, charge_gate.gd
+│   ├── world/         green_platform.gd, green_platform_vertikal.gd, death.gd, fade_area.gd, portal.gd, charge_gate.gd, checkpoint.gd
 │   ├── ui/            hud.gd
 │   └── game_manager.gd  (Singleton / Autoload)
 ├── scenes/
@@ -97,12 +97,13 @@ SobeGameStudios/
 | Datei | Beschreibung |
 |---|---|
 | `scripts/player/player.gd` | **Spieler-Controller** – Bewegung, Sprung, Abilities, Schaden, Tod |
-| `scripts/game_manager.gd` | **Singleton** – speichert den Portal-Zustand zwischen Szenen |
+| `scripts/game_manager.gd` | **Singleton** – speichert Fortschritt zwischen Szenen **und** als Spielstand auf der Festplatte (`user://savegame.json`) |
 | `scripts/world/portal.gd` | **Portal** – Teleportiert den Spieler (gleiche Szene oder Level-Wechsel) |
 | `scripts/ui/hud.gd` | **HUD** – Zeigt Herzen und Münzen an, reagiert auf Spieler-Signale |
 | `scripts/pickups/coin.gd` | **Münze** – Sammelbar, löst Signal aus, spielt Sound |
 | `scripts/world/death.gd` | **Todeszone** – Löst Respawn aus wenn der Spieler eintritt |
 | `scripts/world/charge_gate.gd` | **Charge-Mauer** – Ability-Gate: nur der Charge-Dash bricht sie auf, bleibt dann dauerhaft offen |
+| `scripts/world/checkpoint.gd` | **Checkpoint** – setzt den Respawn-Punkt des Spielers auf die Fahnen-Position |
 | `scripts/enemies/green_slime.gd` | **Boden-Slime** – Patrouilliert, erkennt Spieler, kann sterben |
 | `scripts/enemies/wall_slime.gd` | **Wand-Slime** – Wie Boden-Slime, aber ohne Schwerkraft |
 | `scripts/enemies/green_slime_spawner.gd` | **Spawner** – Erzeugt Gegner in Intervallen bis zum Maximum |

@@ -88,6 +88,7 @@ func _break() -> void:
 	var id := GameManager.get_persistent_id(self)
 	if id != "" and not id in GameManager.opened_gate_ids:
 		GameManager.opened_gate_ids.append(id)
+		GameManager.save_game()   # geoeffnetes Gate sofort sichern
 
 	# Blockierende Kollision sofort entfernen, damit der Charge nicht abrupt
 	# an der Mauer stoppt, sondern hindurchfaehrt. set_deferred, weil wir

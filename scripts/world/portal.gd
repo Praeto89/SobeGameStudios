@@ -64,6 +64,7 @@ func _on_body_entered(body: Node2D) -> void:
 			if current != null:
 				GameManager.mark_scene_visited(current.scene_file_path)
 		# ── Level-Wechsel ──────────────────────────────────
+		GameManager.save_game()   # Fortschritt beim Level-Wechsel sichern
 		get_tree().change_scene_to_file(target_scene)
 	else:
 		# ── Teleport im selben Level ───────────────────────
