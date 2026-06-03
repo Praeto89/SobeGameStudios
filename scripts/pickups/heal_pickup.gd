@@ -19,6 +19,8 @@ extends Area2D
 # ╚═══════════════════════════════════════════════════════════════════════════╝
 @export var heal_amount := 1    # Wie viele Herzen aufgefuellt werden  <- probier: 2 oder 4
 
+@onready var audio := $SoundPickup
+
 # =============================================================================
 # _ready()
 # Verbindet das body_entered-Signal.
@@ -38,4 +40,8 @@ func _on_body_entered(body: Node) -> void:
 	if body.is_in_group("player") and body.has_method("heal"):
 		body.heal(heal_amount)
 		Hud.show_ability_message("Geheilt!  +%d Herz" % heal_amount)
+		set_deferred("monitoring", false)
+		$Sprite2D.visible = false
+		audio.play()
+		await audio.finished
 		queue_free()

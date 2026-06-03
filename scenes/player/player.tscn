@@ -5,6 +5,10 @@
 [ext_resource type="Texture2D" uid="uid://cecy8p8eyvngi" path="res://assets/sprites/KnightSprite.png" id="2_gmlin"]
 [ext_resource type="Texture2D" uid="uid://clightsoft0001" path="res://assets/effects/light_soft.tres" id="3_light"]
 [ext_resource type="Script" path="res://scripts/effects/torch_flicker.gd" id="4_flicker"]
+[ext_resource type="AudioStream" uid="uid://q53j23t3e3b1" path="res://assets/sounds/jump.wav" id="5_snd_jump"]
+[ext_resource type="AudioStream" uid="uid://df0u4cqde05df" path="res://assets/sounds/hurt.wav" id="6_snd_hurt"]
+[ext_resource type="AudioStream" uid="uid://bncupj5iuxe61" path="res://assets/sounds/explosion.wav" id="7_snd_expl"]
+[ext_resource type="AudioStream" uid="uid://dky6sj4iekgtv" path="res://assets/sounds/tap.wav" id="8_snd_tap"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_v6fml"]
 radius = 6.0
@@ -587,3 +591,15 @@ energy = 1.3
 texture_scale = 1.6
 shadow_enabled = true
 script = ExtResource("4_flicker")
+
+[node name="SoundJump" type="AudioStreamPlayer" parent="CharacterBody2D"]
+stream = ExtResource("5_snd_jump")
+
+[node name="SoundHurt" type="AudioStreamPlayer" parent="CharacterBody2D"]
+stream = ExtResource("6_snd_hurt")
+
+[node name="SoundDeath" type="AudioStreamPlayer" parent="CharacterBody2D"]
+stream = ExtResource("7_snd_expl")
+
+[node name="SoundAttack" type="AudioStreamPlayer" parent="CharacterBody2D"]
+stream = ExtResource("8_snd_tap")

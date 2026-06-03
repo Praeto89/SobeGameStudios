@@ -11,6 +11,8 @@
 
 extends Area2D
 
+@onready var audio := $SoundPickup
+
 # =============================================================================
 # _ready()
 # Verbindet das body_entered-Signal.
@@ -31,4 +33,8 @@ func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):
 		body.unlock_double_jump()   # Ability im Spieler-Skript aktivieren
 		Hud.show_ability_message("Doppelsprung freigeschaltet!\nIn der Luft erneut springen")
-		queue_free()                # Pickup aus der Szene entfernen
+		set_deferred("monitoring", false)
+		$Sprite2D.visible = false
+		audio.play()
+		await audio.finished
+		queue_free()

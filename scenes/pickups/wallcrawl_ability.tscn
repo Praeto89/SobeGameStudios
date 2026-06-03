@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://biigvlqnlox6a" path="res://scripts/pickups/wallcrawl_ability.gd" id="1_yhgvd"]
 [ext_resource type="Texture2D" uid="uid://clightsoft0001" path="res://assets/effects/light_soft.tres" id="2_light"]
 [ext_resource type="Script" path="res://scripts/effects/torch_flicker.gd" id="3_flicker"]
+[ext_resource type="AudioStream" uid="uid://cjj22ksmpqowv" path="res://assets/sounds/power_up.wav" id="4_snd_pu"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_dt5ky"]
 
@@ -29,3 +30,6 @@ script = ExtResource("3_flicker")
 modus = 1
 staerke = 0.35
 tempo = 3.5
+
+[node name="SoundPickup" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_snd_pu")

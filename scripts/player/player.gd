@@ -69,6 +69,10 @@ const JUMP_BUFFER_TIME = 0.12       # Sekunden vor dem Landen wo Sprung vorregis
 @onready var animated_sprite = $AnimatedSprite2D
 @onready var roll_hitbox := $"RollHitbox"
 @onready var attack_hitbox := $"AttackHitbox"
+@onready var sound_jump := $SoundJump
+@onready var sound_hurt := $SoundHurt
+@onready var sound_death := $SoundDeath
+@onready var sound_attack := $SoundAttack
 
 # -----------------------------------------------------------------------------
 # Zustandsvariablen — Bewegung & Abilities
@@ -221,6 +225,7 @@ func take_damage(amount: int, knockback_direction: float = 0.0) -> void:
 	if current_health <= 0:
 		_die()
 		return
+	sound_hurt.play()
 	is_hit = true
 	hit_timer = HIT_DURATION
 
@@ -246,6 +251,7 @@ func _die() -> void:
 	velocity.x = 0
 	roll_hitbox.monitoring = false
 	$CollisionShape2D.set_deferred("disabled", true)
+	sound_death.play()
 	_death_slowmo = true
 	Engine.time_scale = 0.5
 	animated_sprite.play("death")
@@ -394,6 +400,7 @@ func _physics_process(delta: float) -> void:
 		is_jumping = true
 		jump_buffer_timer = 0.0
 		coyote_timer = 0.0
+		sound_jump.play()
 	elif Input.is_action_just_pressed("ui_accept"):
 		if is_wall_crawling:
 			# Wall Jump: von der Wand wegspringen
@@ -402,11 +409,13 @@ func _physics_process(delta: float) -> void:
 			is_wall_crawling = false
 			can_double_jump = true
 			is_jumping = true
+			sound_jump.play()
 		elif has_double_jump and can_double_jump:
 			# Double Jump: zweiter Sprung in der Luft
 			velocity.y = JUMP_VELOCITY
 			can_double_jump = false
 			is_jumping = true
+			sound_jump.play()
 
 	# Sprung-Flag zuruecksetzen wenn gelandet
 	if is_on_floor():
@@ -452,6 +461,7 @@ func _physics_process(delta: float) -> void:
 		# als "fertig" gewertet, wenn noch der alte Animationszustand anliegt).
 		animated_sprite.flip_h = attack_facing_left
 		animated_sprite.play("attack_from_above" if attack_from_air else "attack")
+		sound_attack.play()
 	if is_attacking:
 		# Hitbox in Blickrichtung vor den Spieler setzen
 		attack_hitbox.position.x = -ATTACK_HITBOX_OFFSET if attack_facing_left else ATTACK_HITBOX_OFFSET
