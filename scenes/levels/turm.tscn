@@ -131,3 +131,9 @@ position = Vector2(188, 283)
 
 [node name="GeenSlimeSpawner3" parent="." unique_id=576208969 instance=ExtResource("6_h8sst")]
 position = Vector2(619, 435)
+
+[node name="PortalArea1" parent="." groups=["portals"] instance=ExtResource("4_5dp1l")]
+position = Vector2(176, -320)
+portal_id = "turm_to_area1"
+target_portal_id = "from_turm"
+target_scene = "res://scenes/levels/area_1.tscn"

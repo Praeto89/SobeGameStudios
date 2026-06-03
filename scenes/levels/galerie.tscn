@@ -21,7 +21,7 @@ offset_left = -300.0
 offset_top = -170.0
 offset_right = 800.0
 offset_bottom = -90.0
-text = "Such dir einen Slot und bau dein eigenes Level!\nPortal links unten = zurueck zur Sandbox.   F1 = Hilfe."
+text = "Such dir einen Slot und bau dein eigenes Level!\nLinks = Sandbox  |  Rechts = Abenteuer (Main/Turm).   F1 = Hilfe."
 horizontal_alignment = 1
 
 [node name="Boden" type="StaticBody2D" parent="."]
@@ -60,42 +60,42 @@ horizontal_alignment = 1
 position = Vector2(80, 60)
 portal_id = "to_slot_1"
 target_portal_id = "from_galerie"
-target_scene = "res://scenes/levels/student_levels/slot_1.tscn"
+target_scene = "res://scenes/levels/student_levels/riccardo.tscn"
 
 [node name="Slot1Label" type="Label" parent="."]
 offset_left = 40.0
 offset_top = 30.0
 offset_right = 120.0
 offset_bottom = 50.0
-text = "Slot 1"
+text = "Riccardo"
 horizontal_alignment = 1
 
 [node name="ToSlot2" parent="." groups=["portals"] instance=ExtResource("1_portal")]
 position = Vector2(240, 60)
 portal_id = "to_slot_2"
 target_portal_id = "from_galerie"
-target_scene = "res://scenes/levels/student_levels/slot_2.tscn"
+target_scene = "res://scenes/levels/student_levels/philipp.tscn"
 
 [node name="Slot2Label" type="Label" parent="."]
 offset_left = 200.0
 offset_top = 30.0
 offset_right = 280.0
 offset_bottom = 50.0
-text = "Slot 2"
+text = "Philipp"
 horizontal_alignment = 1
 
 [node name="ToSlot3" parent="." groups=["portals"] instance=ExtResource("1_portal")]
 position = Vector2(400, 60)
 portal_id = "to_slot_3"
 target_portal_id = "from_galerie"
-target_scene = "res://scenes/levels/student_levels/slot_3.tscn"
+target_scene = "res://scenes/levels/student_levels/HerrStalder.tscn"
 
 [node name="Slot3Label" type="Label" parent="."]
 offset_left = 360.0
 offset_top = 30.0
 offset_right = 440.0
 offset_bottom = 50.0
-text = "Slot 3"
+text = "Herr Stalder"
 horizontal_alignment = 1
 
 [node name="ToSlot4" parent="." groups=["portals"] instance=ExtResource("1_portal")]
@@ -109,7 +109,21 @@ offset_left = 520.0
 offset_top = 30.0
 offset_right = 600.0
 offset_bottom = 50.0
-text = "Slot 4"
+text = "Slot 4 (frei)"
+horizontal_alignment = 1
+
+[node name="ToMain" parent="." groups=["portals"] instance=ExtResource("1_portal")]
+position = Vector2(740, 60)
+portal_id = "from_main"
+target_portal_id = "main_to_galerie"
+target_scene = "res://scenes/levels/main.tscn"
+
+[node name="ToMainLabel" type="Label" parent="."]
+offset_left = 680.0
+offset_top = 30.0
+offset_right = 800.0
+offset_bottom = 50.0
+text = "Abenteuer"
 horizontal_alignment = 1
 
 [node name="Death" parent="." instance=ExtResource("3_death")]

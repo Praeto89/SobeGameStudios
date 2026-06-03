@@ -10,6 +10,7 @@ Jeder Slot ist ein eigenes Mini-Level, das ueber die **Galerie** erreichbar ist.
 4. Per Godot-Versionsverwaltung committen und pushen
 
 > **Tipp:** Schreib in den `Hinweis`-Label deinen Namen rein, damit alle wissen wessen Level das ist.
+> Dein Name in der **Galerie** kommt aber aus dem `SlotXLabel` dort – siehe Hinweis weiter unten.
 
 ### ✅ Checkliste bevor du pushst
 
@@ -27,12 +28,18 @@ Hast du alles?
 
 ## Welcher Slot ist frei?
 
-- Slot 1 – frei
-- Slot 2 – frei
-- Slot 3 – frei
-- Slot 4 – frei
+- Slot 1 – Riccardo (`riccardo.tscn`)
+- Slot 2 – Philipp (`philipp.tscn`)
+- Slot 3 – Herr Stalder (`HerrStalder.tscn`)
+- Slot 4 – frei (`slot_4.tscn`)
 
 Bitte Liste aktualisieren, wenn du einen Slot belegst.
+
+> **Wichtig, falls du deine Slot-Datei umbenennst** (z. B. `slot_2.tscn` →
+> `dein_name.tscn`): Dann zeigt das Galerie-Portal ins Leere! Oeffne
+> `scenes/levels/galerie.tscn`, klick das passende `ToSlotX`-Portal an und
+> setze `target_scene` auf deinen neuen Dateinamen. Benenne ausserdem das
+> `SlotXLabel` daneben auf deinen Namen um – dieses Label zeigt die Galerie an.
 
 ## Mehr Slots brauchen?
 

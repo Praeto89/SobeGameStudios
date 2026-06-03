@@ -271,3 +271,17 @@ position = Vector2(-804, 53)
 portal_id = "main_a"
 target_portal_id = "turm_a"
 target_scene = "res://scenes/levels/turm.tscn"
+
+[node name="PortalGalerie" parent="." groups=["portals"] instance=ExtResource("16_muem4")]
+position = Vector2(-650, 53)
+portal_id = "main_to_galerie"
+target_portal_id = "from_main"
+target_scene = "res://scenes/levels/galerie.tscn"
+
+[node name="PortalGalerieLabel" type="Label" parent="."]
+offset_left = -710.0
+offset_top = -10.0
+offset_right = -590.0
+offset_bottom = 10.0
+text = "Galerie (Klasse)"
+horizontal_alignment = 1

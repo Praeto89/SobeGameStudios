@@ -59,6 +59,17 @@ echten Editor einmal gegengeprüft werden:
       den `Anleitung`-Label anklicken und `offset_right` etwas vergrößern.
 - [ ] **Projekt einmal komplett importieren** (frisch geklont) und schauen, ob
       das Output-Panel **keine roten** Fehler zeigt.
+- [ ] **Neue Portal-Positionen kontrollieren** (wurden ohne offenen Editor per
+      Koordinaten gesetzt, stehen evtl. nicht perfekt am Boden):
+  - `main.tscn` → `PortalGalerie` (führt zur Galerie)
+  - `galerie.tscn` → `ToMain` (rechts, „Abenteuer")
+  - `turm.tscn` → `PortalArea1` (oben im Turm)
+  - `area_1.tscn` → `PortalTurm` (Rückweg zum Turm)
+  Jeweils Szene mit **F6** starten und prüfen, dass das Portal erreichbar auf
+  dem Boden/einer Plattform steht. Falls es schwebt: Portal anklicken und
+  `position` im Inspector anpassen.
+- [ ] **Todeszone in `area_1.tscn`** ergänzen (`scenes/world/death.tscn`
+      reinziehen) – das Level hat noch keine.
 
 ---
 
