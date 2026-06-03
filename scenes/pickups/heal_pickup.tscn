@@ -1,6 +1,7 @@
 [gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://scripts/pickups/heal_pickup.gd" id="1_heal"]
+[ext_resource type="AudioStream" uid="uid://cjj22ksmpqowv" path="res://assets/sounds/power_up.wav" id="2_snd_pu"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_heal"]
 
@@ -16,3 +17,6 @@ texture = SubResource("CanvasTexture_heal")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_heal")
+
+[node name="SoundPickup" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_snd_pu")

@@ -37,6 +37,7 @@ extends CharacterBody2D
 # -----------------------------------------------------------------------------
 @onready var sprite := $AnimatedSprite2D
 @onready var hitbox := $Hitbox          # Area2D die Schaden an den Spieler gibt
+@onready var sound_death := $SoundDeath
 
 # -----------------------------------------------------------------------------
 # Zustandsvariablen
@@ -104,6 +105,7 @@ func die() -> void:
 	# das die Aenderung auf nach dem Frame verschiebt.
 	$CollisionShape2D.set_deferred("disabled", true)
 	hitbox.monitoring = false
+	sound_death.play()
 	sprite.play("death")
 	# WARUM await?
 	# await haelt diese Funktion an, bis die Animation fertig ist,

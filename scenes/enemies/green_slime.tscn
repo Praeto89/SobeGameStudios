@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://c8684x7sg1j6a" path="res://assets/sprites/slime_green.png" id="1_ee1ex"]
 [ext_resource type="Script" uid="uid://lguaxle0a4pr" path="res://scripts/enemies/green_slime.gd" id="1_vqynf"]
+[ext_resource type="AudioStream" uid="uid://bncupj5iuxe61" path="res://assets/sounds/explosion.wav" id="2_snd_expl"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vqynf"]
 atlas = ExtResource("1_ee1ex")
@@ -164,3 +165,6 @@ collision_layer = 0
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=1407305757]
 position = Vector2(0, 0.5)
 shape = SubResource("RectangleShape2D_tuic5")
+
+[node name="SoundDeath" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_snd_expl")
