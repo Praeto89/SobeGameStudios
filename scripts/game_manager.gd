@@ -35,6 +35,10 @@ var coin_count: int = 0
 var collected_coin_ids: Array[String] = []
 # IDs der Gegner die bereits besiegt wurden.
 var defeated_enemy_ids: Array[String] = []
+# IDs der Gates (z. B. Charge-Mauern), die bereits aufgebrochen wurden.
+# Ein aufgebrochenes Gate bleibt fuer den Rest der Session offen -- so fuehlt
+# sich die Welt dauerhaft veraendert an (Metroidvania-Prinzip).
+var opened_gate_ids: Array[String] = []
 # Szenen-Pfade die der Spieler in dieser Session betreten UND wieder verlassen hat.
 # Wird vom portal.gd befuellt wenn ein Portal in die Galerie fuehrt.
 # Die Galerie liest diese Liste in galerie.gd, um ⭐-Sticker an besuchten
@@ -81,4 +85,5 @@ func reset_game() -> void:
 	coin_count = 0
 	collected_coin_ids.clear()
 	defeated_enemy_ids.clear()
+	opened_gate_ids.clear()
 	visited_scenes.clear()

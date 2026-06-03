@@ -23,6 +23,7 @@ func run(t) -> void:
 	gm.current_health = 1
 	gm.collected_coin_ids.append("res://x.tscn::coin")
 	gm.defeated_enemy_ids.append("res://x.tscn::slime")
+	gm.opened_gate_ids.append("res://x.tscn::charge_gate")
 
 	gm.reset_game()
 
@@ -32,6 +33,7 @@ func run(t) -> void:
 	t.check(gm.current_health == gm.MAX_HEALTH, "reset_game stellt volle Leben her")
 	t.check(gm.collected_coin_ids.is_empty(), "reset_game leert collected_coin_ids")
 	t.check(gm.defeated_enemy_ids.is_empty(), "reset_game leert defeated_enemy_ids")
+	t.check(gm.opened_gate_ids.is_empty(), "reset_game leert opened_gate_ids")
 
 	# --- mark_scene_visited() vermeidet Duplikate und leere Pfade ---
 	gm.mark_scene_visited("res://a.tscn")

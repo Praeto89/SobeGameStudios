@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3 uid="uid://cchargegatescn01"]
+
+[ext_resource type="Script" uid="uid://bchargegate01x" path="res://scripts/world/charge_gate.gd" id="1_gate"]
+[ext_resource type="AudioStream" uid="uid://bncupj5iuxe61" path="res://assets/sounds/explosion.wav" id="2_break"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_block"]
+size = Vector2(16, 48)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_detect"]
+size = Vector2(28, 48)
+
+[node name="ChargeGate" type="StaticBody2D"]
+script = ExtResource("1_gate")
+
+[node name="Sprite" type="Polygon2D" parent="."]
+color = Color(0.85, 0.32, 0.28, 1)
+polygon = PackedVector2Array(-8, -24, 8, -24, 8, 24, -8, 24)
+
+[node name="Block" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_block")
+
+[node name="DetectArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectArea"]
+shape = SubResource("RectangleShape2D_detect")
+
+[node name="SoundBreak" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_break")

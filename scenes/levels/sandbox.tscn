@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://0lmbkrm3yis5" path="res://scenes/pickups/wallcrawl_ability.tscn" id="7_wcrawl"]
 [ext_resource type="PackedScene" uid="uid://7ck1dr5e5kg0" path="res://scenes/world/portal.tscn" id="8_portal"]
 [ext_resource type="PackedScene" uid="uid://md1jdcoedfs" path="res://scenes/world/death.tscn" id="9_death"]
+[ext_resource type="PackedScene" uid="uid://cchargegatescn01" path="res://scenes/world/charge_gate.tscn" id="12_gate"]
 [ext_resource type="Texture2D" uid="uid://ctbiesjqnr38r" path="res://assets/sprites/PurpleDragons Spirte set/Ground/rockgrey_tilemap.png" id="10_tiles"]
 [ext_resource type="PackedScene" uid="uid://ccaveatmo0001" path="res://scenes/effects/cave_atmosphere.tscn" id="11_cave"]
 [ext_resource type="PackedScene" uid="uid://dvndy5yhbn1n3" path="res://scenes/enemies/wall_slime.tscn" id="11_wallslime"]
@@ -98,6 +99,9 @@ distance = 80.0
 
 [node name="green_slime" parent="." instance=ExtResource("4_slime")]
 position = Vector2(620, 60)
+
+[node name="ChargeGate" parent="." instance=ExtResource("12_gate")]
+position = Vector2(520, 56)
 
 [node name="wall_slime" parent="." instance=ExtResource("11_wallslime")]
 position = Vector2(250, -308)
