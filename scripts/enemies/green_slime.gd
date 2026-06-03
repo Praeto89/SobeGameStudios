@@ -10,6 +10,11 @@
 #   - Tod:           Deaktiviert Kollision, spielt Todesanimation, entfernt sich
 #
 # Wird vom Spieler getoedet durch: Roll oder Charge-Ability
+#
+# Schwierigkeit: [FORTGESCHRITTEN] – Zustandsautomat (State Machine) + await.
+#
+# 📝 AUFGABE (A3, Stufe 5): Gib dem Slime einen "Flucht"-Zustand, wenn der
+#    Spieler sehr nah ist (laeuft weg statt hin). Loesung: AUFGABEN.md -> A3
 # =============================================================================
 
 extends CharacterBody2D

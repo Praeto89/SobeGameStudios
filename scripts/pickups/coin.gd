@@ -10,6 +10,11 @@
 #   4. Muenze aus der Szene entfernen
 #
 # Die Muenze spielt beim Start automatisch eine Dreh-Animation ab.
+#
+# Schwierigkeit: [EINSTEIGER] – kurzes, gut lesbares Pickup-Muster.
+#
+# 📝 AUFGABE (A1, Stufe 4): Mach eine "Goldmuenze", die mehr als 1 zaehlt.
+#    Idee + Loesung: AUFGABEN.md -> A1
 # =============================================================================
 
 extends Area2D

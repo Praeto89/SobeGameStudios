@@ -49,7 +49,7 @@ offset_left = -460.0
 offset_top = -200.0
 offset_right = 860.0
 offset_bottom = -40.0
-text = "SANDBOX – Spielwiese\n1. Ziehe Prefabs aus dem FileSystem-Tab (links) in diese Szene\n   z. B. scenes/pickups/coin.tscn fuer eine Muenze\n2. F6 = nur diese Szene starten   |   F1 im Spiel = Hilfe\n3. Strg+S = speichern\nKlick auf den TileMap-Node = eigene Boden-Tiles malen\nPortal links unten: Galerie  |  Portal rechts unten: Hauptlevel"
+text = "SANDBOX – Spielwiese\nSteuerung: Pfeiltasten = Laufen  |  Leertaste = Springen  |  F1 = Hilfe\n1. Ziehe Prefabs aus dem FileSystem-Tab (links) in diese Szene\n   z. B. scenes/pickups/coin.tscn fuer eine Muenze\n2. F6 = nur diese Szene starten   |   Strg+S = speichern\nKlick auf den TileMap-Node = eigene Boden-Tiles malen\nPortal links unten: Galerie  |  Portal rechts unten: Hauptlevel"
 horizontal_alignment = 1
 vertical_alignment = 1
 
