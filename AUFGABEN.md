@@ -80,25 +80,34 @@ Der Slime patrouilliert und greift an. Gib ihm einen neuen Zustand: wenn der
 Spieler **sehr nah** ist (z. B. < 60 px), läuft der Slime **weg** statt hin.
 
 **Konzept:** Zustandsautomat (State Machine) – einen neuen Zustand ergänzen.
+Das gemeinsame Slime-Verhalten lebt in `scripts/enemies/slime_base.gd`. Dort
+gibt es eine extra Methode `_handle_extra_state(delta)`, die du in
+`green_slime.gd` **überschreiben** kannst, ohne die ganze Hauptschleife zu
+kopieren.
 
 <details>
 <summary>▸ Lösung</summary>
 
+In `green_slime.gd` diese Methode ergänzen:
+
 ```gdscript
-# In _physics_process, vor der Aktivierungs-/Patrouille-Logik:
-var dist := global_position.distance_to(player.global_position) if (player and is_instance_valid(player)) else INF
-if dist < 60.0:
-	# weg vom Spieler laufen
-	var flee_dir = sign(global_position.x - player.global_position.x)
-	velocity.x = flee_dir * speed
-	sprite.flip_h = flee_dir < 0
-	sprite.play("patrol")
-	move_and_slide()
-	return
+# Wird von SlimeBase jeden Frame VOR der Aktivierungs-/Patrouille-Logik gefragt.
+# Gibt true zurueck, wenn der Slime in diesem Frame fluechtet.
+func _handle_extra_state(_delta: float) -> bool:
+	var dist := global_position.distance_to(player.global_position) if (player and is_instance_valid(player)) else INF
+	if dist < 60.0:
+		# weg vom Spieler laufen
+		var flee_dir = sign(global_position.x - player.global_position.x)
+		velocity.x = flee_dir * speed
+		sprite.flip_h = flee_dir < 0
+		sprite.play("patrol")
+		return true   # "Ich uebernehme die Bewegung diesen Frame"
+	return false      # sonst macht SlimeBase normal weiter
 ```
 
 Tipp: `INF` ist "unendlich" – praktisch als Startwert für "noch keinen
-Spieler gefunden".
+Spieler gefunden". Das `return true/false` sagt der Basis-Klasse, ob sie
+danach noch Patrouille/Aktivierung ausführen soll.
 </details>
 
 ---
