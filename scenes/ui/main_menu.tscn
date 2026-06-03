@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://cmainmenuscn001"]
+[gd_scene load_steps=4 format=3 uid="uid://cmainmenuscn001"]
 
 [ext_resource type="Script" uid="uid://dmainmenuscr01" path="res://scripts/ui/main_menu.gd" id="1_menu"]
 [ext_resource type="FontFile" uid="uid://dtx2a7s2qqtrp" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="2_font"]
+[ext_resource type="AudioStream" uid="uid://r7h513q17ogb" path="res://assets/music/for_a_school_game.mp3" id="3_music"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -11,6 +12,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_menu")
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_music")
+autoplay = true
 
 [node name="Background" type="ColorRect" parent="."]
 layout_mode = 1

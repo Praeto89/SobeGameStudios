@@ -304,3 +304,9 @@ position = Vector2(220, 100)
 portal_id = "from_turm"
 target_portal_id = "turm_to_area1"
 target_scene = "res://scenes/levels/turm.tscn"
+
+[node name="PortalEnde" parent="." groups=["portals"] instance=ExtResource("11_portal")]
+position = Vector2(392, 120)
+portal_id = "area1_end"
+target_portal_id = ""
+target_scene = "res://scenes/ui/credits.tscn"
