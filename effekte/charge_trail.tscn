@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://chargetrail0001"]
+
+; Geist-Spur waehrend des Charge-Dashs. Drag&Drop als Kind des Spielers
+; (CharacterBody2D-Root in player.tscn).
+;
+; Erzeugt blaue Sprite-Geister die beim Charge-Dash erscheinen und ausblenden.
+;
+; Tunen:
+;   ChargeSpur anklicken -> geist_intervall, geist_alpha, geist_farbe, geist_dauer
+
+[ext_resource type="Script" path="res://effekte/charge_trail.gd" id="1_trail"]
+
+[node name="ChargeSpur" type="Node2D"]
+script = ExtResource("1_trail")

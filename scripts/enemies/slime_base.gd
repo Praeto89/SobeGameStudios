@@ -112,6 +112,11 @@ func die() -> void:
 	# das die Aenderung auf nach dem Frame verschiebt.
 	$CollisionShape2D.set_deferred("disabled", true)
 	hitbox.monitoring = false
+	# Optionaler Partikel-Burst: Wenn ein Kind namens "TodExplosion" existiert
+	# (z. B. enemy_death_burst.tscn per Drag&Drop hinzugefuegt), wird es ausgeloest.
+	var tod_burst := get_node_or_null("TodExplosion")
+	if tod_burst and tod_burst.has_method("ausloesen"):
+		tod_burst.ausloesen()
 	if has_node("SoundDeath"):
 		$SoundDeath.play()
 	# Effekt: kurz hell aufleuchten ("Treffer-Blitz"), dann erst sterben.

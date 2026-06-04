@@ -182,6 +182,7 @@ signal coin_collected(new_count)
 # Speichert die Startposition als Spawn-Punkt und aktiviert die Roll-Hitbox.
 # =============================================================================
 func _ready() -> void:
+	add_to_group("spieler")   # Wird von Effekt-Szenen (screen_shake, etc.) per Gruppe gefunden
 	spawn_position = global_position
 	# Grund-Skalierung des Sprites merken, damit Squash & Stretch immer dorthin
 	# zurueckfedert (statt fest auf 1,1 – falls jemand das Sprite skaliert hat).

@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://screenshake0001"]
+
+; Kamera-Schüttel-Effekt. Drag&Drop als Kind von Camera2D (in player.tscn).
+; Schüttelt automatisch bei Schadensereignissen. Methode shake() kann auch
+; manuell aufgerufen werden, z. B. bei Explosionen.
+;
+; Tunen:
+;   ScreenShake anklicken -> standard_staerke (1-12), standard_dauer (0.1-0.6)
+
+[ext_resource type="Script" path="res://effekte/screen_shake.gd" id="1_shake"]
+
+[node name="ScreenShake" type="Node"]
+script = ExtResource("1_shake")
