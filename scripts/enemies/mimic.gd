@@ -108,6 +108,38 @@ func _wake_up() -> void:
 	state = State.ACTIVE
 
 # =============================================================================
+# die()
+# Überschreibt SlimeBase.die(): spawnt erst Münzen, dann läuft die Basisversion
+# (Kollision aus, Todesanimation abspielen, queue_free).
+#
+# WARUM hier und nicht in SlimeBase?
+# Nur die Mimik-Truhe soll Münzen hinterlassen. Der grüne Slime tut das nicht.
+# Durch das Überschreiben bleibt die Basis-Klasse sauber und jede Unterklasse
+# entscheidet selbst, was beim Tod passiert.
+# =============================================================================
+func die() -> void:
+	_spawn_coins(8)
+	super()
+
+# =============================================================================
+# _spawn_coins(count)
+# Instanziiert count Münzen als Kinder des Eltern-Knotens (des Levels) und
+# verteilt sie zufällig um die aktuelle Position.
+#
+# WARUM get_parent()?
+# Die Truhe wird gleich mit queue_free() entfernt. Münzen als eigene Kinder
+# wären sofort weg. Als Kinder des Levels bleiben sie sammelbar.
+# =============================================================================
+func _spawn_coins(count: int) -> void:
+	var coin_scene := load("res://scenes/pickups/coin.tscn")
+	for i in count:
+		var c = coin_scene.instantiate()
+		var angle := randf() * TAU
+		var dist  := randf_range(12.0, 32.0)
+		c.global_position = global_position + Vector2(cos(angle) * dist, sin(angle) * dist - 14.0)
+		get_parent().add_child(c)
+
+# =============================================================================
 # _do_active()
 # Wach: kriecht auf den Spieler zu und wedelt mit dem Tentakel (attack-Anim).
 # An einer Wand bleibt sie stehen statt sinnlos dagegen zu druecken.
