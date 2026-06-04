@@ -12,6 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://ctbiesjqnr38r" path="res://assets/sprites/PurpleDragons Spirte set/Ground/rockgrey_tilemap.png" id="10_tiles"]
 [ext_resource type="PackedScene" uid="uid://ccaveatmo0001" path="res://scenes/effects/cave_atmosphere.tscn" id="11_cave"]
 [ext_resource type="PackedScene" uid="uid://dvndy5yhbn1n3" path="res://scenes/enemies/wall_slime.tscn" id="11_wallslime"]
+[ext_resource type="PackedScene" uid="uid://bmimicscn0001" path="res://scenes/enemies/mimic.tscn" id="12_mimic"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_floor"]
 texture = ExtResource("10_tiles")
@@ -98,6 +99,17 @@ distance = 80.0
 
 [node name="green_slime" parent="." instance=ExtResource("4_slime")]
 position = Vector2(620, 60)
+
+[node name="mimic" parent="." instance=ExtResource("12_mimic")]
+position = Vector2(510, 60)
+
+[node name="MimicLabel" type="Label" parent="."]
+offset_left = 450.0
+offset_top = 20.0
+offset_right = 570.0
+offset_bottom = 40.0
+text = "Mimik-Truhe: komm nicht zu nah!"
+horizontal_alignment = 1
 
 [node name="wall_slime" parent="." instance=ExtResource("11_wallslime")]
 position = Vector2(250, -308)
