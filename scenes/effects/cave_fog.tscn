@@ -1,0 +1,47 @@
+[gd_scene load_steps=2 format=3 uid="uid://dcavefog00001"]
+
+; Wiederverwendbarer "Nebel"-Baustein. Wie cave_atmosphere.tscn einfach per
+; Drag&Drop in ein Level ziehen (als Kind der Level-Wurzel) -- am besten ZUSAMMEN
+; mit cave_atmosphere fuer die volle Hoehlen-Stimmung.
+;
+; Technik: In 2D gibt es keinen "echten" volumetrischen Nebel wie in 3D. Wir
+; faken ihn mit grossen, sehr weichen, halbtransparenten Partikeln, die langsam
+; seitlich treiben -> wirkt wie ziehende Nebelschwaden. Alle Werte sind im
+; Inspector frei einstellbar.
+;
+; Wichtige Stellschrauben:
+;   amount        -> Dichte des Nebels (mehr = dichter)
+;   color (Alpha) -> wie milchig der Nebel ist (a hoch = dichter Brei)
+;   scale_amount  -> Groesse der einzelnen Schwaden
+;   direction/initial_velocity -> Zugrichtung & Tempo der Schwaden
+;
+; Soll der Nebel VOR dem Spieler liegen? "Nebel" anklicken -> z_index hoch.
+; Soll er HINTER dem Spieler liegen (nur Hintergrund neblig)? z_index negativ.
+
+[ext_resource type="Texture2D" uid="uid://clightsoft0001" path="res://assets/effects/light_soft.tres" id="1_light"]
+
+[node name="CaveFog" type="Node2D"]
+
+[node name="Nebel" type="CPUParticles2D" parent="."]
+; Leicht vor der Spielebene, damit der Nebel sichtbar ueber allem schwebt.
+; Auf 0 oder negativ setzen, wenn er hinter den Spieler soll.
+z_index = 1
+texture = ExtResource("1_light")
+amount = 14
+lifetime = 12.0
+; preprocess = "spult" die Simulation beim Start vor, damit der Nebel schon
+; gleichmaessig verteilt ist und nicht erst langsam einschwebt.
+preprocess = 8.0
+randomness = 0.8
+emission_shape = 3
+emission_rect_extents = Vector2(520, 320)
+direction = Vector2(1, 0)
+spread = 12.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 4.0
+initial_velocity_max = 12.0
+scale_amount_min = 0.8
+scale_amount_max = 1.6
+; Helles, leicht blaeuliches Grau mit niedrigem Alpha (0.1) = zarter Dunst.
+; Fuer dichten Nebel das Alpha Richtung 0.25-0.35 schieben.
+color = Color(0.72, 0.74, 0.85, 0.1)
