@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://caufstiegscn01"]
+[gd_scene load_steps=18 format=3 uid="uid://caufstiegscn01"]
 
 [ext_resource type="PackedScene" uid="uid://ck6q6oyovvakg" path="res://scenes/player/player.tscn" id="1_player"]
 [ext_resource type="PackedScene" uid="uid://jhiuqdedq0l3" path="res://scenes/pickups/coin.tscn" id="2_coin"]
@@ -8,9 +8,12 @@
 [ext_resource type="PackedScene" uid="uid://cdjgatescn0001" path="res://scenes/world/doublejump_gate.tscn" id="6_djgate"]
 [ext_resource type="PackedScene" uid="uid://7ck1dr5e5kg0" path="res://scenes/world/portal.tscn" id="7_portal"]
 [ext_resource type="PackedScene" uid="uid://ccaveatmo0001" path="res://scenes/effects/cave_atmosphere.tscn" id="8_cave"]
+[ext_resource type="PackedScene" uid="uid://0lmbkrm3yis5" path="res://scenes/pickups/wallcrawl_ability.tscn" id="9_wcrawl"]
+[ext_resource type="Texture2D" uid="uid://vv735vwr7k1u" path="res://assets/textures/generated_image_bc174b4f-9b30-4346-aeb9-e82c34e2bffd.png" id="10_texrock"]
+[ext_resource type="Texture2D" uid="uid://c8dh35mr5wq6" path="res://assets/textures/generated_image_451106ce-fd27-46d3-820c-47a8a42f5138 (1).png" id="11_texbrick"]
 
 [sub_resource type="RectangleShape2D" id="RS_boden"]
-size = Vector2(1310, 240)
+size = Vector2(1430, 240)
 
 [sub_resource type="RectangleShape2D" id="RS_wallL"]
 size = Vector2(40, 280)
@@ -21,16 +24,24 @@ size = Vector2(40, 220)
 [sub_resource type="RectangleShape2D" id="RS_upper"]
 size = Vector2(816, 16)
 
+[sub_resource type="RectangleShape2D" id="RS_climb"]
+size = Vector2(20, 230)
+
+[sub_resource type="RectangleShape2D" id="RS_third"]
+size = Vector2(160, 16)
+
 [node name="Aufstieg" type="Node2D"]
 
 [node name="CaveAtmosphere" parent="." instance=ExtResource("8_cave")]
 
 [node name="Boden" type="StaticBody2D" parent="."]
-position = Vector2(5, 200)
+position = Vector2(65, 200)
 
 [node name="Sprite" type="Polygon2D" parent="Boden"]
-color = Color(0.18, 0.16, 0.22, 1)
-polygon = PackedVector2Array(-655, -120, 655, -120, 655, 120, -655, 120)
+texture_repeat = 2
+texture = ExtResource("10_texrock")
+polygon = PackedVector2Array(-715, -120, 715, -120, 715, 120, -715, 120)
+uv = PackedVector2Array(-715, -120, 715, -120, 715, 120, -715, 120)
 
 [node name="Block" type="CollisionShape2D" parent="Boden"]
 shape = SubResource("RS_boden")
@@ -39,18 +50,22 @@ shape = SubResource("RS_boden")
 position = Vector2(-630, -40)
 
 [node name="Sprite" type="Polygon2D" parent="WandLinks"]
-color = Color(0.18, 0.16, 0.22, 1)
+texture_repeat = 2
+texture = ExtResource("10_texrock")
 polygon = PackedVector2Array(-20, -140, 20, -140, 20, 140, -20, 140)
+uv = PackedVector2Array(-20, -140, 20, -140, 20, 140, -20, 140)
 
 [node name="Block" type="CollisionShape2D" parent="WandLinks"]
 shape = SubResource("RS_wallL")
 
 [node name="WandRechts" type="StaticBody2D" parent="."]
-position = Vector2(640, -30)
+position = Vector2(760, -30)
 
 [node name="Sprite" type="Polygon2D" parent="WandRechts"]
-color = Color(0.18, 0.16, 0.22, 1)
+texture_repeat = 2
+texture = ExtResource("10_texrock")
 polygon = PackedVector2Array(-20, -110, 20, -110, 20, 110, -20, 110)
+uv = PackedVector2Array(-20, -110, 20, -110, 20, 110, -20, 110)
 
 [node name="Block" type="CollisionShape2D" parent="WandRechts"]
 shape = SubResource("RS_wallR")
@@ -59,11 +74,37 @@ shape = SubResource("RS_wallR")
 position = Vector2(152, 22)
 
 [node name="Sprite" type="Polygon2D" parent="ObereEbene"]
-color = Color(0.22, 0.2, 0.28, 1)
+texture_repeat = 2
+texture = ExtResource("11_texbrick")
 polygon = PackedVector2Array(-408, -8, 408, -8, 408, 8, -408, 8)
+uv = PackedVector2Array(-408, -8, 408, -8, 408, 8, -408, 8)
 
 [node name="Block" type="CollisionShape2D" parent="ObereEbene"]
 shape = SubResource("RS_upper")
+
+[node name="Kletterwand" type="StaticBody2D" parent="."]
+position = Vector2(550, -85)
+
+[node name="Sprite" type="Polygon2D" parent="Kletterwand"]
+texture_repeat = 2
+texture = ExtResource("10_texrock")
+polygon = PackedVector2Array(-10, -115, 10, -115, 10, 115, -10, 115)
+uv = PackedVector2Array(-10, -115, 10, -115, 10, 115, -10, 115)
+
+[node name="Block" type="CollisionShape2D" parent="Kletterwand"]
+shape = SubResource("RS_climb")
+
+[node name="DritteEbene" type="StaticBody2D" parent="."]
+position = Vector2(640, -192)
+
+[node name="Sprite" type="Polygon2D" parent="DritteEbene"]
+texture_repeat = 2
+texture = ExtResource("11_texbrick")
+polygon = PackedVector2Array(-80, -8, 80, -8, 80, 8, -80, 8)
+uv = PackedVector2Array(-80, -8, 80, -8, 80, 8, -80, 8)
+
+[node name="Block" type="CollisionShape2D" parent="DritteEbene"]
+shape = SubResource("RS_third")
 
 [node name="DoubleJumpGate" parent="." instance=ExtResource("6_djgate")]
 position = Vector2(-300, 22)
@@ -72,10 +113,13 @@ position = Vector2(-300, 22)
 position = Vector2(200, -46)
 
 [node name="DoubleJumpAbility" parent="." instance=ExtResource("3_djump")]
-position = Vector2(360, 58)
+position = Vector2(400, 58)
 
 [node name="ChargeAbility" parent="." instance=ExtResource("4_charge")]
 position = Vector2(-100, -10)
+
+[node name="WallcrawlAbility" parent="." instance=ExtResource("9_wcrawl")]
+position = Vector2(440, -10)
 
 [node name="coin_weg1" parent="." instance=ExtResource("2_coin")]
 position = Vector2(-150, 58)
@@ -87,16 +131,16 @@ position = Vector2(60, 58)
 position = Vector2(220, 58)
 
 [node name="coin_belohnung1" parent="." instance=ExtResource("2_coin")]
-position = Vector2(300, -10)
+position = Vector2(590, -226)
 
 [node name="coin_belohnung2" parent="." instance=ExtResource("2_coin")]
-position = Vector2(360, -10)
+position = Vector2(630, -226)
 
 [node name="coin_belohnung3" parent="." instance=ExtResource("2_coin")]
-position = Vector2(420, -10)
+position = Vector2(670, -226)
 
 [node name="PortalEnde" parent="." groups=["portals"] instance=ExtResource("7_portal")]
-position = Vector2(440, -12)
+position = Vector2(700, -226)
 portal_id = "aufstieg_end"
 target_portal_id = "from_aufstieg"
 target_scene = "res://scenes/levels/main.tscn"
@@ -132,6 +176,14 @@ offset_top = -150.0
 offset_right = 290.0
 offset_bottom = -110.0
 text = "Charge-Mauer\n('E' durchbrechen)"
+horizontal_alignment = 1
+
+[node name="WallcrawlSchild" type="Label" parent="."]
+offset_left = 440.0
+offset_top = -150.0
+offset_right = 600.0
+offset_bottom = -110.0
+text = "Kletterwand\n(hochklettern)"
 horizontal_alignment = 1
 
 [node name="Player" parent="." instance=ExtResource("1_player")]
