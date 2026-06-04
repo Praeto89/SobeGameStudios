@@ -114,6 +114,11 @@ func die() -> void:
 	hitbox.monitoring = false
 	if has_node("SoundDeath"):
 		$SoundDeath.play()
+	# Effekt: kurz hell aufleuchten ("Treffer-Blitz"), dann erst sterben.
+	# modulate-Werte > 1 leuchten dank Glow-Environment richtig auf. Rein
+	# optisch – laeuft parallel zur Todesanimation ab.
+	sprite.modulate = Color(3.0, 3.0, 3.0)
+	create_tween().tween_property(sprite, "modulate", Color.WHITE, 0.18)
 	if sprite.sprite_frames and sprite.sprite_frames.has_animation("death"):
 		sprite.play("death")
 		# WARUM await?

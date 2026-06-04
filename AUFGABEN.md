@@ -176,5 +176,13 @@ bewirkt.
 
 ---
 
+## Lust auf Optik statt Logik?
+
+Effekt-Aufgaben (Squash & Stretch, Partikel, Screen-Shake, Shader …) leben in
+einer eigenen Sammlung: [VISUALS.md](VISUALS.md). Dort steht auch, welche
+Effekte schon eingebaut sind und wo im Code sie sitzen.
+
+---
+
 Eigene Aufgabe gefunden, die hier fehlt? Trag sie als
 [Issue](../../issues/new/choose) ein – so wächst die Sammlung.

@@ -31,3 +31,15 @@ func run(t) -> void:
 	t.check(c.get("MAX_FALL_SPEED", 0.0) > 0.0, "MAX_FALL_SPEED ist positiv")
 	# Fallen soll sich schwerer anfuehlen als steigen (Game-Feel-Entscheidung).
 	t.check(c.get("FALL_GRAVITY", 0.0) >= c.get("GRAVITY", 0.0), "FALL_GRAVITY ist >= GRAVITY (knackigeres Fallen)")
+
+	# --- Effekt-Konstanten (Squash & Stretch, siehe VISUALS.md) ---
+	# Beim Absprung soll das Sprite HOCH & SCHMAL werden: y-Faktor > 1, x < 1.
+	var stretch: Vector2 = c.get("JUMP_STRETCH_SCALE", Vector2.ONE)
+	t.check(stretch.y > 1.0 and stretch.x < 1.0, "JUMP_STRETCH_SCALE streckt nach oben (hoch & schmal)")
+	# Beim Aufprall genau umgekehrt: BREIT & FLACH (x > 1, y < 1).
+	var squash: Vector2 = c.get("LANDING_SQUASH_SCALE", Vector2.ONE)
+	t.check(squash.x > 1.0 and squash.y < 1.0, "LANDING_SQUASH_SCALE staucht flach (breit & flach)")
+	# Treffer-Blitz nutzt einen Wert > 1, damit das Glow-Environment ihn aufleuchten laesst.
+	var flash: Color = c.get("HIT_FLASH_COLOR", Color.WHITE)
+	t.check(flash.r > 1.0, "HIT_FLASH_COLOR leuchtet auf (Rot-Kanal > 1)")
+	t.check(c.get("SQUASH_RECOVER_TIME", 0.0) > 0.0, "SQUASH_RECOVER_TIME ist positiv")

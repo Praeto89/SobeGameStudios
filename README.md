@@ -85,6 +85,7 @@ SobeGameStudios/
 | [CONTRIBUTING.md](CONTRIBUTING.md) | 5 Beitragsstufen (Asset → eigenes Skript) |
 | [AUFGABEN.md](AUFGABEN.md) | Kleine Code-Herausforderungen mit Lösung |
 | [BUGCHASE.md](BUGCHASE.md) | 5 eingebaute Bugs zum Suchen |
+| [VISUALS.md](VISUALS.md) | Visuals & Effekte: was schon drin ist + Ideen-Aufgaben |
 | [GLOSSAR.md](GLOSSAR.md) | Englische Fachbegriffe kurz erklärt |
 | [Concepts & ideas/DESIGN.md](Concepts%20%26%20ideas/DESIGN.md) | Design-Entscheidungen und ihr „Warum" |
 | [tests/README.md](tests/README.md) | Wie die Tests laufen und wie man eigene schreibt |

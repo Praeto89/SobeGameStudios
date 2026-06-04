@@ -76,6 +76,20 @@ const COYOTE_TIME = 0.12            # Sekunden nach Plattformrand wo noch gespru
 const JUMP_BUFFER_TIME = 0.12       # Sekunden vor dem Landen wo Sprung vorregistriert wird
 
 # -----------------------------------------------------------------------------
+# Effekt-Konstanten (Game Feel) — rein optisch, beeinflussen keine Physik
+# -----------------------------------------------------------------------------
+# "Squash & Stretch" ist ein Klassiker aus der Trick-Animation: beim Absprung
+# wird die Figur kurz schmal+hoch (gestreckt), beim Aufprall breit+flach
+# (gestaucht). Das verkauft Schwung und Wucht – ganz ohne neue Sprites.
+# Die Werte sind FAKTOREN auf die Grund-Skalierung des Sprites (1,1 = normal).
+const JUMP_STRETCH_SCALE := Vector2(0.82, 1.18)   # Absprung: schmal & hoch  <- probier (0.7, 1.3)
+const LANDING_SQUASH_SCALE := Vector2(1.25, 0.75) # Aufprall: breit & flach  <- probier (1.4, 0.6)
+const SQUASH_RECOVER_TIME := 0.22                 # Sekunden bis das Sprite zurueckfedert
+const LANDING_SQUASH_MIN_SPEED := 250.0           # Erst ab dieser Fallgeschwindigkeit stauchen
+const HIT_FLASH_COLOR := Color(2.5, 0.6, 0.6)     # Treffer-Aufleuchten (>1 = leuchtet dank Glow)
+const HIT_FLASH_FADE := 0.25                      # Sekunden bis der rote Blitz wieder abklingt
+
+# -----------------------------------------------------------------------------
 # Node-Referenzen
 # -----------------------------------------------------------------------------
 @onready var animated_sprite = $AnimatedSprite2D
@@ -148,6 +162,15 @@ var was_on_floor := false           # Boden-Status des letzten Frames (fuer Coyo
 var is_jumping := false             # Ob ein Sprung aktiv gehalten wird
 
 # -----------------------------------------------------------------------------
+# Effekt-Laufvariablen (Squash & Stretch, Treffer-Blitz)
+# -----------------------------------------------------------------------------
+var _base_sprite_scale := Vector2.ONE  # Grund-Skalierung des Sprites (in _ready gemerkt)
+var _fx_prev_on_floor := true          # Boden-Status des letzten Frames (fuer Landungs-Erkennung)
+var _fx_last_fall_speed := 0.0         # Fallgeschwindigkeit kurz vor der Landung
+var _squash_tween: Tween = null        # Laufende Squash/Stretch-Animation (zum Abbrechen)
+var _flash_tween: Tween = null         # Laufende Treffer-Blitz-Animation (zum Abbrechen)
+
+# -----------------------------------------------------------------------------
 # Signale
 # -----------------------------------------------------------------------------
 signal health_changed(new_health)
@@ -160,6 +183,9 @@ signal coin_collected(new_count)
 # =============================================================================
 func _ready() -> void:
 	spawn_position = global_position
+	# Grund-Skalierung des Sprites merken, damit Squash & Stretch immer dorthin
+	# zurueckfedert (statt fest auf 1,1 – falls jemand das Sprite skaliert hat).
+	_base_sprite_scale = animated_sprite.scale
 	# Roll-Hitbox nur waehrend des Rolls aktiv (siehe Roll-Block in _physics_process).
 	# Verhindert unnoetige Kollisions-Checks und Gegner-Treffer ausserhalb des Rolls.
 	roll_hitbox.monitoring = false
@@ -222,6 +248,15 @@ func respawn() -> void:
 	was_on_floor = false
 	is_jumping = false
 	roll_hitbox.monitoring = false
+	# Effekt-Zustand zuruecksetzen: ein evtl. laufender Squash/Flash-Tween
+	# wuerde sonst beim Respawn ein verzerrtes/rotes Sprite hinterlassen.
+	if _squash_tween and _squash_tween.is_valid():
+		_squash_tween.kill()
+	if _flash_tween and _flash_tween.is_valid():
+		_flash_tween.kill()
+	animated_sprite.scale = _base_sprite_scale
+	animated_sprite.modulate = Color.WHITE
+	_fx_prev_on_floor = true
 	# WARUM set_deferred statt .disabled = false direkt?
 	# Wir sind im Physik-Frame (move_and_slide laeuft gerade). Kollisions-
 	# Shapes darf man dort nicht direkt aendern – Godot wirft sonst einen
@@ -250,6 +285,7 @@ func take_damage(amount: int, knockback_direction: float = 0.0) -> void:
 		_die()
 		return
 	sound_hurt.play()
+	_flash_hit()                    # Effekt: kurz rot aufleuchten
 	is_hit = true
 	hit_timer = HIT_DURATION
 
@@ -366,6 +402,38 @@ func spend_coins(amount: int) -> void:
 	emit_signal("coin_collected", coin_count)
 
 # =============================================================================
+# _play_squash(ziel_faktor, dauer)
+# Spielt einen Squash-&-Stretch-Effekt: setzt das Sprite sofort auf eine
+# verzerrte Skalierung (z. B. breit & flach) und laesst es dann elastisch in
+# seine Grund-Skalierung zurueckfedern. Rein optisch – die Kollision (eigener
+# CollisionShape2D-Knoten) bleibt unveraendert.
+#
+# ziel_faktor: Start-Verzerrung als Faktor auf _base_sprite_scale
+# dauer:       Sekunden bis das Sprite zurueckgefedert ist
+# =============================================================================
+func _play_squash(ziel_faktor: Vector2, dauer: float) -> void:
+	# Laufenden Effekt abbrechen, damit sich zwei Tweens nicht ueberlagern.
+	if _squash_tween and _squash_tween.is_valid():
+		_squash_tween.kill()
+	animated_sprite.scale = _base_sprite_scale * ziel_faktor
+	# TRANS_ELASTIC + EASE_OUT = federt am Ende leicht ueber -> wirkt "lebendig".
+	_squash_tween = create_tween().set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
+	_squash_tween.tween_property(animated_sprite, "scale", _base_sprite_scale, dauer)
+
+# =============================================================================
+# _flash_hit()
+# Laesst das Spieler-Sprite bei einem Treffer kurz rot aufleuchten und wieder
+# zur Normalfarbe (Weiss) abklingen. Nutzt dieselbe Idee wie die HUD-Herzen
+# (hud.gd) – ein modulate-Wert > 1 leuchtet dank Glow-Environment richtig auf.
+# =============================================================================
+func _flash_hit() -> void:
+	if _flash_tween and _flash_tween.is_valid():
+		_flash_tween.kill()
+	animated_sprite.modulate = HIT_FLASH_COLOR
+	_flash_tween = create_tween()
+	_flash_tween.tween_property(animated_sprite, "modulate", Color.WHITE, HIT_FLASH_FADE)
+
+# =============================================================================
 # _physics_process(delta)
 # Hauptschleife — laeuft jeden Physik-Frame.
 # Verarbeitet in dieser Reihenfolge:
@@ -455,6 +523,7 @@ func _physics_process(delta: float) -> void:
 		jump_buffer_timer = 0.0
 		coyote_timer = 0.0
 		sound_jump.play()
+		_play_squash(JUMP_STRETCH_SCALE, SQUASH_RECOVER_TIME)  # Effekt: Absprung-Stretch
 	elif Input.is_action_just_pressed("ui_accept"):
 		if is_wall_crawling:
 			# Wall Jump: von der Wand wegspringen
@@ -464,12 +533,14 @@ func _physics_process(delta: float) -> void:
 			can_double_jump = true
 			is_jumping = true
 			sound_jump.play()
+			_play_squash(JUMP_STRETCH_SCALE, SQUASH_RECOVER_TIME)  # Effekt: Wall-Jump-Stretch
 		elif has_double_jump and can_double_jump:
 			# Double Jump: zweiter Sprung in der Luft
 			velocity.y = jump_velocity
 			can_double_jump = false
 			is_jumping = true
 			sound_jump.play()
+			_play_squash(JUMP_STRETCH_SCALE, SQUASH_RECOVER_TIME)  # Effekt: Double-Jump-Stretch
 
 	# Sprung-Flag zuruecksetzen wenn gelandet
 	if is_on_floor():
@@ -586,7 +657,19 @@ func _physics_process(delta: float) -> void:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 
 	# --- 11. Physik anwenden und Animation aktualisieren ---
+	# Fallgeschwindigkeit VOR move_and_slide merken: beim Bodenkontakt setzt
+	# move_and_slide velocity.y zurueck, danach waere die Wucht nicht mehr ablesbar.
+	_fx_last_fall_speed = velocity.y
 	move_and_slide()
+
+	# --- 12. Effekt: Landungs-Squash ---
+	# Genau in dem Frame, in dem aus "in der Luft" ein Bodenkontakt wird, und
+	# nur wenn schnell genug gefallen wurde, das Sprite kurz stauchen.
+	var on_floor_now := is_on_floor()
+	if on_floor_now and not _fx_prev_on_floor and _fx_last_fall_speed > LANDING_SQUASH_MIN_SPEED:
+		_play_squash(LANDING_SQUASH_SCALE, SQUASH_RECOVER_TIME)
+	_fx_prev_on_floor = on_floor_now
+
 	_update_animation()
 
 # =============================================================================

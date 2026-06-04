@@ -51,10 +51,16 @@ func _on_body_entered(body: Node) -> void:
 		if id != "" and not id in GameManager.collected_coin_ids:
 			GameManager.collected_coin_ids.append(id)
 		audio.play()
-		# Muenze sofort visuell + kollisionsmaessig entfernen,
-		# aber Node erst freigeben wenn der Sound fertig ist
-		# (sonst wird der Sound mit der Node abgeschnitten)
-		$AnimatedSprite2D.visible = false
+		# Kollision sofort abschalten (kein zweites Einsammeln), aber die Muenze
+		# nicht hart verschwinden lassen: ein kurzer "Pop" (kurz groesser werden)
+		# mit Ausblenden gibt dem Aufsammeln Gewicht. Rein optisch.
 		set_deferred("monitoring", false)
+		var spr := $AnimatedSprite2D
+		var pop := create_tween().set_parallel(true)
+		pop.tween_property(spr, "scale", spr.scale * 1.6, 0.18) \
+			.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		pop.tween_property(spr, "modulate:a", 0.0, 0.18)
+		# Node erst freigeben wenn der Sound fertig ist
+		# (sonst wird der Sound mit der Node abgeschnitten)
 		await audio.finished
 		queue_free()
