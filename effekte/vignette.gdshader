@@ -2,7 +2,7 @@
 // ----------------------------------------------------------------------------
 // Vollbild-Vignette: dunkelt die Bildschirmraender ab. Als reine Stimmung
 // nutzbar -- oder als "Schadens-Vignette", die bei wenig Leben staerker wird
-// (siehe scripts/effects/vignette.gd, das "intensity" per Signal steuert).
+// (siehe effekte/vignette.gd, das "intensity" per Signal steuert).
 //
 // Anhaengen an: eine bildschirmfuellende ColorRect in einem CanvasLayer.
 // Schwierigkeit: [FORTGESCHRITTEN] -- Shader-Parameter von aussen steuern.

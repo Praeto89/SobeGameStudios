@@ -6,7 +6,7 @@
 # kraeftig -> der Spieler "spuert" Gefahr, ohne auf die Herzen schauen zu muessen.
 #
 # Andocken an: die Vignette-ColorRect (mit vignette.gdshader) -- siehe
-# scenes/effects/vignette.tscn. Per Drag&Drop ins Level ziehen; der Spieler
+# effekte/vignette.tscn. Per Drag&Drop ins Level ziehen; der Spieler
 # muss in der Szene sein (Gruppe "player").
 #
 # Funktionsweise: Wir hoeren das health_changed-Signal des Spielers ab (genau

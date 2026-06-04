@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://b3fmywqfcrq3g"]
 
 [ext_resource type="PackedScene" uid="uid://ck6q6oyovvakg" path="res://scenes/player/player.tscn" id="1_c5o7e"]
-[ext_resource type="PackedScene" uid="uid://ccaveatmo0001" path="res://scenes/effects/cave_atmosphere.tscn" id="20_cave"]
+[ext_resource type="PackedScene" uid="uid://ccaveatmo0001" path="res://effekte/cave_atmosphere.tscn" id="20_cave"]
 [ext_resource type="PackedScene" uid="uid://0lmbkrm3yis5" path="res://scenes/pickups/wallcrawl_ability.tscn" id="4_7i8v8"]
 [ext_resource type="PackedScene" uid="uid://dnmnbcdkt56ma" path="res://scenes/pickups/doublejump_ability.tscn" id="5_ervsl"]
 [ext_resource type="Texture2D" uid="uid://ctbiesjqnr38r" path="res://assets/sprites/PurpleDragons Spirte set/Ground/rockgrey_tilemap.png" id="6_7ekqj"]

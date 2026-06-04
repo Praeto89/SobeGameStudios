@@ -13,7 +13,7 @@
 [ext_resource type="Script" uid="uid://co8dnnplbt1aa" path="res://scripts/world/green_platform.gd" id="12_trceg"]
 [ext_resource type="PackedScene" uid="uid://7ck1dr5e5kg0" path="res://scenes/world/portal.tscn" id="16_muem4"]
 [ext_resource type="PackedScene" uid="uid://ck6q6oyovvakg" path="res://scenes/player/player.tscn" id="17_player"]
-[ext_resource type="PackedScene" uid="uid://ccaveatmo0001" path="res://scenes/effects/cave_atmosphere.tscn" id="20_cave"]
+[ext_resource type="PackedScene" uid="uid://ccaveatmo0001" path="res://effekte/cave_atmosphere.tscn" id="20_cave"]
 [ext_resource type="PackedScene" uid="uid://cupgrgate7fltf" path="res://scenes/world/upgrade_gate.tscn" id="30_gate"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ya4ey"]

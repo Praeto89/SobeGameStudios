@@ -12,7 +12,7 @@
 ; Tunen: "Fog" anklicken -> Inspector -> Material -> Shader-Parameter
 ;   density (Dichte), speed (Tempo), fog_color (Farbe).
 
-[ext_resource type="Shader" path="res://assets/effects/fog.gdshader" id="1_sh"]
+[ext_resource type="Shader" path="res://effekte/fog.gdshader" id="1_sh"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_fog"]
 shader = ExtResource("1_sh")

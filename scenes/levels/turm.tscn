@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://ck6q6oyovvakg" path="res://scenes/player/player.tscn" id="5_vqffp"]
 [ext_resource type="PackedScene" uid="uid://dph3vsxklsitn" path="res://scenes/enemies/green_slime_spawner.tscn" id="6_h8sst"]
 [ext_resource type="Script" uid="uid://co8dnnplbt1aa" path="res://scripts/world/green_platform.gd" id="6_horiz"]
-[ext_resource type="PackedScene" uid="uid://ccaveatmo0001" path="res://scenes/effects/cave_atmosphere.tscn" id="20_cave"]
+[ext_resource type="PackedScene" uid="uid://ccaveatmo0001" path="res://effekte/cave_atmosphere.tscn" id="20_cave"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nnl3m"]
 texture = ExtResource("1_3kobl")

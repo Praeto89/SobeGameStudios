@@ -9,8 +9,8 @@
 ;   - "Vignette" anklicken -> Script-Variablen max_intensity / ruhe_intensity
 ;   - Material -> Shader-Parameter: vignette_color, radius, softness
 
-[ext_resource type="Shader" path="res://assets/effects/vignette.gdshader" id="1_sh"]
-[ext_resource type="Script" path="res://scripts/effects/vignette.gd" id="2_scr"]
+[ext_resource type="Shader" path="res://effekte/vignette.gdshader" id="1_sh"]
+[ext_resource type="Script" path="res://effekte/vignette.gd" id="2_scr"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_vig"]
 shader = ExtResource("1_sh")

@@ -3,8 +3,8 @@
 [ext_resource type="Script" uid="uid://b4an360rnqox3" path="res://scripts/pickups/coin.gd" id="1_i64fm"]
 [ext_resource type="Texture2D" uid="uid://bl7n15k2kwa3s" path="res://assets/sprites/coin.png" id="1_rwqht"]
 [ext_resource type="AudioStream" uid="uid://cwbkm8kti72n6" path="res://assets/sounds/coin.wav" id="3_11l1o"]
-[ext_resource type="Texture2D" uid="uid://clightsoft0001" path="res://assets/effects/light_soft.tres" id="4_light"]
-[ext_resource type="Script" path="res://scripts/effects/torch_flicker.gd" id="5_flicker"]
+[ext_resource type="Texture2D" uid="uid://clightsoft0001" path="res://effekte/light_soft.tres" id="4_light"]
+[ext_resource type="Script" path="res://effekte/torch_flicker.gd" id="5_flicker"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_i64fm"]
 atlas = ExtResource("1_rwqht")

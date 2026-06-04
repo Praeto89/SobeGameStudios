@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" path="res://scripts/world/upgrade_gate.gd" id="1_gate"]
 [ext_resource type="Texture2D" path="res://assets/sprites/upgrade_gate.png" id="2_gateimg"]
-[ext_resource type="Texture2D" uid="uid://clightsoft0001" path="res://assets/effects/light_soft.tres" id="3_light"]
-[ext_resource type="Script" path="res://scripts/effects/torch_flicker.gd" id="4_flicker"]
+[ext_resource type="Texture2D" uid="uid://clightsoft0001" path="res://effekte/light_soft.tres" id="3_light"]
+[ext_resource type="Script" path="res://effekte/torch_flicker.gd" id="4_flicker"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gate"]
 size = Vector2(48, 64)

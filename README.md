@@ -70,10 +70,17 @@ SobeGameStudios/
 │   ├── music/         Hintergrundmusik
 │   ├── fonts/         Schriftarten
 │   └── textures/      Tileset und Texturen
+├── effekte/          ⭐ Fertige Effekt-Bausteine zum Reinziehen (siehe VISUALS.md)
 ├── tests/             Automatische Logik-Tests (headless, ohne Addon)
 ├── Concepts & ideas/  Ideen + DESIGN.md (das „Warum" hinter dem Spiel)
 └── project.godot      Godot-Projektkonfiguration
 ```
+
+> **Der Ordner `effekte/`** sammelt alle fertigen Optik-Bausteine (Nebel,
+> Höhlen-Atmosphäre, Vignette …) an EINEM Ort – Szenen, Skripte und Shader
+> zusammen. So musst du zum Ausprobieren nur eine `.tscn` von dort in dein Level
+> ziehen. Was es gibt und wie, steht in [VISUALS.md](VISUALS.md) und
+> [effekte/README.md](effekte/README.md).
 
 **Lern-Dokumente im Überblick:**
 

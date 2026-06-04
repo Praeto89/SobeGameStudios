@@ -29,12 +29,12 @@ an einem Ort:
 
 | Effekt | Wo im Code | Kurz erklärt |
 |---|---|---|
-| **Höhlen-Atmosphäre** | `scenes/effects/cave_atmosphere.tscn` | `CanvasModulate` (Dunkelheit) + `WorldEnvironment` (Glow/Bloom) + schwebender Staub (`CPUParticles2D`). Per Drag&Drop in ein Level ziehen. |
-| **2D-Licht & Flackern** | `scripts/effects/torch_flicker.gd` | `PointLight2D` mit zwei Modi: *Flackern* (Spieler-Laterne) und *Pulsieren* (Portale/Pickups). |
-| **Nebel / Dunst (Partikel)** | `scenes/effects/cave_fog.tscn` | Große, weiche, treibende Partikel = ziehende Nebelschwaden. Per Drag&Drop ins Level (gern mit `cave_atmosphere` kombiniert). |
-| **Nebel (Shader)** | `assets/effects/fog.gdshader` + `scenes/effects/cave_fog_shader.tscn` | Dichter, vollflächiger Dunst aus scrollendem Rausch-Shader als Bildschirm-Overlay. |
-| **Schadens-Vignette** | `assets/effects/vignette.gdshader` + `scripts/effects/vignette.gd` + `scenes/effects/vignette.tscn` | Dunkler Bildschirmrand, der bei wenig Leben stärker wird – hängt am `health_changed`-Signal des Spielers. |
-| **Color Grading** | `scenes/effects/cave_atmosphere_graded.tscn` | Variante der Höhlen-Atmosphäre mit entsättigtem, kühlerem Bild (Environment-*Adjustments*). Drop-in-Ersatz für `cave_atmosphere`. |
+| **Höhlen-Atmosphäre** | `effekte/cave_atmosphere.tscn` | `CanvasModulate` (Dunkelheit) + `WorldEnvironment` (Glow/Bloom) + schwebender Staub (`CPUParticles2D`). Per Drag&Drop in ein Level ziehen. |
+| **2D-Licht & Flackern** | `effekte/torch_flicker.gd` | `PointLight2D` mit zwei Modi: *Flackern* (Spieler-Laterne) und *Pulsieren* (Portale/Pickups). |
+| **Nebel / Dunst (Partikel)** | `effekte/cave_fog.tscn` | Große, weiche, treibende Partikel = ziehende Nebelschwaden. Per Drag&Drop ins Level (gern mit `cave_atmosphere` kombiniert). |
+| **Nebel (Shader)** | `effekte/fog.gdshader` + `effekte/cave_fog_shader.tscn` | Dichter, vollflächiger Dunst aus scrollendem Rausch-Shader als Bildschirm-Overlay. |
+| **Schadens-Vignette** | `effekte/vignette.gdshader` + `effekte/vignette.gd` + `effekte/vignette.tscn` | Dunkler Bildschirmrand, der bei wenig Leben stärker wird – hängt am `health_changed`-Signal des Spielers. |
+| **Color Grading** | `effekte/cave_atmosphere_graded.tscn` | Variante der Höhlen-Atmosphäre mit entsättigtem, kühlerem Bild (Environment-*Adjustments*). Drop-in-Ersatz für `cave_atmosphere`. |
 | **Schatten (Licht-Occlusion)** | `scenes/player/player.tscn` (`TorchLight`, `shadow_enabled`) + `scenes/world/green_platform.tscn` (`LightOccluder2D`) | Die Laterne wirft echte Schatten – **aber bisher nur an Objekten mit Occluder** (Plattform). Das statische Terrain wirft noch keine → siehe V13/V14. |
 | **HUD: Herz bricht** | `scripts/ui/hud.gd` | Bei Schaden blitzt das Herz rot auf (`modulate`-Tween) und bricht ins nächste Frame. |
 | **Squash & Stretch** | `scripts/player/player.gd` → `_play_squash()` | Absprung = hoch & schmal, Landung = breit & flach. Federt elastisch zurück. Nur ab `LANDING_SQUASH_MIN_SPEED` Fallgeschwindigkeit. |
@@ -99,7 +99,7 @@ Landungs-Squash*) und beim Roll eine kurze Staubwolke ausstoßen.
 <details>
 <summary>▸ Wegweiser</summary>
 
-1. Eine Szene `scenes/effects/dust_puff.tscn` mit `CPUParticles2D` bauen
+1. Eine Szene `effekte/dust_puff.tscn` mit `CPUParticles2D` bauen
    (`one_shot = true`, `emitting = true`, kurze `lifetime`).
 2. Im Spieler dort, wo schon `_play_squash(LANDING_SQUASH_SCALE, …)` aufgerufen
    wird, eine Instanz an der Fußposition spawnen.
@@ -169,8 +169,8 @@ Zusätzliche `PointLight2D` an wichtigen Stellen (Portale, Pickups – teils sch
 vorhanden) bewusster setzen, damit die Höhle „Sehenswürdigkeiten" bekommt.
 
 ### V12 – Schadens-Vignette ✅ eingebaut
-**Dateien:** `assets/effects/vignette.gdshader` + `scripts/effects/vignette.gd` +
-`scenes/effects/vignette.tscn`
+**Dateien:** `effekte/vignette.gdshader` + `effekte/vignette.gd` +
+`effekte/vignette.tscn`
 
 Dunkler Bildschirmrand, der bei wenig Leben stärker wird. `vignette.tscn` per
 Drag&Drop ins Level ziehen – das Script verbindet sich automatisch mit dem
@@ -211,7 +211,7 @@ Wand-Polygon einen `LightOccluder2D` mit deckungsgleichem `OccluderPolygon2D`
 legen – Vorlage: `scenes/world/green_platform.tscn`.
 
 ### V15 – „Echter" Nebel per Shader ✅ eingebaut
-**Dateien:** `assets/effects/fog.gdshader` + `scenes/effects/cave_fog_shader.tscn`
+**Dateien:** `effekte/fog.gdshader` + `effekte/cave_fog_shader.tscn`
 
 Dichter, wabernder Dunst aus scrollendem Rausch-Shader als Bildschirm-Overlay.
 `cave_fog_shader.tscn` per Drag&Drop ins Level ziehen. Der Partikel-Nebel
@@ -227,7 +227,7 @@ Diese Effekte liegen als Vollbild-Shader auf einem `CanvasLayer` ganz oben und
 färben/verzerren das fertige Bild.
 
 ### V16 – Color Grading (Stimmung per Reglern) ✅ eingebaut
-**Datei:** `scenes/effects/cave_atmosphere_graded.tscn`
+**Datei:** `effekte/cave_atmosphere_graded.tscn`
 
 Variante der Höhlen-Atmosphäre mit aktivierten Environment-*Adjustments*
 (entsättigt, kühler, etwas kontrastreicher) → kältere, bedrohlichere Höhle,

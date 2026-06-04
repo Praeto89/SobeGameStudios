@@ -7,7 +7,7 @@
 ;   3. CPUParticles2D   -> langsam schwebender Staub fuer Atmosphaere
 ; Alle Werte sind im Inspector frei einstellbar.
 
-[ext_resource type="Texture2D" uid="uid://clightsoft0001" path="res://assets/effects/light_soft.tres" id="1_light"]
+[ext_resource type="Texture2D" uid="uid://clightsoft0001" path="res://effekte/light_soft.tres" id="1_light"]
 
 [sub_resource type="Environment" id="Environment_cave"]
 background_mode = 3

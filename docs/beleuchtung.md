@@ -15,9 +15,9 @@ Godot-Editor von Hand machen musst (Tileset-Schatten).
 
 | Datei | Was sie macht |
 |---|---|
-| `assets/effects/light_soft.tres` | Die weiche, runde **Licht-Form** (ein Verlauf von Weiss innen zu transparent aussen). Alle Lichter benutzen diese eine Datei. |
-| `scripts/effects/torch_flicker.gd` | Laesst ein Licht **flackern** (Fackel) oder **pulsieren** (Portal/Pickup). |
-| `scenes/effects/cave_atmosphere.tscn` | Der **Untergrund-Baustein**: Dunkelheit + Glow + Staub in einem. |
+| `effekte/light_soft.tres` | Die weiche, runde **Licht-Form** (ein Verlauf von Weiss innen zu transparent aussen). Alle Lichter benutzen diese eine Datei. |
+| `effekte/torch_flicker.gd` | Laesst ein Licht **flackern** (Fackel) oder **pulsieren** (Portal/Pickup). |
+| `effekte/cave_atmosphere.tscn` | Der **Untergrund-Baustein**: Dunkelheit + Glow + Staub in einem. |
 
 ### `cave_atmosphere.tscn` enthaelt drei Knoten
 
@@ -49,7 +49,7 @@ sowie in die Schueler-Vorlage `_vorlage.tscn`.
 
 Fuer ein **neues** Level (z. B. dein eigenes im `student_levels/`-Ordner):
 
-1. Im **FileSystem**-Tab `scenes/effects/cave_atmosphere.tscn` finden.
+1. Im **FileSystem**-Tab `effekte/cave_atmosphere.tscn` finden.
 2. Per **Drag & Drop** auf den Wurzel-Knoten deines Levels ziehen.
 3. Fertig. Optional: den Knoten **`Dunkelheit`** anklicken und die Farbe
    heller/dunkler stellen, falls dein Level Text-Labels hat (siehe Galerie).

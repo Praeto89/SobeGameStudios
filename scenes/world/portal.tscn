@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://7ck1dr5e5kg0"]
 
 [ext_resource type="Script" uid="uid://lp4uj71hwawo" path="res://scripts/world/portal.gd" id="1_v0xau"]
-[ext_resource type="Texture2D" uid="uid://clightsoft0001" path="res://assets/effects/light_soft.tres" id="2_light"]
-[ext_resource type="Script" path="res://scripts/effects/torch_flicker.gd" id="3_flicker"]
+[ext_resource type="Texture2D" uid="uid://clightsoft0001" path="res://effekte/light_soft.tres" id="2_light"]
+[ext_resource type="Script" path="res://effekte/torch_flicker.gd" id="3_flicker"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1ffj6"]
 size = Vector2(32, 44)
