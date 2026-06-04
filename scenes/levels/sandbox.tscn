@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://md1jdcoedfs" path="res://scenes/world/death.tscn" id="9_death"]
 [ext_resource type="PackedScene" uid="uid://cchargegatescn01" path="res://scenes/world/charge_gate.tscn" id="12_gate"]
 [ext_resource type="PackedScene" uid="uid://ccheckpointscn01" path="res://scenes/world/checkpoint.tscn" id="13_chk"]
+[ext_resource type="PackedScene" uid="uid://cdjgatescn0001" path="res://scenes/world/doublejump_gate.tscn" id="14_djgate"]
 [ext_resource type="Texture2D" uid="uid://ctbiesjqnr38r" path="res://assets/sprites/PurpleDragons Spirte set/Ground/rockgrey_tilemap.png" id="10_tiles"]
 [ext_resource type="PackedScene" uid="uid://ccaveatmo0001" path="res://scenes/effects/cave_atmosphere.tscn" id="11_cave"]
 [ext_resource type="PackedScene" uid="uid://dvndy5yhbn1n3" path="res://scenes/enemies/wall_slime.tscn" id="11_wallslime"]
@@ -100,6 +101,20 @@ distance = 80.0
 
 [node name="green_slime" parent="." instance=ExtResource("4_slime")]
 position = Vector2(620, 60)
+
+[node name="DoubleJumpGate" parent="." instance=ExtResource("14_djgate")]
+position = Vector2(700, 22)
+
+[node name="DoubleJumpHinweis" type="Label" parent="."]
+offset_left = 650.0
+offset_top = -34.0
+offset_right = 800.0
+offset_bottom = -4.0
+text = "Nur mit\nDoppelsprung!"
+horizontal_alignment = 1
+
+[node name="coin_djreward" parent="." instance=ExtResource("2_coin")]
+position = Vector2(700, 2)
 
 [node name="ChargeGate" parent="." instance=ExtResource("12_gate")]
 position = Vector2(520, 20)
