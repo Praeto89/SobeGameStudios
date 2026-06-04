@@ -13,12 +13,16 @@
 
 extends RefCounted
 
-const PlayerScript = preload("res://scripts/player/player.gd")
-
 func run(t) -> void:
 	print("Player-Konstanten:")
 
-	var c: Dictionary = PlayerScript.get_script_constant_map()
+	# player.gd hat ein "class_name Player". Ein preload() davon liefert den
+	# Klassen-TYP -- und auf einem Typ laesst sich die Instanz-Methode
+	# get_script_constant_map() nicht direkt aufrufen (Parse-Fehler in 4.6).
+	# Deshalb das Skript zur Laufzeit als Resource laden; darauf funktioniert
+	# die Methode wie erwartet.
+	var player_script := load("res://scripts/player/player.gd")
+	var c: Dictionary = player_script.get_script_constant_map()
 
 	t.check(c.has("JUMP_VELOCITY"), "JUMP_VELOCITY ist definiert")
 	t.check(c.get("JUMP_VELOCITY", 0.0) < 0.0, "JUMP_VELOCITY ist negativ (Sprung geht nach oben)")

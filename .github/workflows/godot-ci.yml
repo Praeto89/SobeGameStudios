@@ -1,9 +1,16 @@
 name: Godot CI
 
 # Smoke-Test fuer jeden Push/PR: importiert das Projekt (faengt kaputte
-# Ressourcen-Referenzen ab, z. B. falsche Szenen-/Skript-Pfade) und prueft
-# die Syntax aller GDScript-Dateien. So landen keine nicht-oeffnenden
-# Skripte oder gebrochenen Verweise in main.
+# Ressourcen-Referenzen ab, z. B. falsche Szenen-/Skript-Pfade) und kompiliert
+# dabei alle an Szenen/Ressourcen haengenden GDScripts. So landen keine
+# nicht-oeffnenden Skripte oder gebrochenen Verweise in main.
+#
+# WICHTIG: Die Skript-Pruefung laeuft ueber "--import" und NICHT mehr ueber
+# einen Einzeldatei-Check (godot --check-only --script <datei>). Grund: beim
+# Einzeldatei-Check sind die Autoload-Singletons (GameManager, Hud) nicht
+# registriert, wodurch JEDE Datei, die sie nutzt, faelschlich
+# "Identifier not found: GameManager" meldete. Beim Projekt-Import sind die
+# Autoloads verfuegbar -> nur echte Fehler schlagen an.
 #
 # Hinweis: Die Godot-Version unten muss zur Engine-Version des Projekts
 # passen (siehe project.godot -> config/features). Bei einem Engine-Update
@@ -31,21 +38,17 @@ jobs:
       - name: Godot-Version
         run: godot --version
 
-      - name: Projekt importieren (Ressourcen-Smoke-Test)
-        run: godot --headless --path . --import
-
-      - name: GDScript-Syntax pruefen
+      - name: Projekt importieren & Skripte pruefen (Smoke-Test)
         run: |
-          set -e
-          fail=0
-          while IFS= read -r f; do
-            echo "== check $f =="
-            if ! godot --headless --path . --check-only --script "$f" --quit; then
-              echo "::error file=$f::GDScript-Syntaxfehler"
-              fail=1
-            fi
-          done < <(find scripts tests -name '*.gd')
-          exit $fail
+          set -o pipefail
+          # --import laedt das gesamte Projekt (inkl. Autoloads GameManager/Hud)
+          # und kompiliert alle an Szenen/Ressourcen haengenden Skripte. Echte
+          # Compile-/Parse-Fehler erscheinen dabei als "SCRIPT ERROR" o. ae.
+          godot --headless --path . --import 2>&1 | tee import.log
+          if grep -E "SCRIPT ERROR|Parse Error|Compile Error|Failed to load script" import.log; then
+            echo "::error::Echte GDScript-Fehler beim Projekt-Import gefunden (siehe Log oben)."
+            exit 1
+          fi
 
       - name: Logik-Tests ausfuehren
         run: godot --headless --path . --script res://tests/run_tests.gd
