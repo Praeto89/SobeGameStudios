@@ -1,0 +1,33 @@
+[gd_scene load_steps=4 format=3 uid="uid://dvignette00001"]
+
+; Schadens-Vignette: dunkler (leicht roter) Bildschirmrand, der bei wenig Leben
+; staerker wird. Drag&Drop ins Level (Kind der Level-Wurzel). Der Spieler muss
+; in der Szene sein -- das Script verbindet sich automatisch mit seinem
+; health_changed-Signal.
+;
+; Tunen:
+;   - "Vignette" anklicken -> Script-Variablen max_intensity / ruhe_intensity
+;   - Material -> Shader-Parameter: vignette_color, radius, softness
+
+[ext_resource type="Shader" path="res://assets/effects/vignette.gdshader" id="1_sh"]
+[ext_resource type="Script" path="res://scripts/effects/vignette.gd" id="2_scr"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vig"]
+shader = ExtResource("1_sh")
+shader_parameter/vignette_color = Color(0.06, 0.0, 0.02, 1)
+shader_parameter/radius = 0.8
+shader_parameter/softness = 0.5
+shader_parameter/intensity = 0.2
+
+[node name="DamageVignette" type="CanvasLayer"]
+layer = 3
+
+[node name="Vignette" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_vig")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_scr")

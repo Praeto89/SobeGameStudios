@@ -1,0 +1,53 @@
+[gd_scene load_steps=3 format=3 uid="uid://ccaveatmograd1"]
+
+; Wie cave_atmosphere.tscn -- aber mit zusaetzlichem Color Grading: das
+; WorldEnvironment entsaettigt und kuehlt das Bild leicht ab. Ergebnis: eine
+; kaeltere, bedrohlichere Hoehle. Drop-in-Ersatz: statt cave_atmosphere einfach
+; diese Szene ins Level ziehen (NICHT beide gleichzeitig -- es darf nur EIN
+; aktives WorldEnvironment geben).
+;
+; Tunen: "Glow" anklicken -> Environment -> Bereich "Adjustments":
+;   adjustment_saturation < 1 = blasser,  adjustment_contrast > 1 = harter,
+;   adjustment_brightness  = heller/dunkler.
+
+[ext_resource type="Texture2D" uid="uid://clightsoft0001" path="res://assets/effects/light_soft.tres" id="1_light"]
+
+[sub_resource type="Environment" id="Environment_cave_graded"]
+background_mode = 3
+glow_enabled = true
+glow_intensity = 1.0
+glow_strength = 1.1
+glow_bloom = 0.15
+glow_blend_mode = 0
+glow_hdr_threshold = 0.85
+; --- Color Grading ---
+adjustment_enabled = true
+adjustment_brightness = 0.95
+adjustment_contrast = 1.12
+adjustment_saturation = 0.78
+
+[node name="CaveAtmosphereGraded" type="Node2D"]
+
+[node name="Dunkelheit" type="CanvasModulate" parent="."]
+; Etwas kuehler/blauer als die Standard-Atmosphaere.
+color = Color(0.3, 0.31, 0.46, 1)
+
+[node name="Glow" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_cave_graded")
+
+[node name="Staub" type="CPUParticles2D" parent="."]
+texture = ExtResource("1_light")
+amount = 36
+lifetime = 7.0
+preprocess = 4.0
+randomness = 0.6
+emission_shape = 3
+emission_rect_extents = Vector2(480, 300)
+direction = Vector2(0.2, 1)
+spread = 25.0
+gravity = Vector2(0, 3)
+initial_velocity_min = 2.0
+initial_velocity_max = 9.0
+scale_amount_min = 0.02
+scale_amount_max = 0.05
+color = Color(0.8, 0.85, 1, 0.28)

@@ -1,0 +1,34 @@
+[gd_scene load_steps=3 format=3 uid="uid://dcavefogsh001"]
+
+; Shader-Nebel als Bildschirm-Overlay. Drag&Drop ins Level (Kind der
+; Level-Wurzel). Liegt als CanvasLayer ueber dem Spielgeschehen und legt
+; einen wabernden Dunst ueber das ganze Bild.
+;
+; Unterschied zu cave_fog.tscn (Partikel-Nebel):
+;   - cave_fog.tscn       = guenstig, einzelne Schwaden, bewegt sich in der Welt
+;   - cave_fog_shader.tscn = dichter, vollflaechig, "echteres" Wabern (Shader)
+; Man kann beide kombinieren.
+;
+; Tunen: "Fog" anklicken -> Inspector -> Material -> Shader-Parameter
+;   density (Dichte), speed (Tempo), fog_color (Farbe).
+
+[ext_resource type="Shader" path="res://assets/effects/fog.gdshader" id="1_sh"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fog"]
+shader = ExtResource("1_sh")
+shader_parameter/fog_color = Color(0.72, 0.74, 0.85, 1)
+shader_parameter/speed = 0.03
+shader_parameter/density = 0.5
+shader_parameter/scale = 3.0
+
+[node name="CaveFogShader" type="CanvasLayer"]
+layer = 2
+
+[node name="Fog" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_fog")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
