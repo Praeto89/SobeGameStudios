@@ -16,7 +16,9 @@
 extends Control
 
 ## Pfad zum ersten Level, das "Neues Spiel" startet.
-const LEVEL_SCENE := "res://scenes/levels/main.tscn"
+## Aufstieg ist das Lehr-Level: ohne Abilities starten, beide Gates oeffnen,
+## danach per Portal weiter ins Hauptlevel (main.tscn).
+const LEVEL_SCENE := "res://scenes/levels/aufstieg.tscn"
 ## Pfad zum Abspann.
 const CREDITS_SCENE := "res://scenes/ui/credits.tscn"
 

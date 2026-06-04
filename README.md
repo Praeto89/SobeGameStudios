@@ -58,7 +58,7 @@ SobeGameStudios/
 │   ├── ui/            hud.gd
 │   └── game_manager.gd  (Singleton / Autoload)
 ├── scenes/
-│   ├── levels/        main.tscn, area_1.tscn, turm.tscn
+│   ├── levels/        aufstieg.tscn (Lehr-Level mit Ability-Gates), main.tscn, area_1.tscn, turm.tscn
 │   ├── player/        player.tscn
 │   ├── enemies/       green_slime.tscn, wall_slime.tscn, green_slime_spawner.tscn, …
 │   ├── pickups/       charge_ability.tscn, doublejump_ability.tscn, coin.tscn, …
