@@ -1,76 +1,24 @@
-[gd_scene load_steps=18 format=3 uid="uid://dvndy5yhbn1n3"]
+[gd_scene load_steps=8 format=3 uid="uid://dvndy5yhbn1n3"]
 
 [ext_resource type="Script" uid="uid://dtbh4bcfwyyq5" path="res://scripts/enemies/wall_slime.gd" id="1_phduw"]
-[ext_resource type="Texture2D" uid="uid://ccdpjujmgn00i" path="res://assets/sprites/slime_purple.png" id="2_purp"]
+[ext_resource type="Texture2D" uid="uid://c34qirtgt3kg1" path="res://assets/sprites/PurpleDragons Spirte set/obstacle/Purple_slime.png" id="2_purp"]
 
-[sub_resource type="AtlasTexture" id="A_0_0"]
+[sub_resource type="AtlasTexture" id="A_p0"]
 atlas = ExtResource("2_purp")
-region = Rect2(0, 0, 24, 24)
+region = Rect2(16, 17, 16, 16)
 
-[sub_resource type="AtlasTexture" id="A_24_0"]
+[sub_resource type="AtlasTexture" id="A_p1"]
 atlas = ExtResource("2_purp")
-region = Rect2(24, 0, 24, 24)
-
-[sub_resource type="AtlasTexture" id="A_48_0"]
-atlas = ExtResource("2_purp")
-region = Rect2(48, 0, 24, 24)
-
-[sub_resource type="AtlasTexture" id="A_72_0"]
-atlas = ExtResource("2_purp")
-region = Rect2(72, 0, 24, 24)
-
-[sub_resource type="AtlasTexture" id="A_0_24"]
-atlas = ExtResource("2_purp")
-region = Rect2(0, 24, 24, 24)
-
-[sub_resource type="AtlasTexture" id="A_24_24"]
-atlas = ExtResource("2_purp")
-region = Rect2(24, 24, 24, 24)
-
-[sub_resource type="AtlasTexture" id="A_48_24"]
-atlas = ExtResource("2_purp")
-region = Rect2(48, 24, 24, 24)
-
-[sub_resource type="AtlasTexture" id="A_72_24"]
-atlas = ExtResource("2_purp")
-region = Rect2(72, 24, 24, 24)
-
-[sub_resource type="AtlasTexture" id="A_0_48"]
-atlas = ExtResource("2_purp")
-region = Rect2(0, 48, 24, 24)
-
-[sub_resource type="AtlasTexture" id="A_24_48"]
-atlas = ExtResource("2_purp")
-region = Rect2(24, 48, 24, 24)
-
-[sub_resource type="AtlasTexture" id="A_48_48"]
-atlas = ExtResource("2_purp")
-region = Rect2(48, 48, 24, 24)
-
-[sub_resource type="AtlasTexture" id="A_72_48"]
-atlas = ExtResource("2_purp")
-region = Rect2(72, 48, 24, 24)
+region = Rect2(16, 34, 16, 16)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_wall"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("A_0_24")
+"texture": SubResource("A_p0")
 }, {
 "duration": 1.0,
-"texture": SubResource("A_24_24")
-}, {
-"duration": 1.0,
-"texture": SubResource("A_48_24")
-}, {
-"duration": 1.0,
-"texture": SubResource("A_72_24")
-}, {
-"duration": 1.0,
-"texture": SubResource("A_0_48")
-}, {
-"duration": 1.0,
-"texture": SubResource("A_24_48")
+"texture": SubResource("A_p1")
 }],
 "loop": true,
 "name": &"crawl",
@@ -78,10 +26,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("A_48_0")
-}, {
-"duration": 1.0,
-"texture": SubResource("A_72_0")
+"texture": SubResource("A_p1")
 }],
 "loop": true,
 "name": &"fall",
@@ -89,22 +34,13 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("A_24_48")
+"texture": SubResource("A_p1")
 }, {
 "duration": 1.0,
-"texture": SubResource("A_72_48")
+"texture": SubResource("A_p0")
 }, {
 "duration": 1.5,
-"texture": SubResource("A_48_48")
-}, {
-"duration": 1.0,
-"texture": SubResource("A_48_0")
-}, {
-"duration": 1.0,
-"texture": SubResource("A_24_0")
-}, {
-"duration": 1.0,
-"texture": SubResource("A_0_0")
+"texture": SubResource("A_p0")
 }],
 "loop": false,
 "name": &"death",
