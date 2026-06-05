@@ -52,7 +52,7 @@ Pickups liegen im Level verteilt. Einmal aufgesammelt, ist die Ability dauerhaft
 SobeGameStudios/
 ├── scripts/
 │   ├── player/        player.gd  (Spieler-Controller)
-│   ├── enemies/       green_slime.gd, wall_slime.gd, green_slime_spawner.gd
+│   ├── enemies/       green_slime.gd, wall_slime.gd, mimic.gd, green_slime_spawner.gd
 │   ├── pickups/       charge_ability.gd, doublejump_ability.gd, wallcrawl_ability.gd, coin.gd
 │   ├── world/         green_platform.gd, green_platform_vertikal.gd, death.gd, fade_area.gd, portal.gd
 │   ├── ui/            hud.gd
@@ -60,7 +60,7 @@ SobeGameStudios/
 ├── scenes/
 │   ├── levels/        main.tscn, area_1.tscn, turm.tscn
 │   ├── player/        player.tscn
-│   ├── enemies/       green_slime.tscn, wall_slime.tscn, green_slime_spawner.tscn, …
+│   ├── enemies/       green_slime.tscn, wall_slime.tscn, mimic.tscn, green_slime_spawner.tscn, …
 │   ├── pickups/       charge_ability.tscn, doublejump_ability.tscn, coin.tscn, …
 │   ├── world/         green_platform.tscn, death.tscn, fade_area.tscn, portal.tscn
 │   └── ui/            hud.tscn, background_music.tscn
@@ -112,6 +112,7 @@ SobeGameStudios/
 | `scripts/world/death.gd` | **Todeszone** – Löst Respawn aus wenn der Spieler eintritt |
 | `scripts/enemies/green_slime.gd` | **Boden-Slime** – Patrouilliert, erkennt Spieler, kann sterben |
 | `scripts/enemies/wall_slime.gd` | **Wand-Slime** – Wie Boden-Slime, aber ohne Schwerkraft |
+| `scripts/enemies/mimic.gd` | **Mimik-Truhe** – Getarnt als Schatztruhe, erwacht im Hinterhalt (Tentakel) |
 | `scripts/enemies/green_slime_spawner.gd` | **Spawner** – Erzeugt Gegner in Intervallen bis zum Maximum |
 | `scripts/world/green_platform.gd` | **Horizontale Plattform** – Pendelt links/rechts |
 | `scripts/world/green_platform_vertikal.gd` | **Vertikale Plattform** – Pendelt auf/ab |
@@ -184,6 +185,29 @@ Tod (ausgelöst durch Roll oder Charge des Spielers)
   → Todesanimation abspielen
   → Aus Szene entfernen
 ```
+
+### Mimik-Truhe (mimic.gd)
+
+Ein Hinterhalt-Gegner, der dasselbe Grundgerüst (`SlimeBase`) nutzt, aber eine
+eigene Bewegung hat:
+
+```
+Zustand DORMANT: getarnt als geschlossene Schatztruhe
+  → bewegt sich nicht, Schaden-Hitbox ist AUS
+  → wartet bis der Spieler in wake_range kommt
+
+Zustand WAKING: Aktivierung (einmalig)
+  → Deckel springt auf, lila Tentakel schießt heraus (activation-Anim)
+  → danach wird die Hitbox scharf
+
+Zustand ACTIVE: wach
+  → kriecht auf den Spieler zu, wedelt mit dem Tentakel (attack-Anim)
+
+Tod (Roll / Attacke / Charge): wie bei den Slimes – Todesanimation, entfernen
+```
+
+Die Frames stammen aus `assets/sprites/mimic.png` (aus dem Konzept-Sheet
+`KnightSprite.png` extrahiert und animiert).
 
 ### Spawner (green_slime_spawner.gd)
 

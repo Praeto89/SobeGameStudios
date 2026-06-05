@@ -1,0 +1,161 @@
+[gd_scene format=3 uid="uid://bmimicscn0001"]
+
+[ext_resource type="Texture2D" uid="uid://dmimictex0001" path="res://assets/sprites/mimic.png" id="1_tex"]
+[ext_resource type="Script" uid="uid://cmimicgd00001" path="res://scripts/enemies/mimic.gd" id="2_scr"]
+[ext_resource type="AudioStream" uid="uid://bncupj5iuxe61" path="res://assets/sounds/explosion.wav" id="3_death"]
+[ext_resource type="AudioStream" uid="uid://cjj22ksmpqowv" path="res://assets/sounds/power_up.wav" id="4_wake"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m00"]
+atlas = ExtResource("1_tex")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m01"]
+atlas = ExtResource("1_tex")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m02"]
+atlas = ExtResource("1_tex")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m03"]
+atlas = ExtResource("1_tex")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m04"]
+atlas = ExtResource("1_tex")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m05"]
+atlas = ExtResource("1_tex")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m06"]
+atlas = ExtResource("1_tex")
+region = Rect2(192, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m07"]
+atlas = ExtResource("1_tex")
+region = Rect2(224, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m08"]
+atlas = ExtResource("1_tex")
+region = Rect2(256, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m09"]
+atlas = ExtResource("1_tex")
+region = Rect2(288, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m10"]
+atlas = ExtResource("1_tex")
+region = Rect2(320, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m11"]
+atlas = ExtResource("1_tex")
+region = Rect2(352, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m12"]
+atlas = ExtResource("1_tex")
+region = Rect2(384, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m13"]
+atlas = ExtResource("1_tex")
+region = Rect2(416, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_mimic"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m02")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m03")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m04")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m05")
+}],
+"loop": false,
+"name": &"activation",
+"speed": 9.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m06")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m07")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m08")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m09")
+}],
+"loop": true,
+"name": &"attack",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m10")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m11")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m12")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m13")
+}],
+"loop": false,
+"name": &"death",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m00")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m01")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 2.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
+size = Vector2(18, 12)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hit"]
+size = Vector2(22, 20)
+
+[node name="Mimic" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 5
+script = ExtResource("2_scr")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_mimic")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 7)
+shape = SubResource("RectangleShape2D_body")
+
+[node name="Hitbox" type="Area2D" parent="."]
+position = Vector2(0, 4)
+collision_layer = 0
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+shape = SubResource("RectangleShape2D_hit")
+
+[node name="SoundDeath" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_death")
+
+[node name="SoundActivate" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_wake")
