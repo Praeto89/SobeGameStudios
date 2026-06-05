@@ -544,12 +544,11 @@ radius = 11.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_attack"]
 
 [node name="Node2D" type="Node2D" unique_id=1773745841]
-position = Vector2(209, 94)
+position = Vector2(0, 0)
 
 [node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=2028502886 groups=["player"]]
-top_level = true
 light_mask = 3
-position = Vector2(227, 106)
+position = Vector2(0, 0)
 collision_mask = 7
 script = ExtResource("1_v6fml")
 
