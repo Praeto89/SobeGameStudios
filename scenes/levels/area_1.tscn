@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://b3fmywqfcrq3g"]
 
 [ext_resource type="PackedScene" uid="uid://ck6q6oyovvakg" path="res://scenes/player/player.tscn" id="1_c5o7e"]
-[ext_resource type="PackedScene" uid="uid://ccaveatmo0001" path="res://effekte/cave_atmosphere.tscn" id="20_cave"]
 [ext_resource type="PackedScene" uid="uid://0lmbkrm3yis5" path="res://scenes/pickups/wallcrawl_ability.tscn" id="4_7i8v8"]
 [ext_resource type="PackedScene" uid="uid://dnmnbcdkt56ma" path="res://scenes/pickups/doublejump_ability.tscn" id="5_ervsl"]
 [ext_resource type="Texture2D" uid="uid://ctbiesjqnr38r" path="res://assets/sprites/PurpleDragons Spirte set/Ground/rockgrey_tilemap.png" id="6_7ekqj"]
@@ -13,6 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://b65pogkcjh3t8" path="res://assets/sprites/PurpleDragons Spirte set/enviroment/rock 3.png" id="10_1ip4w"]
 [ext_resource type="PackedScene" uid="uid://7ck1dr5e5kg0" path="res://scenes/world/portal.tscn" id="11_portal"]
 [ext_resource type="FontFile" uid="uid://dtx2a7s2qqtrp" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="12_font"]
+[ext_resource type="PackedScene" uid="uid://ccaveatmo0001" path="res://effekte/cave_atmosphere.tscn" id="20_cave"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8iv4n"]
 texture = ExtResource("6_7ekqj")
@@ -208,7 +208,7 @@ sources/1 = SubResource("TileSetAtlasSource_ac54n")
 [node name="Node2D" type="Node2D" unique_id=718214453]
 position = Vector2(16, 8)
 
-[node name="CaveAtmosphere" parent="." instance=ExtResource("20_cave")]
+[node name="CaveAtmosphere" parent="." unique_id=1064661870 instance=ExtResource("20_cave")]
 
 [node name="Node2D" parent="." unique_id=1773745841 instance=ExtResource("1_c5o7e")]
 position = Vector2(157, 118)
@@ -303,19 +303,19 @@ rotation = -0.6374189
 scale = Vector2(0.45121953, 0.4512195)
 texture = ExtResource("8_ac54n")
 
-[node name="PortalTurm" parent="." groups=["portals"] instance=ExtResource("11_portal")]
-position = Vector2(220, 100)
+[node name="PortalTurm" parent="." unique_id=1284038433 groups=["portals"] instance=ExtResource("11_portal")]
+position = Vector2(421, 35)
 portal_id = "from_turm"
 target_portal_id = "turm_to_area1"
 target_scene = "res://scenes/levels/turm.tscn"
 
-[node name="PortalEnde" parent="." groups=["portals"] instance=ExtResource("11_portal")]
-position = Vector2(392, 120)
+[node name="PortalEnde" parent="." unique_id=217915997 groups=["portals"] instance=ExtResource("11_portal")]
+position = Vector2(400, 145)
 portal_id = "area1_end"
 target_portal_id = ""
 target_scene = "res://scenes/ui/credits.tscn"
 
-[node name="ZielSchild" type="Label" parent="PortalEnde"]
+[node name="ZielSchild" type="Label" parent="PortalEnde" unique_id=339218637]
 offset_left = -24.0
 offset_top = -58.0
 offset_right = 24.0
