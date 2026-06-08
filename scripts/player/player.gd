@@ -522,7 +522,7 @@ func _physics_process(delta: float) -> void:
 		is_jumping = true
 		jump_buffer_timer = 0.0
 		coyote_timer = 0.0
-		sound_jump.play()
+		pass  # sound_jump.play() -- Sprung-Sound deaktiviert (zu nervig); zum Reaktivieren diese Zeile wieder zu sound_jump.play() machen
 		_play_squash(JUMP_STRETCH_SCALE, SQUASH_RECOVER_TIME)  # Effekt: Absprung-Stretch
 	elif Input.is_action_just_pressed("ui_accept"):
 		if is_wall_crawling:
@@ -532,14 +532,14 @@ func _physics_process(delta: float) -> void:
 			is_wall_crawling = false
 			can_double_jump = true
 			is_jumping = true
-			sound_jump.play()
+			pass  # sound_jump.play() -- Sprung-Sound deaktiviert (zu nervig); zum Reaktivieren diese Zeile wieder zu sound_jump.play() machen
 			_play_squash(JUMP_STRETCH_SCALE, SQUASH_RECOVER_TIME)  # Effekt: Wall-Jump-Stretch
 		elif has_double_jump and can_double_jump:
 			# Double Jump: zweiter Sprung in der Luft
 			velocity.y = jump_velocity
 			can_double_jump = false
 			is_jumping = true
-			sound_jump.play()
+			pass  # sound_jump.play() -- Sprung-Sound deaktiviert (zu nervig); zum Reaktivieren diese Zeile wieder zu sound_jump.play() machen
 			_play_squash(JUMP_STRETCH_SCALE, SQUASH_RECOVER_TIME)  # Effekt: Double-Jump-Stretch
 
 	# Sprung-Flag zuruecksetzen wenn gelandet

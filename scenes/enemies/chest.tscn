@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://dchestscn00001"]
+[gd_scene format=3 uid="uid://dyr6icf4crab5"]
 
 [ext_resource type="Texture2D" uid="uid://dchesttex00001" path="res://assets/sprites/chest.png" id="1_tex"]
 [ext_resource type="Script" uid="uid://cchestgd000001" path="res://scripts/enemies/chest.gd" id="2_scr"]
