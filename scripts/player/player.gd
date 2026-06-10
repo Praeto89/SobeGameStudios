@@ -33,9 +33,9 @@ class_name Player extends CharacterBody2D
 # -----------------------------------------------------------------------------
 # Bewegungs-Konstanten
 # -----------------------------------------------------------------------------
-const SPEED = 150.0                 # Laufgeschwindigkeit  <- probier: 80 (langsam) oder 300 (schnell)
+const SPEED = 175.0                 # Laufgeschwindigkeit  <- probier: 80 (langsam) oder 300 (schnell)
 const AIR_SPEED = 140.0             # Geschwindigkeit in der Luft  <- kleiner als SPEED = traegere Luft
-const JUMP_VELOCITY = -400.0        # Sprungkraft (negativ = nach oben!)  <- probier: -250 oder -600
+const JUMP_VELOCITY = -520.0        # Sprungkraft (negativ = nach oben!)  <- probier: -250 oder -600
 const JUMP_RELEASE_MULTIPLIER  = 2.5 # Gravity-Multiplikator wenn Sprung losgelassen wird (variable Hoehe)
 const ROLL_SPEED = 300.0            # Geschwindigkeit waehrend des Rolls
 const CHARGE_SPEED = 700.0          # Geschwindigkeit waehrend des Charge-Dashs  <- probier: 400 oder 1200
@@ -501,16 +501,21 @@ func _physics_process(delta: float) -> void:
 	# - Fallen:          schwerere Gravity nach Sprung-Peak
 	# - Sprung halten:   leichtere Gravity beim Aufstieg
 	# - Sprung loslassen: Aufstieg wird abgebremst (variable Sprunghoehe)
-	if not is_on_floor() and not is_wall_crawling and not is_charging and charge_time_active <= 0:
-		var fast_fall = Input.is_action_pressed("ui_down") and velocity.y > 0
-		if fast_fall:
-			velocity.y = min(velocity.y + FAST_FALL_SPEED * delta, FAST_FALL_SPEED)
-		elif velocity.y > 0:
-			velocity.y = min(velocity.y + FALL_GRAVITY * delta, MAX_FALL_SPEED)
-		elif not Input.is_action_pressed("ui_accept") and velocity.y < 0:
-			velocity.y += GRAVITY * JUMP_RELEASE_MULTIPLIER * delta
-		else:
-			velocity.y += GRAVITY * delta
+	if not is_on_floor() and not is_wall_crawling:
+		if is_charging:
+			# Waehrend des Charge-Bogens: normale Gravity ohne Multiplikatoren,
+			# damit der Aufwaerts-Impuls natuerlich in einen Bogen uebergeht.
+			velocity.y = min(velocity.y + GRAVITY * delta, MAX_FALL_SPEED)
+		elif charge_time_active <= 0:
+			var fast_fall = Input.is_action_pressed("ui_down") and velocity.y > 0
+			if fast_fall:
+				velocity.y = min(velocity.y + FAST_FALL_SPEED * delta, FAST_FALL_SPEED)
+			elif velocity.y > 0:
+				velocity.y = min(velocity.y + FALL_GRAVITY * delta, MAX_FALL_SPEED)
+			elif not Input.is_action_pressed("ui_accept") and velocity.y < 0:
+				velocity.y += GRAVITY * JUMP_RELEASE_MULTIPLIER * delta
+			else:
+				velocity.y += GRAVITY * delta
 
 	# --- 7. Springen ---
 	# Prioritaet: Boden/Coyote > Wall Jump > Double Jump
@@ -635,11 +640,10 @@ func _physics_process(delta: float) -> void:
 			elif body.get_parent().is_in_group(GameConstants.GROUP_ENEMY):
 				body.get_parent().die()
 	elif is_charging:
-		# Charge: schneller Dash in Blickrichtung, Gravity wird gedaempft
+		# Charge: schneller Dash in Blickrichtung, Bogen durch Gravity (kein Daempfen)
 		charge_time_active += delta
 		var charge_dir = -1.0 if animated_sprite.flip_h else 1.0
 		velocity.x = charge_dir * charge_speed
-		velocity.y = move_toward(velocity.y, 0, 300)
 		if charge_time_active >= charge_max_time:
 			is_charging = false
 			charge_time_active = 0.0
@@ -650,7 +654,11 @@ func _physics_process(delta: float) -> void:
 	elif direction:
 		# Normale Bewegung: leicht reduzierte Geschwindigkeit in der Luft
 		var target_speed = SPEED if is_on_floor() else AIR_SPEED
-		velocity.x = direction * target_speed
+		if is_on_floor():
+			velocity.x = direction * target_speed
+		else:
+			# Leichte Lufttraegheit: Richtungswechsel braucht ~0.17s (HK-feel)
+			velocity.x = move_toward(velocity.x, direction * target_speed, AIR_SPEED * 6.0 * delta)
 		animated_sprite.flip_h = direction < 0
 	else:
 		# Kein Input: abremsen
