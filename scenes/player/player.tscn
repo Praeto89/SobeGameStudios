@@ -11,8 +11,8 @@
 [ext_resource type="AudioStream" uid="uid://dky6sj4iekgtv" path="res://assets/sounds/tap.wav" id="8_snd_tap"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_v6fml"]
-radius = 6.0
-height = 16.0
+radius = 5.0
+height = 14.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_atk0"]
 atlas = ExtResource("2_gmlin")
@@ -542,6 +542,7 @@ animations = [{
 radius = 11.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_attack"]
+radius = 14.0
 
 [node name="Node2D" type="Node2D" unique_id=1773745841]
 position = Vector2(0, 0)
@@ -553,7 +554,7 @@ collision_mask = 7
 script = ExtResource("1_v6fml")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D" unique_id=1731528327]
-position = Vector2(-18, -12)
+position = Vector2(-18, -11)
 shape = SubResource("CapsuleShape2D_v6fml")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharacterBody2D" unique_id=1743012011]

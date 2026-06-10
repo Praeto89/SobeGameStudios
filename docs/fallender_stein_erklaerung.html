@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Warum machen die fallenden Steine keinen Schaden?</title>
+<style>
+  :root{
+    --ok:#2e9e5b; --bad:#d6453d; --hi:#3b82f6;
+    --ink:#1d2230; --sub:#5b6577; --line:#e2e6ee;
+    --card:#f5f7fb; --code:#f0f2f7; --page:#ffffff;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:#eef1f6; color:var(--ink);
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    line-height:1.5; padding:24px;
+  }
+  .wrap{
+    max-width:780px; margin:0 auto; background:var(--page);
+    border:1px solid var(--line); border-radius:16px;
+    padding:28px 30px; box-shadow:0 1px 3px rgba(20,30,60,.06);
+  }
+  h1{font-size:1.45rem;margin:0 0 .15em}
+  .lead{color:var(--sub);margin:.1em 0 1.5em;font-size:1rem}
+  .sec{margin:1.7em 0 .6em;font-size:.78rem;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--sub);font-weight:700}
+  code,pre{font-family:ui-monospace,"SF Mono",Consolas,monospace}
+  pre{margin:.5em 0;padding:.75em .95em;border-radius:10px;
+    background:var(--code);border:1px solid var(--line);
+    overflow-x:auto;font-size:.84rem;line-height:1.55}
+  .cap{font-size:.88rem;color:var(--sub);margin:.35em 0 0}
+
+  .chain{display:flex;flex-direction:column;gap:0}
+  .step{display:flex;gap:.8em;align-items:center;padding:.75em .95em;
+    border-radius:12px;border:1px solid var(--line);background:var(--card)}
+  .step .n{flex:0 0 1.95em;height:1.95em;border-radius:50%;display:grid;
+    place-items:center;font-weight:700;font-size:.92rem;
+    border:1.5px solid var(--line);color:var(--sub);background:#fff}
+  .step .tx b{display:block}
+  .step .tx small{color:var(--sub);font-family:ui-monospace,monospace;font-size:.79rem}
+  .arrow{align-self:center;color:var(--sub);font-size:1.15rem;margin:.2em 0}
+  .step.ok .n{border-color:var(--ok);color:var(--ok)}
+  .step.miss{border:1.5px dashed var(--bad);background:#fbecea}
+  .step.miss .n{border-color:var(--bad);color:var(--bad)}
+  .step.miss .tx b{color:var(--bad)}
+  .tag{margin-left:auto;font-size:.75rem;font-weight:700;padding:.18em .65em;
+    border-radius:999px;white-space:nowrap;color:var(--bad);background:#f7d9d5}
+
+  table{width:100%;border-collapse:collapse;margin:.4em 0;font-size:.93rem}
+  th,td{padding:.58em .7em;border-bottom:1px solid var(--line);text-align:left}
+  th{font-size:.82rem;color:var(--sub);font-weight:700}
+  td.c{text-align:center;font-weight:700;white-space:nowrap}
+  .good{color:var(--ok)} .nope{color:var(--bad)}
+  tr.key td{background:#eef4ff}
+
+  .fix{margin-top:.4em;padding:.9em 1.05em;border-radius:12px;
+    border:1px solid #bfe3cd;background:#edf8f1}
+  .fix b{color:var(--ok)}
+  .take{margin-top:1.5em;padding:.95em 1.15em;border-radius:12px;
+    border:1px solid var(--line);background:var(--card);font-size:1rem}
+  .take .k{font-weight:700}
+  .muted{color:var(--sub)} .add{color:var(--ok);font-weight:600}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>Warum machen die fallenden Steine keinen Schaden?</h1>
+  <p class="lead">Der Stein hat eine <b>Trefferzone</b> <i>und</i> eine <b>Schadens-Funktion</b>.
+  Trotzdem passiert nichts – weil die beiden <b>nie miteinander verbunden</b> wurden.</p>
+
+  <div class="sec">So entsteht Schaden – eine Kette aus 4 Gliedern</div>
+  <div class="chain">
+    <div class="step ok"><div class="n">1</div><div class="tx"><b>Trefferzone (Area2D) bemerkt den Spieler</b><small>sendet das Signal&nbsp;body_entered(body)</small></div></div>
+    <div class="arrow">↓</div>
+    <div class="step miss"><div class="n">2</div><div class="tx"><b>Signal wird mit einer Funktion VERBUNDEN</b><small>.connect(...) — der „Draht"</small></div><span class="tag">✗ FEHLT</span></div>
+    <div class="arrow">↓</div>
+    <div class="step ok"><div class="n">3</div><div class="tx"><b>Funktion läuft &amp; prüft: Ist das der Spieler?</b><small>if body.has_method("take_damage")</small></div></div>
+    <div class="arrow">↓</div>
+    <div class="step ok"><div class="n">4</div><div class="tx"><b>take_damage() → Spieler verliert Leben</b><small>body.take_damage(1, …)</small></div></div>
+  </div>
+  <p class="cap">Fehlt <b>ein</b> Glied, passiert nichts. Beim Stein fehlt genau
+  <b style="color:var(--bad)">Glied&nbsp;2</b> – die anderen drei sind korrekt da.</p>
+
+  <div class="sec">Die Funktion ist da – aber niemand ruft sie auf</div>
+  <pre><span class="muted"># in falling_rock.gd</span>
+func _on_FallingRock_entered(body):
+    if body.has_method("take_damage"):
+        body.take_damage(1, knockback_dir)   <span class="muted"># ✔ richtig geschrieben</span></pre>
+  <p class="cap">Der Code stimmt. Aber im ganzen File gibt es <b>kein <code>.connect(...)</code></b>
+  und in der Szene keine Signal-Verbindung → die Funktion ist eine <b>Waise</b> und wird <b>nie</b> aufgerufen.</p>
+
+  <div class="sec">Gleiche Aufgabe – beim Slime fehlt nur diese eine Zutat nicht</div>
+  <table>
+    <tr><th></th><th>Slime</th><th>Fallender Stein</th></tr>
+    <tr><td>Trefferzone (Area2D)</td><td class="c good">✔</td><td class="c good">✔</td></tr>
+    <tr><td>Schadens-Funktion</td><td class="c good">✔</td><td class="c good">✔</td></tr>
+    <tr class="key"><td><b>Signal → Funktion verbunden</b></td><td class="c good">✔ in&nbsp;_ready()</td><td class="c nope">✗ fehlt</td></tr>
+  </table>
+  <pre><span class="muted"># slime_base.gd – DAS ist der „Draht", den der Stein nicht hat:</span>
+hitbox.body_entered.connect(_on_hitbox_body_entered)</pre>
+
+  <div class="sec">Die Lösung</div>
+  <div class="fix"><b>Eine Zeile</b> in <code>falling_rock.gd</code>, in <code>_ready()</code>:
+    <pre style="margin:.6em 0 0"><span class="add">$Sprite2D/Hitbox.body_entered.connect(_on_FallingRock_entered)</span></pre>
+    <p class="cap" style="margin-top:.5em">Pfad <code>$Sprite2D/Hitbox</code>, weil die Trefferzone
+    <b>unter</b> dem Sprite hängt – nicht direkt unter dem Stein.</p>
+  </div>
+
+  <div class="take"><span class="k">💡 Merksatz:</span> Eine Funktion für ein Signal zu <i>schreiben</i>
+  ist nur die halbe Arbeit – man muss das Signal auch mit ihr <b>verbinden</b>
+  (<code>.connect</code>), sonst wird sie nie aufgerufen.</div>
+
+</div>
+</body>
+</html>

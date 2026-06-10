@@ -7,8 +7,13 @@
 [ext_resource type="PackedScene" uid="uid://ck6q6oyovvakg" path="res://scenes/player/player.tscn" id="5_vqffp"]
 [ext_resource type="PackedScene" uid="uid://dph3vsxklsitn" path="res://scenes/enemies/green_slime_spawner.tscn" id="6_h8sst"]
 [ext_resource type="Script" uid="uid://co8dnnplbt1aa" path="res://scripts/world/green_platform.gd" id="6_horiz"]
-[ext_resource type="PackedScene" uid="uid://ccaveatmo0001" path="res://effekte/cave_atmosphere.tscn" id="20_cave"]
 [ext_resource type="FontFile" uid="uid://dtx2a7s2qqtrp" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="9_font"]
+[ext_resource type="PackedScene" uid="uid://ccaveatmo0001" path="res://effekte/cave_atmosphere.tscn" id="20_cave"]
+[ext_resource type="Script" uid="uid://cssho58smdbfm" path="res://scripts/world/updown.gd" id="10_updown"]
+[ext_resource type="PackedScene" uid="uid://v7qyx6x5blsy" path="res://scenes/world/Falling Rock.tscn" id="11_rock"]
+[ext_resource type="PackedScene" uid="uid://b8dstnsvjshbn" path="res://scenes/pickups/charge_ability.tscn" id="12_charge"]
+[ext_resource type="PackedScene" uid="uid://dnmnbcdkt56ma" path="res://scenes/pickups/doublejump_ability.tscn" id="13_djump"]
+[ext_resource type="PackedScene" uid="uid://0lmbkrm3yis5" path="res://scenes/pickups/wallcrawl_ability.tscn" id="14_wall"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nnl3m"]
 texture = ExtResource("1_3kobl")
@@ -69,7 +74,7 @@ sources/1 = SubResource("TileSetAtlasSource_nnl3m")
 
 [node name="Node2D" type="Node2D" unique_id=174249883]
 
-[node name="CaveAtmosphere" parent="." instance=ExtResource("20_cave")]
+[node name="CaveAtmosphere" parent="." unique_id=1860400604 instance=ExtResource("20_cave")]
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=60681153]
 position = Vector2(-44, 465)
@@ -93,12 +98,6 @@ position = Vector2(68, 30)
 script = ExtResource("3_vqffp")
 speed = 50.0
 distance = 80.0
-
-[node name="Portal" parent="." unique_id=559695772 groups=["portals"] instance=ExtResource("4_5dp1l")]
-position = Vector2(58, 542)
-portal_id = "turm_a"
-target_portal_id = "main_a"
-target_scene = "res://scenes/levels/main.tscn"
 
 [node name="Node2D" parent="." unique_id=1773745841 instance=ExtResource("5_vqffp")]
 position = Vector2(208, 98)
@@ -136,19 +135,19 @@ position = Vector2(188, 283)
 [node name="GeenSlimeSpawner3" parent="." unique_id=576208969 instance=ExtResource("6_h8sst")]
 position = Vector2(619, 435)
 
-[node name="PortalArea1" parent="." groups=["portals"] instance=ExtResource("4_5dp1l")]
-position = Vector2(176, -320)
+[node name="PortalArea1" parent="." unique_id=1497045151 groups=["portals"] instance=ExtResource("4_5dp1l")]
+position = Vector2(272, 547)
 portal_id = "turm_to_area1"
 target_portal_id = "from_turm"
 target_scene = "res://scenes/levels/area_1.tscn"
 
-[node name="PortalEnde" parent="." groups=["portals"] instance=ExtResource("4_5dp1l")]
-position = Vector2(176, -500)
+[node name="PortalEnde" parent="." unique_id=1477270169 groups=["portals"] instance=ExtResource("4_5dp1l")]
+position = Vector2(995, -571)
 portal_id = "turm_end"
 target_portal_id = ""
 target_scene = "res://scenes/ui/credits.tscn"
 
-[node name="ZielSchild" type="Label" parent="PortalEnde"]
+[node name="ZielSchild" type="Label" parent="PortalEnde" unique_id=918857954]
 offset_left = -24.0
 offset_top = -58.0
 offset_right = 24.0
@@ -159,3 +158,19 @@ theme_override_font_sizes/font_size = 12
 text = "ZIEL"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="MovingPlatform" parent="." unique_id=900100001 instance=ExtResource("2_5dp1l")]
+position = Vector2(185, 499)
+script = ExtResource("10_updown")
+
+[node name="FallingRock" parent="." unique_id=500792702 instance=ExtResource("11_rock")]
+position = Vector2(157, 310)
+
+[node name="charge_ability" parent="." unique_id=333438941 instance=ExtResource("12_charge")]
+position = Vector2(622, 533)
+
+[node name="doublejump_ability" parent="." unique_id=699448679 instance=ExtResource("13_djump")]
+position = Vector2(401, 536)
+
+[node name="wallcrawl_ability" parent="." unique_id=1532143513 instance=ExtResource("14_wall")]
+position = Vector2(245, 540)

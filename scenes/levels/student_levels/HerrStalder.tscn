@@ -100,7 +100,7 @@ target_scene = "res://scenes/levels/galerie.tscn"
 offset_left = -480.0
 offset_top = 30.0
 offset_right = -400.0
-offset_bottom = 50.0
+offset_bottom = 53.0
 text = "Galerie"
 horizontal_alignment = 1
 

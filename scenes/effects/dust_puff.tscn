@@ -1,0 +1,48 @@
+[gd_scene load_steps=11 format=3 uid="uid://dustpuffscn01"]
+
+[ext_resource type="Script" path="res://scripts/effects/dust_puff.gd" id="1_dust"]
+[ext_resource type="Texture2D" path="res://assets/effects/walk_particle/WalkParticleGrayf1.png" id="2_f1"]
+[ext_resource type="Texture2D" path="res://assets/effects/walk_particle/WalkParticleGrayf2.png" id="2_f2"]
+[ext_resource type="Texture2D" path="res://assets/effects/walk_particle/WalkParticleGrayf3.png" id="2_f3"]
+[ext_resource type="Texture2D" path="res://assets/effects/walk_particle/WalkParticleGrayf4.png" id="2_f4"]
+[ext_resource type="Texture2D" path="res://assets/effects/walk_particle/WalkParticleGrayf5.png" id="2_f5"]
+[ext_resource type="Texture2D" path="res://assets/effects/walk_particle/WalkParticleGrayf6.png" id="2_f6"]
+[ext_resource type="Texture2D" path="res://assets/effects/walk_particle/WalkParticleGrayf7.png" id="2_f7"]
+[ext_resource type="Texture2D" path="res://assets/effects/walk_particle/WalkParticleGrayf8.png" id="2_f8"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_dust"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_f1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_f2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_f3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_f4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_f5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_f6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_f7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_f8")
+}],
+"loop": false,
+"name": &"puff",
+"speed": 16.0
+}]
+
+[node name="DustPuff" type="AnimatedSprite2D"]
+sprite_frames = SubResource("SpriteFrames_dust")
+animation = &"puff"
+script = ExtResource("1_dust")

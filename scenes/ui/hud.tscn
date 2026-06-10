@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://b7sys1w0f7fwv" path="res://scripts/ui/hud.gd" id="1_ahhtf"]
 [ext_resource type="PackedScene" uid="uid://5r6xfs6r3afx" path="res://scenes/ui/healthbar.tscn" id="2_hbar"]
+[ext_resource type="Script" uid="uid://cra20hmdt5ays" path="res://scenes/ui/unlockwallclimbbutton.gd" id="3_bo48s"]
 
 [node name="CanvasLayer" type="CanvasLayer" unique_id=672277396]
 layer = 10
@@ -18,3 +19,11 @@ offset_top = 20.0
 offset_right = 200.0
 offset_bottom = 60.0
 theme_override_font_sizes/font_size = 30
+
+[node name="Button" type="Button" parent="." unique_id=1522824426]
+offset_left = 36.0
+offset_top = 559.0
+offset_right = 176.0
+offset_bottom = 605.43286
+text = "UnlockWallClimb"
+script = ExtResource("3_bo48s")

@@ -2,13 +2,13 @@
 
 importer="mp3"
 type="AudioStreamMP3"
-uid="uid://bnewproj0song1"
-path="res://.godot/imported/new_project.mp3-00000000000000000000000000000000.mp3str"
+uid="uid://01ao0iy085du"
+path="res://.godot/imported/new_project.mp3-878c8a7081f8cfface0600c892d69dab.mp3str"
 
 [deps]
 
 source_file="res://assets/music/new_project.mp3"
-dest_files=["res://.godot/imported/new_project.mp3-00000000000000000000000000000000.mp3str"]
+dest_files=["res://.godot/imported/new_project.mp3-878c8a7081f8cfface0600c892d69dab.mp3str"]
 
 [params]
 

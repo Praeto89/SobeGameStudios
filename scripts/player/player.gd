@@ -89,6 +89,25 @@ const LANDING_SQUASH_MIN_SPEED := 250.0           # Erst ab dieser Fallgeschwind
 const HIT_FLASH_COLOR := Color(2.5, 0.6, 0.6)     # Treffer-Aufleuchten (>1 = leuchtet dank Glow)
 const HIT_FLASH_FADE := 0.25                      # Sekunden bis der rote Blitz wieder abklingt
 
+# Lauf-Staub: bei jedem "Schritt" erscheint mit etwas Zufall ein Staubwoelkchen
+# unter den Fuessen. Ein "Schritt" = STEP_DUST_DISTANCE Pixel Laufstrecke, dadurch
+# kommt der Staub bei schnellem Laufen oefter (fuehlt sich automatisch richtig an).
+const STEP_DUST_DISTANCE := 22.0                  # Pixel pro Schritt  <- kleiner = mehr Staub, groesser = weniger
+const STEP_DUST_CHANCE := 0.7                     # Chance pro Schritt dass Staub kommt (0 = nie, 1 = immer)
+const DUST_FEET_OFFSET := Vector2(-18.0, -6.0)    # Lage der Wolke relativ zum Spieler (negativeres Y = hoeher, raus aus den Tiles)
+const DustPuffScene := preload("res://scenes/effects/dust_puff.tscn")  # Wird pro Schritt einmal instanziert
+
+# Luft-Runterschlag ("attack_from_above"): groessere Hitbox + Bodenschock-Welle.
+const AIR_ATTACK_HITBOX_SCALE := 1.8              # Luft-Attacke-Hitbox so viel groesser als die normale Attacke
+const SHOCKWAVE_FEET_OFFSET := Vector2(-18.0, -3.0)  # Wo die Schockwelle aufschlaegt (auf Bodenhoehe unter dem Spieler)
+const ShockwaveScene := preload("res://scenes/effects/shockwave.tscn")  # Wird beim Aufkommen des Luft-Schlags instanziert
+
+# Charge-Dash: hinten stoesst der Spieler Abgas-Woelkchen aus, die ausfaden -> Raketen-Antrieb.
+const CHARGE_TRAIL_INTERVAL := 0.035              # Sekunden zwischen zwei Abgas-Woelkchen  <- kleiner = dichterer Strahl
+const CHARGE_TRAIL_OFFSET := Vector2(-18.0, -8.0) # Austritts-Hoehe relativ zum Spieler (auf Koerper-Mitte)
+const CHARGE_TRAIL_BACK_DISTANCE := 10.0          # Wie weit hinter dem Spieler ein Woelkchen startet
+const RocketPuffScene := preload("res://scenes/effects/rocket_puff.tscn")  # Wird waehrend des Charge-Dashs wiederholt instanziert
+
 # -----------------------------------------------------------------------------
 # Node-Referenzen
 # -----------------------------------------------------------------------------
@@ -169,6 +188,10 @@ var _fx_prev_on_floor := true          # Boden-Status des letzten Frames (fuer L
 var _fx_last_fall_speed := 0.0         # Fallgeschwindigkeit kurz vor der Landung
 var _squash_tween: Tween = null        # Laufende Squash/Stretch-Animation (zum Abbrechen)
 var _flash_tween: Tween = null         # Laufende Treffer-Blitz-Animation (zum Abbrechen)
+var _step_distance_acc := 0.0          # Aufsummierte Laufstrecke seit dem letzten Staub-Schritt
+var _attack_base_scale := Vector2.ONE  # Grund-Skalierung der Attack-Hitbox (inkl. Upgrade), Basis fuer die Luft-Vergroesserung
+var _air_attack_slam_armed := false     # True waehrend eines Luft-Schlags: beim Aufkommen wird die Schockwelle ausgeloest
+var _charge_trail_timer := 0.0          # Countdown bis zum naechsten Abgas-Woelkchen waehrend des Charge-Dashs
 
 # -----------------------------------------------------------------------------
 # Signale
@@ -238,6 +261,8 @@ func respawn() -> void:
 	is_attacking = false
 	attack_timer = 0.0
 	attack_hitbox.monitoring = false
+	attack_hitbox.scale = _attack_base_scale
+	_air_attack_slam_armed = false
 	is_hit = false
 	hit_timer = 0.0
 	is_wall_crawling = false
@@ -302,6 +327,7 @@ func _die() -> void:
 	is_attacking = false
 	attack_timer = 0.0
 	attack_hitbox.monitoring = false
+	_air_attack_slam_armed = false
 	is_wall_crawling = false
 	last_wall_normal = Vector2.ZERO
 	can_double_jump = false
@@ -384,8 +410,12 @@ func apply_upgrades() -> void:
 	charge_max_time = CHARGE_MAX_TIME * (CHARGE_TIME_UPGRADE_MULTIPLIER if GameManager.upgrade_charge else 1.0)
 	attack_hitbox_offset = ATTACK_HITBOX_OFFSET + (ATTACK_REACH_UPGRADE if GameManager.upgrade_attack else 0.0)
 	# Groessere Angriffs-Hitbox: die ganze AttackHitbox-Area skalieren.
+	# _attack_base_scale ist die "Ruhegroesse" (inkl. Upgrade). Der Luft-Schlag
+	# vergroessert sie zusaetzlich (siehe Attacke-Start), danach wird wieder auf
+	# diese Basis zurueckgesetzt.
 	var atk_scale = ATTACK_HITBOX_UPGRADE_SCALE if GameManager.upgrade_attack else 1.0
-	attack_hitbox.scale = Vector2(atk_scale, atk_scale)
+	_attack_base_scale = Vector2(atk_scale, atk_scale)
+	attack_hitbox.scale = _attack_base_scale
 	# Lebens-Maximum (Health-Upgrade); aktuelle Leben nie ueber das Maximum.
 	max_health = GameManager.get_max_health()
 	current_health = min(current_health, max_health)
@@ -432,6 +462,70 @@ func _flash_hit() -> void:
 	animated_sprite.modulate = HIT_FLASH_COLOR
 	_flash_tween = create_tween()
 	_flash_tween.tween_property(animated_sprite, "modulate", Color.WHITE, HIT_FLASH_FADE)
+
+# =============================================================================
+# _spawn_dust_puff()
+# Setzt ein kurzlebiges Staubwoelkchen (dust_puff.tscn) unter die Fuesse des
+# Spielers. Die Wolke spielt ihre Animation einmal ab und entfernt sich dann
+# selbst (siehe dust_puff.gd). Jede Wolke wird zufaellig gespiegelt, leicht
+# versetzt und unterschiedlich gross -> nie zwei exakt gleiche Schritte.
+# =============================================================================
+func _spawn_dust_puff() -> void:
+	var puff := DustPuffScene.instantiate()
+	# In die Level-Szene haengen (nicht an den Spieler), damit die Wolke an Ort
+	# und Stelle liegen bleibt, waehrend der Spieler weiterlaeuft.
+	var target := get_tree().current_scene
+	if target == null:
+		target = get_parent()
+	target.add_child(puff)
+	# Unter die Fuesse setzen, mit etwas Zufalls-Streuung fuer ein natuerliches Bild.
+	var jitter := Vector2(randf_range(-3.0, 3.0), randf_range(-1.0, 1.0))
+	puff.global_position = global_position + DUST_FEET_OFFSET + jitter
+	# Zufaellig spiegeln + leicht unterschiedliche Groesse -> jede Wolke ist einzigartig.
+	puff.flip_h = randf() < 0.5
+	var s := randf_range(0.8, 1.3)
+	puff.scale = Vector2(s, s)
+
+# =============================================================================
+# _spawn_shockwave()
+# Setzt die Bodenschock-Welle (shockwave.tscn) auf Fusshoehe unter den Spieler.
+# Sie breitet sich kurz aus und toetet beruehrte Gegner, dann entfernt sie sich
+# selbst (siehe shockwave.gd). Wird beim Aufkommen des Luft-Schlags ausgeloest.
+# =============================================================================
+func _spawn_shockwave() -> void:
+	var wave := ShockwaveScene.instantiate()
+	# In die Level-Szene haengen (nicht an den Spieler), damit die Welle an Ort
+	# und Stelle bleibt und nicht mit dem Spieler mitwandert.
+	var target := get_tree().current_scene
+	if target == null:
+		target = get_parent()
+	target.add_child(wave)
+	wave.global_position = global_position + SHOCKWAVE_FEET_OFFSET
+
+# =============================================================================
+# _spawn_rocket_puff(charge_dir)
+# Stoesst waehrend des Charge-Dashs ein einzelnes Abgas-Woelkchen (rocket_puff.tscn)
+# HINTEN am Spieler aus (entgegen der Dash-Richtung charge_dir: -1 = nach links,
+# +1 = nach rechts). Das Woelkchen blendet selbst aus (siehe rocket_puff.gd), und
+# weil der Spieler weiterzischt, bleibt ein nachziehender Raketen-Strahl zurueck.
+# =============================================================================
+func _spawn_rocket_puff(charge_dir: float) -> void:
+	var puff := RocketPuffScene.instantiate()
+	# Klein und leicht unterschiedlich starten -> waechst beim Ausblenden auf.
+	# WICHTIG: scale VOR add_child setzen, sonst startet der Wachstums-Tween in
+	# rocket_puff.gd._ready() von der falschen Groesse.
+	var s := randf_range(0.5, 0.8)
+	puff.scale = Vector2(s, s)
+	# In die Level-Szene haengen (nicht an den Spieler), damit die Wolke an Ort
+	# und Stelle liegen bleibt, waehrend der Spieler nach vorne schiesst.
+	var target := get_tree().current_scene
+	if target == null:
+		target = get_parent()
+	target.add_child(puff)
+	# Hinter dem Spieler positionieren (gegen die Dash-Richtung), mit etwas Zufall.
+	var back := -charge_dir * CHARGE_TRAIL_BACK_DISTANCE
+	var jitter := Vector2(randf_range(-2.0, 2.0), randf_range(-3.0, 3.0))
+	puff.global_position = global_position + CHARGE_TRAIL_OFFSET + Vector2(back, 0.0) + jitter
 
 # =============================================================================
 # _physics_process(delta)
@@ -571,6 +665,7 @@ func _physics_process(delta: float) -> void:
 			is_charging = true
 			charge_timer = 0.0
 			velocity.y = CHARGE_LAUNCH_VELOCITY
+			_charge_trail_timer = 0.0       # gleich beim Start das erste Abgas-Woelkchen ausstossen
 	if Input.is_action_just_released("charge") and not is_charging:
 		charge_timer = 0.0
 
@@ -586,6 +681,10 @@ func _physics_process(delta: float) -> void:
 		attack_facing_left = animated_sprite.flip_h
 		# In der Luft? -> Attacke nach unten (eigene, einmalige Animation)
 		attack_from_air = not is_on_floor()
+		# Luft-Schlag: Hitbox vergroessern und die Bodenschock-Welle "scharf
+		# schalten" (loest beim Aufkommen aus). Boden-Attacke: normale Groesse.
+		_air_attack_slam_armed = attack_from_air
+		attack_hitbox.scale = _attack_base_scale * (AIR_ATTACK_HITBOX_SCALE if attack_from_air else 1.0)
 		# Animation sofort starten (auch fuer korrekten is_playing()-Status der
 		# Luft-Attacke schon im selben Frame, sonst wuerde sie unten faelschlich
 		# als "fertig" gewertet, wenn noch der alte Animationszustand anliegt).
@@ -616,6 +715,11 @@ func _physics_process(delta: float) -> void:
 		if attack_done:
 			is_attacking = false
 			attack_hitbox.monitoring = false
+			# Hitbox wieder auf Ruhegroesse (Luft-Schlag hatte sie vergroessert).
+			attack_hitbox.scale = _attack_base_scale
+			# Endet der Luft-Schlag noch in der Luft (ohne Aufprall), keine
+			# Schockwelle nachtraeglich ausloesen.
+			_air_attack_slam_armed = false
 			# Blickrichtung wiederherstellen, damit Idle/Lauf (nutzen flip_h)
 			# danach in die richtige Richtung schauen.
 			animated_sprite.flip_h = attack_facing_left
@@ -644,6 +748,11 @@ func _physics_process(delta: float) -> void:
 		charge_time_active += delta
 		var charge_dir = -1.0 if animated_sprite.flip_h else 1.0
 		velocity.x = charge_dir * charge_speed
+		# Raketen-Antrieb: in kurzen Abstaenden hinten ein Abgas-Woelkchen ausstossen.
+		_charge_trail_timer -= delta
+		if _charge_trail_timer <= 0.0:
+			_charge_trail_timer = CHARGE_TRAIL_INTERVAL
+			_spawn_rocket_puff(charge_dir)
 		if charge_time_active >= charge_max_time:
 			is_charging = false
 			charge_time_active = 0.0
@@ -674,9 +783,30 @@ func _physics_process(delta: float) -> void:
 	# Genau in dem Frame, in dem aus "in der Luft" ein Bodenkontakt wird, und
 	# nur wenn schnell genug gefallen wurde, das Sprite kurz stauchen.
 	var on_floor_now := is_on_floor()
-	if on_floor_now and not _fx_prev_on_floor and _fx_last_fall_speed > LANDING_SQUASH_MIN_SPEED:
-		_play_squash(LANDING_SQUASH_SCALE, SQUASH_RECOVER_TIME)
+	if on_floor_now and not _fx_prev_on_floor:
+		# Luft-Runterschlag kommt auf -> Bodenschock-Welle ausloesen.
+		if _air_attack_slam_armed:
+			_air_attack_slam_armed = false
+			_spawn_shockwave()
+		# Squash nur ab genuegend Fallgeschwindigkeit.
+		if _fx_last_fall_speed > LANDING_SQUASH_MIN_SPEED:
+			_play_squash(LANDING_SQUASH_SCALE, SQUASH_RECOVER_TIME)
 	_fx_prev_on_floor = on_floor_now
+
+	# --- 13. Effekt: Lauf-Staub ---
+	# Nur beim normalen Laufen am Boden Strecke aufsummieren (nicht bei Roll/Charge,
+	# die haben ihre eigene Optik). Ist genug Strecke fuer einen "Schritt"
+	# zusammengekommen, mit STEP_DUST_CHANCE-Wahrscheinlichkeit ein Woelkchen spawnen.
+	if on_floor_now and not is_rolling and not is_charging and absf(velocity.x) > 5.0:
+		_step_distance_acc += absf(velocity.x) * delta
+		if _step_distance_acc >= STEP_DUST_DISTANCE:
+			_step_distance_acc = 0.0
+			if randf() < STEP_DUST_CHANCE:
+				_spawn_dust_puff()
+	else:
+		# Steht der Spieler (oder ist in der Luft), beim naechsten Loslaufen sofort
+		# einen ersten Staub-Schritt erlauben -> kleiner "Anlauf-Kick".
+		_step_distance_acc = STEP_DUST_DISTANCE
 
 	_update_animation()
 

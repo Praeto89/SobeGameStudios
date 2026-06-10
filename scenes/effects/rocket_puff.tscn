@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://y48k27u0ufp1"]
+
+[ext_resource type="Script" path="res://scripts/effects/rocket_puff.gd" id="1_rkt"]
+[ext_resource type="Texture2D" path="res://assets/effects/cloud.png" id="2_cloud"]
+
+[node name="RocketPuff" type="Sprite2D"]
+texture = ExtResource("2_cloud")
+script = ExtResource("1_rkt")
