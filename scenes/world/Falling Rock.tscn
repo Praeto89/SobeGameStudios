@@ -7,11 +7,17 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_07vdb"]
 radius = 11.045361
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_body"]
+radius = 8.0
+
 [node name="FallingRock" type="CharacterBody2D" unique_id=500792702]
 collision_layer = 2
 collision_mask = 5
 slide_on_ceiling = false
 script = ExtResource("1_oeg5s")
+
+[node name="Koerper" type="CollisionShape2D" parent="." unique_id=500357972]
+shape = SubResource("CircleShape2D_body")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1393296573]
 texture = ExtResource("1_webd4")
