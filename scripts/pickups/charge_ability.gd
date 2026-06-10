@@ -31,7 +31,7 @@ func _ready():
 # Schaltet die Charge-Ability frei und entfernt das Pickup.
 # =============================================================================
 func _on_body_entered(body):
-	if body.is_in_group("player"):
+	if body.is_in_group(GameConstants.GROUP_PLAYER):
 		body.unlock_charge()    # Ability im Spieler-Skript aktivieren
 		# Spieler-Hinweis: was die Ability tut + Tasten-Hinweis
 		Hud.show_ability_message("Charge freigeschaltet!\n'E' gedrueckt halten fuer einen schnellen Dash")

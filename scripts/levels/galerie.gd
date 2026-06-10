@@ -26,7 +26,7 @@ const _SLOT_PATH_PREFIX := "res://scenes/levels/student_levels/"
 
 
 func _ready() -> void:
-	for portal in get_tree().get_nodes_in_group("portals"):
+	for portal in get_tree().get_nodes_in_group(GameConstants.GROUP_PORTALS):
 		if not _is_slot_portal(portal):
 			continue
 		if portal.target_scene in GameManager.visited_scenes:

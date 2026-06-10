@@ -594,9 +594,9 @@ func _physics_process(delta: float) -> void:
 		for body in attack_hitbox.get_overlapping_bodies():
 			if body == self:
 				continue
-			if body.is_in_group("enemy"):
+			if body.is_in_group(GameConstants.GROUP_ENEMY):
 				body.die()
-			elif body.get_parent() and body.get_parent().is_in_group("enemy"):
+			elif body.get_parent() and body.get_parent().is_in_group(GameConstants.GROUP_ENEMY):
 				body.get_parent().die()
 		# Ende der Attacke:
 		#  - Boden-Attacke: nach fester Dauer (ATTACK_DURATION, Animation loopt)
@@ -630,9 +630,9 @@ func _physics_process(delta: float) -> void:
 		for body in roll_hitbox.get_overlapping_bodies():
 			if body == self:
 				continue
-			if body.is_in_group("enemy"):
+			if body.is_in_group(GameConstants.GROUP_ENEMY):
 				body.die()
-			elif body.get_parent().is_in_group("enemy"):
+			elif body.get_parent().is_in_group(GameConstants.GROUP_ENEMY):
 				body.get_parent().die()
 	elif is_charging:
 		# Charge: schneller Dash in Blickrichtung, Gravity wird gedaempft

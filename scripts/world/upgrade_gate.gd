@@ -52,7 +52,7 @@ func _ready() -> void:
 
 
 func _on_body_entered(body: Node2D) -> void:
-	if not body.is_in_group("player"):
+	if not body.is_in_group(GameConstants.GROUP_PLAYER):
 		return
 	_player = body
 	_open_menu()

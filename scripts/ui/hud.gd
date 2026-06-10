@@ -91,7 +91,7 @@ func _ready() -> void:
 # hat eine neue Szene mit eigenem Player erzeugt.
 # =============================================================================
 func _on_node_added(node: Node) -> void:
-	if node.is_in_group("player") and node != _connected_player:
+	if node.is_in_group(GameConstants.GROUP_PLAYER) and node != _connected_player:
 		_connect_to_player()
 
 # =============================================================================
@@ -101,7 +101,7 @@ func _on_node_added(node: Node) -> void:
 # werden vorher sauber getrennt.
 # =============================================================================
 func _connect_to_player() -> void:
-	var player = get_tree().get_first_node_in_group("player")
+	var player = get_tree().get_first_node_in_group(GameConstants.GROUP_PLAYER)
 	if player == null or player == _connected_player:
 		return
 	# Alte Verbindungen loesen, falls der vorherige Player noch existiert
