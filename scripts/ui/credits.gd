@@ -25,25 +25,27 @@ const MENU_SCENE := "res://scenes/ui/main_menu.tscn"
 # -----------------------------------------------------------------------------
 # Node-Referenzen
 # -----------------------------------------------------------------------------
-@onready var _text: Label = $ScrollText
+# "ScrollContent" enthaelt das Studio-Logo UND die Namen – beides wandert
+# gemeinsam nach oben.
+@onready var _content: VBoxContainer = $ScrollContent
 @onready var _back_button: Button = $BackButton
 
 
 func _ready() -> void:
 	_back_button.pressed.connect(_back_to_menu)
-	# Den Text knapp unterhalb des sichtbaren Bereichs starten lassen,
+	# Den Inhalt knapp unterhalb des sichtbaren Bereichs starten lassen,
 	# damit er von unten ins Bild hineinwandert.
-	_text.position.y = get_viewport_rect().size.y
+	_content.position.y = get_viewport_rect().size.y
 
 
 func _process(delta: float) -> void:
-	# Text Bild fuer Bild ein kleines Stueck nach oben schieben.
-	_text.position.y -= scroll_speed * delta
-	# Ist der gesamte Text oben aus dem Bild gewandert? -> zurueck ins Menue.
-	# get_combined_minimum_size() liefert die echte Hoehe des Textinhalts
+	# Inhalt Bild fuer Bild ein kleines Stueck nach oben schieben.
+	_content.position.y -= scroll_speed * delta
+	# Ist alles oben aus dem Bild gewandert? -> zurueck ins Menue.
+	# get_combined_minimum_size() liefert die echte Hoehe des Inhalts
 	# (das normale "size" entspricht nur dem gesetzten Rechteck).
-	var text_height := _text.get_combined_minimum_size().y
-	if _text.position.y + text_height < 0.0:
+	var content_height := _content.get_combined_minimum_size().y
+	if _content.position.y + content_height < 0.0:
 		_back_to_menu()
 
 
