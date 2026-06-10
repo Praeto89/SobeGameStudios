@@ -1,0 +1,314 @@
+[gd_scene format=3 uid="uid://dk00enemy001"]
+
+[ext_resource type="Script" path="res://scripts/enemies/dark_knight.gd" id="1_dkgd"]
+[ext_resource type="Texture2D" uid="uid://crjdpwtu7xsko" path="res://assets/sprites/knight.png" id="2_knight"]
+[ext_resource type="Texture2D" uid="uid://cecy8p8eyvngi" path="res://assets/sprites/KnightSprite.png" id="3_knightex"]
+[ext_resource type="AudioStream" uid="uid://bncupj5iuxe61" path="res://assets/sounds/explosion.wav" id="4_expl"]
+
+[sub_resource type="AtlasTexture" id="AT_run1"]
+atlas = ExtResource("2_knight")
+region = Rect2(0, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AT_run2"]
+atlas = ExtResource("2_knight")
+region = Rect2(32, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AT_run3"]
+atlas = ExtResource("2_knight")
+region = Rect2(64, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AT_run4"]
+atlas = ExtResource("2_knight")
+region = Rect2(96, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AT_run5"]
+atlas = ExtResource("2_knight")
+region = Rect2(128, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AT_run6"]
+atlas = ExtResource("2_knight")
+region = Rect2(160, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AT_run7"]
+atlas = ExtResource("2_knight")
+region = Rect2(192, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AT_run8"]
+atlas = ExtResource("2_knight")
+region = Rect2(224, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AT_jump1"]
+atlas = ExtResource("2_knight")
+region = Rect2(64, 224, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AT_jump2"]
+atlas = ExtResource("2_knight")
+region = Rect2(64, 160, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AT_jump3"]
+atlas = ExtResource("2_knight")
+region = Rect2(128, 96, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AT_idle1"]
+atlas = ExtResource("2_knight")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AT_idle2"]
+atlas = ExtResource("2_knight")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AT_idle3"]
+atlas = ExtResource("2_knight")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AT_idle4"]
+atlas = ExtResource("2_knight")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AT_atk1"]
+atlas = ExtResource("3_knightex")
+region = Rect2(32, 178, 14, 18)
+margin = Rect2(0, 6, 0, 6)
+
+[sub_resource type="AtlasTexture" id="AT_atk2"]
+atlas = ExtResource("3_knightex")
+region = Rect2(48, 178, 15, 18)
+margin = Rect2(0, 6, 0, 6)
+
+[sub_resource type="AtlasTexture" id="AT_atk3"]
+atlas = ExtResource("3_knightex")
+region = Rect2(65, 178, 17, 18)
+margin = Rect2(0, 6, 0, 6)
+
+[sub_resource type="AtlasTexture" id="AT_death1"]
+atlas = ExtResource("2_knight")
+region = Rect2(0, 224, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AT_death2"]
+atlas = ExtResource("2_knight")
+region = Rect2(32, 224, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AT_death3"]
+atlas = ExtResource("2_knight")
+region = Rect2(64, 224, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AT_death4"]
+atlas = ExtResource("2_knight")
+region = Rect2(96, 224, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AT_roll1"]
+atlas = ExtResource("2_knight")
+region = Rect2(0, 160, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AT_roll2"]
+atlas = ExtResource("2_knight")
+region = Rect2(32, 160, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AT_roll3"]
+atlas = ExtResource("2_knight")
+region = Rect2(64, 160, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AT_roll4"]
+atlas = ExtResource("2_knight")
+region = Rect2(96, 160, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AT_roll5"]
+atlas = ExtResource("2_knight")
+region = Rect2(128, 160, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AT_roll6"]
+atlas = ExtResource("2_knight")
+region = Rect2(160, 160, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AT_roll7"]
+atlas = ExtResource("2_knight")
+region = Rect2(192, 160, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AT_roll8"]
+atlas = ExtResource("2_knight")
+region = Rect2(224, 160, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SF_dk"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AT_idle1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AT_idle2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AT_idle3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AT_idle4")
+}],
+"loop": false,
+"name": &"activation",
+"speed": 3.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AT_atk1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AT_atk2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AT_atk3")
+}],
+"loop": true,
+"name": &"attack",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AT_death1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AT_death2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AT_death3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AT_death4")
+}],
+"loop": false,
+"name": &"death",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AT_idle1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AT_idle2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AT_idle3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AT_idle4")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AT_jump1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AT_jump2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AT_jump3")
+}],
+"loop": true,
+"name": &"jump",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AT_run1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AT_run2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AT_run3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AT_run4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AT_run5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AT_run6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AT_run7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AT_run8")
+}],
+"loop": true,
+"name": &"patrol",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AT_roll1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AT_roll2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AT_roll3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AT_roll4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AT_roll5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AT_roll6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AT_roll7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AT_roll8")
+}],
+"loop": false,
+"name": &"roll",
+"speed": 22.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="Cap_body"]
+radius = 5.0
+height = 14.0
+
+[sub_resource type="CircleShape2D" id="Cir_hitbox"]
+radius = 12.0
+
+[sub_resource type="CircleShape2D" id="Cir_attack"]
+radius = 14.0
+
+[node name="DarkKnight" type="CharacterBody2D" unique_id=801000001]
+collision_layer = 2
+collision_mask = 5
+script = ExtResource("1_dkgd")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=801000002]
+position = Vector2(-17, -16)
+modulate = Color(1, 0.078, 0.078, 1)
+sprite_frames = SubResource("SF_dk")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=801000003]
+position = Vector2(-18, -11)
+shape = SubResource("Cap_body")
+
+[node name="Hitbox" type="Area2D" parent="." unique_id=801000004]
+position = Vector2(-18, -11)
+collision_layer = 0
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=801000005]
+shape = SubResource("Cir_hitbox")
+
+[node name="AttackHitbox" type="Area2D" parent="." unique_id=801000006]
+position = Vector2(-4, -11)
+collision_layer = 0
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackHitbox" unique_id=801000007]
+shape = SubResource("Cir_attack")
+
+[node name="SoundDeath" type="AudioStreamPlayer2D" parent="." unique_id=801000008]
+stream = ExtResource("4_expl")

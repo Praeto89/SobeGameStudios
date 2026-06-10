@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://ck6q6oyovvakg" path="res://scenes/player/player.tscn" id="17_player"]
 [ext_resource type="PackedScene" uid="uid://ccaveatmo0001" path="res://effekte/cave_atmosphere.tscn" id="20_cave"]
 [ext_resource type="PackedScene" uid="uid://dohmg1luryc5l" path="res://scenes/world/upgrade_gate.tscn" id="30_gate"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/dark_knight.tscn" id="50_dk"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ya4ey"]
 texture = ExtResource("3_choun")
@@ -295,3 +296,6 @@ offset_right = -690.0
 offset_bottom = 60.0
 text = "Upgrade-Tor"
 horizontal_alignment = 1
+
+[node name="DarkKnight" parent="." unique_id=900000001 instance=ExtResource("50_dk")]
+position = Vector2(900, -29)
