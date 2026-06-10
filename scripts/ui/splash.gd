@@ -31,8 +31,8 @@ func _ready() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	# Wer nicht warten will: Taste druecken oder klicken ueberspringt das Logo.
-	var taste := event is InputEventKey and event.pressed
-	var klick := event is InputEventMouseButton and event.pressed
+	var taste: bool = event is InputEventKey and event.pressed
+	var klick: bool = event is InputEventMouseButton and event.pressed
 	if taste or klick:
 		_weiter()
 
