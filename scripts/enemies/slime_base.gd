@@ -40,6 +40,13 @@ extends CharacterBody2D
 @export var gravity := 800.0            # Schwerkraft  <- 0 = schwebt (Wand-Slime), 2000 = faellt sehr schnell
 @export var detection_range := 200.0    # Erkennungsreichweite in Pixeln  <- 0 = blind, 500 = scharfaeuging
 
+# --- Jagd & Sprung (das macht den Slime "schlau") -----------------------------
+@export var chase_player := true        # Jagt der Slime den Spieler aktiv?  <- false = nur stures Patrouillieren
+@export var chase_speed := 130.0        # Tempo beim Jagen (meist schneller als speed)  <- 60 = gemuetlich, 250 = Panik
+@export var can_jump := true            # Darf der Slime springen?  <- false = bleibt am Boden kleben
+@export var jump_strength := 320.0      # Wie hoch der Sprung geht  <- 150 = Huepfer, 600 = Riesensatz
+@export var jump_interval := 1.0        # Sekunden zwischen zwei Spruengen beim Jagen  <- 0.4 = Dauerhuepfen
+
 # -----------------------------------------------------------------------------
 # Node-Referenzen
 # -----------------------------------------------------------------------------
@@ -52,6 +59,7 @@ extends CharacterBody2D
 var player: Node2D = null               # Referenz auf den Spieler (wird in _ready() geholt)
 var patrol_direction := 1.0             # Aktuelle Laufrichtung: 1.0 = rechts, -1.0 = links
 var wall_cooldown := 0.0                # Wartezeit nach Wandkontakt (verhindert Flackern)
+var jump_cooldown := 0.0                # Wartezeit bis zum naechsten Sprung (zaehlt herunter)
 var activated := false                  # True sobald die Aktivierungsanimation einmal abgespielt wurde
 var is_activating := false              # True waehrend die Aktivierungs-Animation laeuft (verhindert Mehrfach-Start)
 var is_dead := false                    # True waehrend und nach der Todesanimation
@@ -151,9 +159,11 @@ func _physics_process(delta):
 	if not is_on_floor():
 		velocity.y += gravity * delta
 
-	# --- 3. Wand-Cooldown ---
+	# --- 3. Cooldowns (Wand & Sprung) herunterzaehlen ---
 	if wall_cooldown > 0:
 		wall_cooldown -= delta
+	if jump_cooldown > 0:
+		jump_cooldown -= delta
 
 	# --- 4. Aktivierung laeuft noch: warten bis Animation fertig ist ---
 	# Ohne diesen Check wuerde _state_activation in jedem Frame erneut
@@ -168,12 +178,14 @@ func _physics_process(delta):
 		move_and_slide()
 		return
 
-	# --- 6. Spieler-Naehe pruefen ---
+	# --- 6. Spieler-Naehe pruefen und passenden Zustand waehlen ---
 	var player_near = player and is_instance_valid(player) and global_position.distance_to(player.global_position) < detection_range
 	if player_near and not activated:
-		_state_activation()
+		_state_activation()         # Spieler zum ersten Mal entdeckt -> aufwachen
+	elif player_near and chase_player:
+		_state_chase(delta)         # Spieler in Reichweite -> jagen (und springen)
 	else:
-		_state_patrol()
+		_state_patrol()             # niemand in der Naehe -> stur hin und her laufen
 
 	move_and_slide()
 
@@ -221,3 +233,44 @@ func _state_patrol():
 	if is_on_wall() and wall_cooldown <= 0:
 		patrol_direction *= -1      # Richtung umkehren
 		wall_cooldown = 0.3         # Kurze Pause damit der Slime nicht sofort wieder dreht
+
+# =============================================================================
+# _state_chase(delta)
+# Jagd-Zustand: der Slime hat den Spieler entdeckt und laeuft ihm aktiv
+# hinterher. Beim Jagen ist er schneller als beim Patrouillieren (chase_speed)
+# und springt in Abstaenden (jump_interval) – so kommt er auch ueber kleine
+# Hindernisse und es sieht lebendig aus.
+# =============================================================================
+func _state_chase(delta: float) -> void:
+	# Richtung zum Spieler bestimmen: +1 = Spieler ist rechts, -1 = links.
+	var direction = sign(player.global_position.x - global_position.x)
+	if direction == 0:
+		direction = patrol_direction        # genau uebereinander? -> alte Richtung halten
+	velocity.x = direction * chase_speed
+	sprite.flip_h = direction < 0
+	patrol_direction = direction            # merken, damit Patrouille spaeter nahtlos weitergeht
+
+	# --- Springen ---
+	# Nur springen wenn erlaubt, wenn wir auf festem Boden stehen und die
+	# Pause (jump_cooldown) abgelaufen ist. Steht eine Wand im Weg, springt
+	# der Slime sofort, um darueber zu klettern.
+	if can_jump and is_on_floor() and (jump_cooldown <= 0 or is_on_wall()):
+		_do_jump()
+
+	# --- Animation ---
+	# In der Luft die Sprung-Animation, am Boden die normale Lauf-Animation.
+	if not is_on_floor() and sprite.sprite_frames and sprite.sprite_frames.has_animation("jump"):
+		sprite.play("jump")
+	else:
+		sprite.play("patrol")
+
+# =============================================================================
+# _do_jump()
+# Loest einen Sprung aus: gibt der Geschwindigkeit nach oben einen Stoss
+# (negatives y = nach oben) und startet die Sprung-Pause neu.
+# =============================================================================
+func _do_jump() -> void:
+	velocity.y = -jump_strength
+	jump_cooldown = jump_interval
+	if has_node("SoundJump"):
+		$SoundJump.play()

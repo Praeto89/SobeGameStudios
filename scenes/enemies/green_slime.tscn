@@ -132,6 +132,17 @@ animations = [{
 "loop": true,
 "name": &"patrol",
 "speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l8y2k")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ysx1p")
+}],
+"loop": true,
+"name": &"jump",
+"speed": 6.0
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_y6yh0"]
