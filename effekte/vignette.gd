@@ -67,10 +67,19 @@ func _set_intensity(wert: float, sofort: bool) -> void:
 	if _tween and _tween.is_valid():
 		_tween.kill()
 	if sofort or uebergang <= 0.0:
-		material.set_shader_parameter("intensity", wert)
+		_apply_intensity(wert)
 		return
 	var von: float = material.get_shader_parameter("intensity")
 	_tween = create_tween()
-	_tween.tween_method(
-		func(v): material.set_shader_parameter("intensity", v),
-		von, wert, uebergang)
+	# Der Tween ruft fuer jeden Zwischenwert _apply_intensity() auf und
+	# laesst die Vignette so weich von "von" auf "wert" gleiten.
+	_tween.tween_method(_apply_intensity, von, wert, uebergang)
+
+# =============================================================================
+# _apply_intensity(wert)
+# Schreibt den Wert in den Shader-Parameter "intensity".
+# Eigene kleine Funktion, damit der Tween sie direkt aufrufen kann.
+# =============================================================================
+func _apply_intensity(wert: float) -> void:
+	if material:
+		material.set_shader_parameter("intensity", wert)
