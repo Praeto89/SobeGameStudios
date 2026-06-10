@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://cmainmenuscn001"]
+[gd_scene load_steps=5 format=3 uid="uid://cmainmenuscn001"]
 
 [ext_resource type="Script" uid="uid://dmainmenuscr01" path="res://scripts/ui/main_menu.gd" id="1_menu"]
 [ext_resource type="FontFile" uid="uid://dtx2a7s2qqtrp" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="2_font"]
 [ext_resource type="AudioStream" uid="uid://r7h513q17ogb" path="res://assets/music/for_a_school_game.mp3" id="3_music"]
+[ext_resource type="Texture2D" uid="uid://bwrpal7g7mcel" path="res://assets/sprites/sobe_studio_wordmark.png" id="4_logo"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -38,12 +39,13 @@ grow_vertical = 2
 layout_mode = 2
 theme_override_constants/separation = 24
 
-[node name="Title" type="Label" parent="CenterContainer/VBoxContainer"]
+[node name="Logo" type="TextureRect" parent="CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(380, 167)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_font")
-theme_override_font_sizes/font_size = 64
-text = "SobeGame"
-horizontal_alignment = 1
+size_flags_horizontal = 4
+texture = ExtResource("4_logo")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="PlayButton" type="Button" parent="CenterContainer/VBoxContainer"]
 custom_minimum_size = Vector2(260, 0)

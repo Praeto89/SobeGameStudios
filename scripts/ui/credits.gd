@@ -28,6 +28,7 @@ const MENU_SCENE := "res://scenes/ui/main_menu.tscn"
 # "ScrollContent" enthaelt das Studio-Logo UND die Namen – beides wandert
 # gemeinsam nach oben.
 @onready var _content: VBoxContainer = $ScrollContent
+@onready var _logo: TextureRect = $ScrollContent/Logo
 @onready var _back_button: Button = $BackButton
 
 
@@ -36,6 +37,13 @@ func _ready() -> void:
 	# Den Inhalt knapp unterhalb des sichtbaren Bereichs starten lassen,
 	# damit er von unten ins Bild hineinwandert.
 	_content.position.y = get_viewport_rect().size.y
+	# Den Schriftzug sanft "atmen" lassen (gleiche Idee wie im Hauptmenue).
+	_logo.pivot_offset = _logo.custom_minimum_size / 2.0
+	var puls := create_tween().set_loops()
+	puls.tween_property(_logo, "scale", Vector2(1.04, 1.04), 0.8) \
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	puls.tween_property(_logo, "scale", Vector2.ONE, 0.8) \
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
 
 func _process(delta: float) -> void:

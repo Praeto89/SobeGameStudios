@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://dcreditsscr0001" path="res://scripts/ui/credits.gd" id="1_cred"]
 [ext_resource type="FontFile" uid="uid://dtx2a7s2qqtrp" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="2_font"]
 [ext_resource type="AudioStream" uid="uid://r7h513q17ogb" path="res://assets/music/for_a_school_game.mp3" id="3_music"]
-[ext_resource type="Texture2D" uid="uid://dft8ij3iagqq" path="res://assets/sprites/sobe_studio_logo.png" id="4_logo"]
+[ext_resource type="Texture2D" uid="uid://bwrpal7g7mcel" path="res://assets/sprites/sobe_studio_wordmark.png" id="4_logo"]
 
 [node name="Credits" type="Control"]
 layout_mode = 3
@@ -35,7 +35,7 @@ grow_horizontal = 2
 theme_override_constants/separation = 24
 
 [node name="Logo" type="TextureRect" parent="ScrollContent"]
-custom_minimum_size = Vector2(320, 320)
+custom_minimum_size = Vector2(380, 167)
 layout_mode = 2
 size_flags_horizontal = 4
 texture = ExtResource("4_logo")
