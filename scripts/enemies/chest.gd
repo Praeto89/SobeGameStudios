@@ -42,7 +42,7 @@ var is_dead := false
 # Attacke oder Charge treffen kann (gleiche Logik wie bei den Slimes).
 # =============================================================================
 func _ready() -> void:
-	add_to_group("enemy")
+	add_to_group(GameConstants.GROUP_ENEMY)
 	sprite.play("idle")
 
 # =============================================================================

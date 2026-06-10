@@ -100,7 +100,7 @@ func _prune() -> void:
 # sind. So wachsen weit entfernte Spawner nicht endlos an.
 # =============================================================================
 func _despawn_distant() -> void:
-	var player = get_tree().get_first_node_in_group("player")
+	var player = get_tree().get_first_node_in_group(GameConstants.GROUP_PLAYER)
 	if player == null or not is_instance_valid(player):
 		return
 	for slime in _spawned:

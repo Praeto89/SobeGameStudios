@@ -37,7 +37,7 @@ func _ready() -> void:
 func _on_body_entered(body: Node) -> void:
 	# has_method-Check: nur der Spieler hat heal() -- so kracht es nicht,
 	# wenn z. B. ein Gegner das Pickup beruehrt.
-	if body.is_in_group("player") and body.has_method("heal"):
+	if body.is_in_group(GameConstants.GROUP_PLAYER) and body.has_method("heal"):
 		body.heal(heal_amount)
 		Hud.show_ability_message("Geheilt!  +%d Herz" % heal_amount)
 		set_deferred("monitoring", false)

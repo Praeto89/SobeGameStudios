@@ -31,7 +31,7 @@ func _ready() -> void:
 # Schaltet die Wallcrawl-Ability frei und entfernt das Pickup.
 # =============================================================================
 func _on_body_entered(body: Node2D) -> void:
-	if body.is_in_group("player"):
+	if body.is_in_group(GameConstants.GROUP_PLAYER):
 		body.unlock_wallcrawl()     # Ability im Spieler-Skript aktivieren
 		Hud.show_ability_message("Wallcrawl freigeschaltet!\nAn Waenden klettern und abspringen")
 		set_deferred("monitoring", false)

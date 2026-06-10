@@ -70,8 +70,8 @@ var _persistent_id: String = ""
 # treffen kann), holt sich die Spieler-Referenz und verbindet das Hitbox-Signal.
 # =============================================================================
 func _ready():
-	add_to_group("enemy")
-	player = get_tree().get_first_node_in_group("player")
+	add_to_group(GameConstants.GROUP_ENEMY)
+	player = get_tree().get_first_node_in_group(GameConstants.GROUP_PLAYER)
 	hitbox.body_entered.connect(_on_hitbox_body_entered)
 	# Persistenz: nur fest platzierte Slimes (nicht vom Spawner) checken,
 	# ob sie schon mal besiegt wurden.

@@ -30,6 +30,9 @@ func _initialize() -> void:
 	var modules := [
 		preload("res://tests/test_game_manager.gd").new(),
 		preload("res://tests/test_player_constants.gd").new(),
+		preload("res://tests/test_constants.gd").new(),
+		preload("res://tests/test_game_manager_persistence.gd").new(),
+		preload("res://tests/test_player_abilities.gd").new(),
 	]
 
 	for m in modules:
