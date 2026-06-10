@@ -11,7 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://bh450uccjk0sw" path="res://assets/sprites/PurpleDragons Spirte set/Background/Stalagmite.png" id="9_yfq5b"]
 [ext_resource type="Texture2D" uid="uid://b65pogkcjh3t8" path="res://assets/sprites/PurpleDragons Spirte set/enviroment/rock 3.png" id="10_1ip4w"]
 [ext_resource type="PackedScene" uid="uid://7ck1dr5e5kg0" path="res://scenes/world/portal.tscn" id="11_portal"]
-[ext_resource type="FontFile" uid="uid://dtx2a7s2qqtrp" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="12_font"]
+
 [ext_resource type="PackedScene" uid="uid://ccaveatmo0001" path="res://effekte/cave_atmosphere.tscn" id="20_cave"]
 [ext_resource type="PackedScene" uid="uid://md1jdcoedfs" path="res://scenes/world/death.tscn" id="30_death"]
 
@@ -310,23 +310,5 @@ portal_id = "from_turm"
 target_portal_id = "turm_to_area1"
 target_scene = "res://scenes/levels/turm.tscn"
 
-[node name="PortalEnde" parent="." unique_id=217915997 groups=["portals"] instance=ExtResource("11_portal")]
-position = Vector2(400, 145)
-portal_id = "area1_end"
-target_portal_id = ""
-target_scene = "res://scenes/ui/credits.tscn"
-
 [node name="Todeszone" parent="." unique_id=12345678 instance=ExtResource("30_death")]
 position = Vector2(0, 330)
-
-[node name="ZielSchild" type="Label" parent="PortalEnde" unique_id=339218637]
-offset_left = -24.0
-offset_top = -58.0
-offset_right = 24.0
-offset_bottom = -42.0
-theme_override_colors/font_color = Color(1, 0.95, 0.5, 1)
-theme_override_fonts/font = ExtResource("12_font")
-theme_override_font_sizes/font_size = 12
-text = "ZIEL"
-horizontal_alignment = 1
-vertical_alignment = 1

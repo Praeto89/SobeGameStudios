@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://dph3vsxklsitn" path="res://scenes/enemies/green_slime_spawner.tscn" id="6_h8sst"]
 [ext_resource type="Script" uid="uid://co8dnnplbt1aa" path="res://scripts/world/green_platform.gd" id="6_horiz"]
 [ext_resource type="PackedScene" uid="uid://ccaveatmo0001" path="res://effekte/cave_atmosphere.tscn" id="20_cave"]
+[ext_resource type="FontFile" uid="uid://dtx2a7s2qqtrp" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="9_font"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nnl3m"]
 texture = ExtResource("1_3kobl")
@@ -140,3 +141,21 @@ position = Vector2(176, -320)
 portal_id = "turm_to_area1"
 target_portal_id = "from_turm"
 target_scene = "res://scenes/levels/area_1.tscn"
+
+[node name="PortalEnde" parent="." groups=["portals"] instance=ExtResource("4_5dp1l")]
+position = Vector2(176, -500)
+portal_id = "turm_end"
+target_portal_id = ""
+target_scene = "res://scenes/ui/credits.tscn"
+
+[node name="ZielSchild" type="Label" parent="PortalEnde"]
+offset_left = -24.0
+offset_top = -58.0
+offset_right = 24.0
+offset_bottom = -42.0
+theme_override_colors/font_color = Color(1, 0.95, 0.5, 1)
+theme_override_fonts/font = ExtResource("9_font")
+theme_override_font_sizes/font_size = 12
+text = "ZIEL"
+horizontal_alignment = 1
+vertical_alignment = 1
