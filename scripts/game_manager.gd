@@ -118,6 +118,18 @@ var current_health: int = MAX_HEALTH
 var coin_count: int = 0
 
 # -------------------------------------------------------
+# Speicherstand (Save-Game)
+# -------------------------------------------------------
+# Der komplette Fortschritt wird in eine Datei im Nutzer-Verzeichnis
+# geschrieben (user:// liegt je nach Betriebssystem z. B. unter
+# %APPDATA%/Godot bzw. ~/.local/share/godot). So bleibt alles erhalten,
+# auch wenn das Spiel geschlossen wird. Das Hauptmenue bietet darueber den
+# "Fortsetzen"-Knopf an.
+const SAVE_PATH := "user://savegame.cfg"
+## Szene, in der der Spieler zuletzt war -- der "Fortsetzen"-Knopf laedt sie.
+var current_scene_path: String = ""
+
+# -------------------------------------------------------
 # Persistente Welt-Aenderungen
 # -------------------------------------------------------
 # IDs der Coins die bereits eingesammelt wurden (Format siehe get_persistent_id).
@@ -172,6 +184,7 @@ func get_persistent_id(node: Node) -> String:
 # =============================================================================
 func reset_game() -> void:
 	came_from_portal_id = ""
+	current_scene_path = ""
 	for key in ability_levels.keys():
 		ability_levels[key] = 0
 	current_health = MAX_HEALTH
@@ -179,3 +192,72 @@ func reset_game() -> void:
 	collected_coin_ids.clear()
 	defeated_enemy_ids.clear()
 	visited_scenes.clear()
+
+# =============================================================================
+# save_game(scene_path)
+# Schreibt den kompletten Session-Zustand in die Save-Datei (SAVE_PATH).
+# Wird automatisch beim Levelwechsel (portal.gd) und an Checkpoints aufgerufen,
+# damit der Fortschritt ohne Zutun des Spielers erhalten bleibt.
+#
+# scene_path: Pfad der Szene, in der man sich befindet. Leer lassen, dann wird
+#             die aktuell laufende Szene verwendet.
+# =============================================================================
+func save_game(scene_path: String = "") -> void:
+	if scene_path != "":
+		current_scene_path = scene_path
+	elif get_tree() != null and get_tree().current_scene != null:
+		current_scene_path = get_tree().current_scene.scene_file_path
+
+	var cfg := ConfigFile.new()
+	cfg.set_value("player", "current_health", current_health)
+	cfg.set_value("player", "coin_count", coin_count)
+	cfg.set_value("abilities", "levels", ability_levels)
+	cfg.set_value("world", "collected_coin_ids", collected_coin_ids)
+	cfg.set_value("world", "defeated_enemy_ids", defeated_enemy_ids)
+	cfg.set_value("world", "visited_scenes", visited_scenes)
+	cfg.set_value("world", "scene_path", current_scene_path)
+	cfg.save(SAVE_PATH)
+
+# =============================================================================
+# has_save() -> bool
+# True wenn eine Save-Datei existiert (steuert, ob "Fortsetzen" anwaehlbar ist).
+# =============================================================================
+func has_save() -> bool:
+	return FileAccess.file_exists(SAVE_PATH)
+
+# =============================================================================
+# load_game() -> bool
+# Laedt den gespeicherten Zustand zurueck in den GameManager. Gibt true zurueck,
+# wenn erfolgreich. Danach kann das Hauptmenue in die gespeicherte Szene wechseln
+# (siehe get_saved_scene) -- der Player liest die Werte beim naechsten _ready().
+# =============================================================================
+func load_game() -> bool:
+	var cfg := ConfigFile.new()
+	if cfg.load(SAVE_PATH) != OK:
+		return false
+	current_health = int(cfg.get_value("player", "current_health", MAX_HEALTH))
+	coin_count = int(cfg.get_value("player", "coin_count", 0))
+	var saved_levels: Dictionary = cfg.get_value("abilities", "levels", {})
+	for key in ability_levels.keys():
+		ability_levels[key] = int(saved_levels.get(key, 0))
+	collected_coin_ids = _to_string_array(cfg.get_value("world", "collected_coin_ids", []))
+	defeated_enemy_ids = _to_string_array(cfg.get_value("world", "defeated_enemy_ids", []))
+	visited_scenes = _to_string_array(cfg.get_value("world", "visited_scenes", []))
+	current_scene_path = str(cfg.get_value("world", "scene_path", ""))
+	# Frisch geladen: nicht "aus einem Portal kommend" -- sonst wuerde der Spieler
+	# beim Laden an eine alte Portal-Position teleportiert.
+	came_from_portal_id = ""
+	return true
+
+## Pfad der zuletzt gespeicherten Szene (fuer den "Fortsetzen"-Knopf).
+func get_saved_scene() -> String:
+	return current_scene_path
+
+# Hilfsfunktion: macht aus einer (untypisierten) ConfigFile-Array eine
+# typisierte Array[String], wie die Felder oben sie erwarten.
+func _to_string_array(arr) -> Array[String]:
+	var out: Array[String] = []
+	if arr is Array:
+		for v in arr:
+			out.append(str(v))
+	return out

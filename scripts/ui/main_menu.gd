@@ -4,9 +4,10 @@
 # Hauptmenue – der erste Bildschirm, den der Spieler beim Start sieht.
 #
 # Buttons:
-#   - Spielen  -> setzt den Spielstand zurueck und startet das erste Level
-#   - Abspann  -> zeigt den Abspann (Credits)
-#   - Beenden  -> schliesst das Spiel
+#   - Neues Spiel -> setzt den Spielstand zurueck und startet das erste Level
+#   - Fortsetzen   -> laedt den gespeicherten Stand und springt ins letzte Level
+#   - Abspann      -> zeigt den Abspann (Credits)
+#   - Beenden      -> schliesst das Spiel
 #
 # Diese Szene ist als Start-Szene eingetragen:
 #   Projekt > Projekteinstellungen > Anwendung > Ausfuehren > Hauptszene
@@ -23,6 +24,7 @@ const CREDITS_SCENE := "res://scenes/ui/credits.tscn"
 # -----------------------------------------------------------------------------
 @onready var _logo: TextureRect = $CenterContainer/VBoxContainer/Logo
 @onready var _play_button: Button = $CenterContainer/VBoxContainer/PlayButton
+@onready var _continue_button: Button = $CenterContainer/VBoxContainer/ContinueButton
 @onready var _credits_button: Button = $CenterContainer/VBoxContainer/CreditsButton
 @onready var _quit_button: Button = $CenterContainer/VBoxContainer/QuitButton
 
@@ -30,11 +32,20 @@ const CREDITS_SCENE := "res://scenes/ui/credits.tscn"
 func _ready() -> void:
 	# Jeden Button mit seiner Funktion verbinden.
 	_play_button.pressed.connect(_on_play_pressed)
+	_continue_button.pressed.connect(_on_continue_pressed)
 	_credits_button.pressed.connect(_on_credits_pressed)
 	_quit_button.pressed.connect(_on_quit_pressed)
-	# Tastatur-/Gamepad-Fokus auf den ersten Button legen,
+	# "Fortsetzen" nur anbieten, wenn es ueberhaupt einen Speicherstand gibt.
+	# Ohne Save bleibt der Knopf sichtbar, ist aber ausgegraut und nicht fokussierbar.
+	var save_exists := GameManager.has_save()
+	_continue_button.disabled = not save_exists
+	_continue_button.focus_mode = Control.FOCUS_ALL if save_exists else Control.FOCUS_NONE
+	# Tastatur-/Gamepad-Fokus auf den sinnvollsten Button legen,
 	# damit man das Menue auch ohne Maus bedienen kann.
-	_play_button.grab_focus()
+	if save_exists:
+		_continue_button.grab_focus()
+	else:
+		_play_button.grab_focus()
 	# Den Studio-Schriftzug animiert auftauchen lassen.
 	_logo_animieren()
 
@@ -72,7 +83,20 @@ func _atmen_starten() -> void:
 func _on_play_pressed() -> void:
 	# Frischer Spielstart: Abilities, Leben, Muenzen usw. zuruecksetzen.
 	GameManager.reset_game()
+	# Sofort speichern, damit "Fortsetzen" auf den frischen Start zeigt (und nicht
+	# auf einen alten, schon abgeschlossenen Spielstand).
+	GameManager.save_game(LEVEL_SCENE)
 	get_tree().change_scene_to_file(LEVEL_SCENE)
+
+
+func _on_continue_pressed() -> void:
+	# Gespeicherten Stand laden und in die zuletzt besuchte Szene springen.
+	if not GameManager.load_game():
+		return
+	var scene := GameManager.get_saved_scene()
+	if scene == "":
+		scene = LEVEL_SCENE
+	get_tree().change_scene_to_file(scene)
 
 
 func _on_credits_pressed() -> void:

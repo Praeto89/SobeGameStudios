@@ -14,6 +14,8 @@
 [ext_resource type="PackedScene" uid="uid://b8dstnsvjshbn" path="res://scenes/pickups/charge_ability.tscn" id="12_charge"]
 [ext_resource type="PackedScene" uid="uid://dnmnbcdkt56ma" path="res://scenes/pickups/doublejump_ability.tscn" id="13_djump"]
 [ext_resource type="PackedScene" uid="uid://0lmbkrm3yis5" path="res://scenes/pickups/wallcrawl_ability.tscn" id="14_wall"]
+[ext_resource type="PackedScene" uid="uid://cbossdragon0001" path="res://scenes/enemies/boss_dragon.tscn" id="15_boss"]
+[ext_resource type="PackedScene" uid="uid://ccheckpoint0001" path="res://scenes/world/checkpoint.tscn" id="16_chk"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nnl3m"]
 texture = ExtResource("1_3kobl")
@@ -174,3 +176,16 @@ position = Vector2(401, 536)
 
 [node name="wallcrawl_ability" parent="." unique_id=1532143513 instance=ExtResource("14_wall")]
 position = Vector2(245, 540)
+
+[node name="BossDragon" parent="." unique_id=900200001 instance=ExtResource("15_boss")]
+position = Vector2(575, -470)
+patrol_half_width = 350.0
+
+[node name="Checkpoint1" parent="." unique_id=900300001 instance=ExtResource("16_chk")]
+position = Vector2(479, -48)
+
+[node name="Checkpoint2" parent="." unique_id=900300002 instance=ExtResource("16_chk")]
+position = Vector2(438, -234)
+
+[node name="Checkpoint3" parent="." unique_id=900300003 instance=ExtResource("16_chk")]
+position = Vector2(176, -292)

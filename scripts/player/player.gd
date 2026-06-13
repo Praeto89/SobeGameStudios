@@ -327,6 +327,16 @@ func respawn() -> void:
 	$CollisionShape2D.set_deferred("disabled", false)
 
 # =============================================================================
+# set_checkpoint(pos)
+# Setzt den Wiederbelebungs-Punkt auf eine neue Position. Wird von einem
+# Checkpoint (scenes/world/checkpoint.tscn) aufgerufen, sobald der Spieler ihn
+# beruehrt. Nach einem Tod (respawn) erscheint der Spieler dann hier statt am
+# Level-Anfang -- gerade in langen Levels (Turm) spart das viel Frust.
+# =============================================================================
+func set_checkpoint(pos: Vector2) -> void:
+	spawn_position = pos
+
+# =============================================================================
 # take_damage(amount, knockback_direction)
 # Zieht dem Spieler Leben ab und versetzt ihn in den Treffer-Zustand.
 # Waehrend Roll, Charge oder Wallcrawl ist der Spieler unverwundbar.

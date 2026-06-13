@@ -52,7 +52,14 @@ custom_minimum_size = Vector2(260, 0)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_font")
 theme_override_font_sizes/font_size = 32
-text = "Spielen"
+text = "Neues Spiel"
+
+[node name="ContinueButton" type="Button" parent="CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(260, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 32
+text = "Fortsetzen"
 
 [node name="CreditsButton" type="Button" parent="CenterContainer/VBoxContainer"]
 custom_minimum_size = Vector2(260, 0)

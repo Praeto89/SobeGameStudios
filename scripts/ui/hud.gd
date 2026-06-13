@@ -67,6 +67,10 @@ var _connected_player: Node = null
 # endlos durch alle Frames) und verbindet sich mit dem Spieler.
 # =============================================================================
 func _ready() -> void:
+	# WICHTIG fuer das Pause-Menue: das HUD muss auch dann noch laufen, wenn das
+	# Spiel pausiert ist (get_tree().paused = true) -- sonst koennte man die
+	# Pause per ESC nicht wieder aufheben und die Pause-Buttons waeren tot.
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	# Animationen anhalten -- wir setzen die Frames manuell je nach HP
 	_hilt.stop()
 	_hilt.frame = 0
@@ -290,7 +294,7 @@ func show_ability_message(text: String, duration: float = 3.0) -> void:
 # verfuegbar bleibt.
 # =============================================================================
 
-const _HELP_TEXT := "STEUERUNG\n\n  Pfeiltasten:     Laufen\n  Leertaste:       Springen (kurz/lang fuer Sprunghoehe)\n  X:               Boden-Attacke (immer verfuegbar)\n  Pfeil unten:     Schnellfall (in der Luft)\n\nKAUFBARE FÄHIGKEITEN (im Tor mit Gold)\n  Dash/Roll:       SHIFT (schadet Gegnern)\n  Luft-Attacke:    X in der Luft (Sturzschlag)\n  Charge-Dash:     E halten + loslassen\n  Doppelsprung:    Leertaste 2x\n  Wallcrawl:       automatisch an Waenden\n\nFÄHIGKEITEN-LADEN (weisses Tor)\n  Betreten + Tasten 1-8:  Gold gegen Faehigkeiten tauschen\n  Jede Faehigkeit: kaufen + 2x verbessern (Stufe 1-3)\n\nGOLD\n  Gegner und Truhen lassen Gold (Muenzen) fallen\n\nHILFE\n  F1:  dieses Fenster ein-/ausblenden"
+const _HELP_TEXT := "STEUERUNG\n\n  Pfeiltasten:     Laufen\n  Leertaste:       Springen (kurz/lang fuer Sprunghoehe)\n  X:               Boden-Attacke (immer verfuegbar)\n  Pfeil unten:     Schnellfall (in der Luft)\n\nKAUFBARE FÄHIGKEITEN (im Tor mit Gold)\n  Dash/Roll:       SHIFT (schadet Gegnern)\n  Luft-Attacke:    X in der Luft (Sturzschlag)\n  Charge-Dash:     E halten + loslassen\n  Doppelsprung:    Leertaste 2x\n  Wallcrawl:       automatisch an Waenden\n\nFÄHIGKEITEN-LADEN (weisses Tor)\n  Betreten + Tasten 1-8:  Gold gegen Faehigkeiten tauschen\n  Jede Faehigkeit: kaufen + 2x verbessern (Stufe 1-3)\n\nGOLD\n  Gegner und Truhen lassen Gold (Muenzen) fallen\n\nHILFE\n  F1:   dieses Fenster ein-/ausblenden\n  ESC:  Pause-Menue (Weiter / Neustart / Hauptmenue)"
 
 var _help_panel: PanelContainer = null
 
@@ -298,6 +302,14 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
 		if event.keycode == KEY_F1:
 			toggle_help()
+			get_viewport().set_input_as_handled()
+			return
+	# ESC / "ui_cancel": Pause-Menue ein-/ausblenden -- aber nur im laufenden
+	# Spiel (also wenn ein Spieler in der Szene ist). In Menue/Abspann gibt es
+	# keinen Spieler, dort kuemmern sich diese Szenen selbst um ESC.
+	if event.is_action_pressed("ui_cancel"):
+		if get_tree().get_first_node_in_group(GameConstants.GROUP_PLAYER) != null:
+			toggle_pause()
 			get_viewport().set_input_as_handled()
 
 func toggle_help() -> void:
@@ -331,3 +343,89 @@ func _create_help_panel() -> void:
 
 	add_child(_help_panel)
 	_help_panel.visible = false
+
+# =============================================================================
+# Pause-Menue (ESC)
+# =============================================================================
+# Haelt das Spiel an (get_tree().paused) und blendet ein Menue mit den Optionen
+# Weiter / Level neu starten / Hauptmenue ein. Wird beim ersten ESC erzeugt und
+# danach nur noch ein-/ausgeblendet. Liegt -- wie das Hilfe-Panel -- im HUD,
+# weil das HUD autoloaded ist und damit in jedem Level vorhanden bleibt.
+# =============================================================================
+
+const _MENU_SCENE := "res://scenes/ui/main_menu.tscn"
+
+var _pause_panel: Control = null
+var _resume_button: Button = null
+
+func toggle_pause() -> void:
+	if _pause_panel == null:
+		_create_pause_panel()
+	var should_pause := not get_tree().paused
+	get_tree().paused = should_pause
+	_pause_panel.visible = should_pause
+	if should_pause and _resume_button != null:
+		_resume_button.grab_focus()
+
+func _create_pause_panel() -> void:
+	# Halbtransparenter, bildschirmfuellender Hintergrund -- dunkelt das Spiel ab
+	# und faengt Maus-Klicks ab, damit man nicht "durch" das Menue klickt.
+	var panel := ColorRect.new()
+	panel.color = Color(0, 0, 0, 0.6)
+	panel.set_anchors_preset(Control.PRESET_FULL_RECT)
+	# Muss auch im pausierten Zustand verarbeitet werden (Buttons!).
+	panel.process_mode = Node.PROCESS_MODE_ALWAYS
+
+	var center := CenterContainer.new()
+	center.set_anchors_preset(Control.PRESET_FULL_RECT)
+	panel.add_child(center)
+
+	var box := VBoxContainer.new()
+	box.add_theme_constant_override("separation", 18)
+	center.add_child(box)
+
+	var title := Label.new()
+	title.text = "PAUSE"
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", 40)
+	title.add_theme_color_override("font_color", Color(1, 0.95, 0.5))
+	title.add_theme_color_override("font_outline_color", Color.BLACK)
+	title.add_theme_constant_override("outline_size", 6)
+	box.add_child(title)
+
+	_resume_button = _make_pause_button("Weiter")
+	_resume_button.pressed.connect(toggle_pause)
+	box.add_child(_resume_button)
+
+	var restart_button := _make_pause_button("Level neu starten")
+	restart_button.pressed.connect(_on_pause_restart)
+	box.add_child(restart_button)
+
+	var menu_button := _make_pause_button("Hauptmenue")
+	menu_button.pressed.connect(_on_pause_to_menu)
+	box.add_child(menu_button)
+
+	_pause_panel = panel
+	add_child(_pause_panel)
+	_pause_panel.visible = false
+
+func _make_pause_button(text: String) -> Button:
+	var b := Button.new()
+	b.text = text
+	b.custom_minimum_size = Vector2(280, 0)
+	b.add_theme_font_size_override("font_size", 26)
+	# Buttons muessen waehrend der Pause klickbar bleiben.
+	b.process_mode = Node.PROCESS_MODE_ALWAYS
+	return b
+
+func _on_pause_restart() -> void:
+	# Pause aufheben und das aktuelle Level frisch laden (Fortschritt/Upgrades
+	# bleiben, weil sie im GameManager liegen -- nur die Szene wird neu gebaut).
+	get_tree().paused = false
+	_pause_panel.visible = false
+	get_tree().reload_current_scene()
+
+func _on_pause_to_menu() -> void:
+	get_tree().paused = false
+	_pause_panel.visible = false
+	get_tree().change_scene_to_file(_MENU_SCENE)

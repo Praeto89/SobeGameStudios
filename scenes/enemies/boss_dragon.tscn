@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3 uid="uid://cbossdragon0001"]
+
+[ext_resource type="Script" path="res://scripts/enemies/boss_dragon.gd" id="1_boss"]
+[ext_resource type="AudioStream" uid="uid://bncupj5iuxe61" path="res://assets/sounds/explosion.wav" id="2_expl"]
+
+[sub_resource type="CircleShape2D" id="Cir_body"]
+radius = 22.0
+
+[sub_resource type="CircleShape2D" id="Cir_hit"]
+radius = 27.0
+
+[node name="BossDragon" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("1_boss")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("Cir_body")
+
+[node name="Hitbox" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+shape = SubResource("Cir_hit")
+
+[node name="SoundDeath" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_expl")
