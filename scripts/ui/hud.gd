@@ -232,7 +232,7 @@ func _set_blade_frame(blade: AnimatedSprite2D, frame_idx: int) -> void:
 # new_count: Gesamtzahl der bisher gesammelten Muenzen
 # =============================================================================
 func _on_coin_collected(new_count: int) -> void:
-	coin_label.text = "Coins: " + str(new_count)
+	coin_label.text = "Gold: " + str(new_count)
 
 # =============================================================================
 # show_ability_message(text, duration)
@@ -290,7 +290,7 @@ func show_ability_message(text: String, duration: float = 3.0) -> void:
 # verfuegbar bleibt.
 # =============================================================================
 
-const _HELP_TEXT := "STEUERUNG\n\n  Pfeiltasten:     Laufen\n  Leertaste:       Springen (kurz/lang fuer Sprunghoehe)\n  SHIFT:           Rollen (schadet Gegnern)\n  E (halten):      Charge-Dash aufladen + loslassen\n  Pfeil unten:     Schnellfall (in der Luft)\n\nABILITIES (per Pickup freigeschaltet)\n  Double-Jump:     Leertaste 2x\n  Wallcrawl:       automatisch an Waenden\n\nUPGRADE-TOR (weisses Tor)\n  Betreten + Tasten 1-4:  Coins gegen staerkere Abilities tauschen\n\nHILFE\n  F1:  dieses Fenster ein-/ausblenden"
+const _HELP_TEXT := "STEUERUNG\n\n  Pfeiltasten:     Laufen\n  Leertaste:       Springen (kurz/lang fuer Sprunghoehe)\n  X:               Boden-Attacke (immer verfuegbar)\n  Pfeil unten:     Schnellfall (in der Luft)\n\nKAUFBARE FÄHIGKEITEN (im Tor mit Gold)\n  Dash/Roll:       SHIFT (schadet Gegnern)\n  Luft-Attacke:    X in der Luft (Sturzschlag)\n  Charge-Dash:     E halten + loslassen\n  Doppelsprung:    Leertaste 2x\n  Wallcrawl:       automatisch an Waenden\n\nFÄHIGKEITEN-LADEN (weisses Tor)\n  Betreten + Tasten 1-8:  Gold gegen Faehigkeiten tauschen\n  Jede Faehigkeit: kaufen + 2x verbessern (Stufe 1-3)\n\nGOLD\n  Gegner und Truhen lassen Gold (Muenzen) fallen\n\nHILFE\n  F1:  dieses Fenster ein-/ausblenden"
 
 var _help_panel: PanelContainer = null
 

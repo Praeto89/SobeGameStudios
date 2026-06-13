@@ -49,6 +49,9 @@ func _ready() -> void:
 	super()
 	hitbox.monitoring = false        # getarnt: die Truhe tut (noch) nicht weh
 	sprite.play("idle")
+	# Die Mimik wirft beim Tod ohnehin schon 8 Muenzen ab (siehe die()), daher
+	# kein zusaetzliches Basis-Gold ueber SlimeBase._spawn_gold.
+	gold_drop = 0
 
 # =============================================================================
 # _physics_process(delta)

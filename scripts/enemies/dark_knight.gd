@@ -61,6 +61,7 @@ func _ready() -> void:
 	detection_range  = 300.0
 	jump_strength    = 430.0
 	jump_interval    = 0.9
+	gold_drop        = 5      # zaeher Gegner -> mehr Gold beim Ableben
 	attack_hitbox.monitoring = false
 
 # =============================================================================
@@ -113,7 +114,7 @@ func _handle_extra_state(delta: float) -> bool:
 		if in_swing and not attack_hit_done:
 			for body in attack_hitbox.get_overlapping_bodies():
 				if body.has_method("take_damage"):
-					var kdir := sign(body.global_position.x - global_position.x)
+					var kdir: float = sign(body.global_position.x - global_position.x)
 					body.take_damage(1, kdir)
 					attack_hit_done = true
 					break
@@ -150,7 +151,7 @@ func _start_attack() -> void:
 	attack_timer    = ATTACK_DURATION
 	attack_hit_done = false
 	attack_hitbox.monitoring = false
-	var dir := sign(player.global_position.x - global_position.x)
+	var dir: float = sign(player.global_position.x - global_position.x)
 	if dir != 0:
 		sprite.flip_h          = dir < 0
 		attack_hitbox.position.x = dir * 14.0
