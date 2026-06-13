@@ -67,7 +67,11 @@ var dive_cd := 0.0
 # Persistenz: einmal besiegt, bleibt der Boss bei Re-Entry weg.
 var _persistent_id: String = ""
 
+# Boss-Musik: startet beim ersten Sichtkontakt mit dem Spieler.
+var _music_started := false
+
 @onready var hitbox: Area2D = $Hitbox
+@onready var _music: AudioStreamPlayer = $Music
 
 
 # =============================================================================
@@ -100,6 +104,11 @@ func _physics_process(delta: float) -> void:
 	# Optik: Fluegelschlag-Phase weiterdrehen und neu zeichnen.
 	_flap += delta * flap_speed
 	queue_redraw()
+
+	# Boss-Musik bei Sichtkontakt starten (Spieler in Erkennungsreichweite).
+	if not _music_started and player != null and is_instance_valid(player):
+		if global_position.distance_to(player.global_position) <= detection_range:
+			_start_boss_music()
 
 	# Treffer-Unverwundbarkeit herunterzaehlen.
 	if hit_cd > 0.0:
@@ -217,6 +226,11 @@ func _start_death() -> void:
 		$SoundDeath.play()
 	# Grosse Gold-Belohnung.
 	_spawn_gold(gold_drop)
+	# Kampfmusik sanft ausblenden und stoppen.
+	if _music != null and _music.playing:
+		var mt := create_tween()
+		mt.tween_property(_music, "volume_db", -40.0, 1.2)
+		mt.tween_callback(_music.stop)
 	# Triumph-Hinweis (HUD ist autoloaded -> ueberall erreichbar).
 	Hud.show_ability_message("Der Drache ist besiegt!\nFliehe nach oben zum ZIEL!", 4.0)
 	# Ausblenden: kurz aufleuchten, langsam fallen, drehen und transparent werden.
@@ -228,6 +242,26 @@ func _start_death() -> void:
 	await t.finished
 	queue_free()
 
+
+# =============================================================================
+# Boss-Musik
+# =============================================================================
+# Startet das Kampf-Lied (dasselbe Stueck wie im Hauptmenue) beim ersten
+# Sichtkontakt und haelt es in einer Schleife, solange der Boss lebt.
+# =============================================================================
+func _start_boss_music() -> void:
+	_music_started = true
+	if _music == null:
+		return
+	if not _music.finished.is_connected(_loop_music):
+		_music.finished.connect(_loop_music)
+	_music.play()
+
+func _loop_music() -> void:
+	# Manuelles Looping -- unabhaengig davon, ob die MP3 im Import auf "loop" steht.
+	# Beim Sieg (is_dead) nicht erneut starten.
+	if not is_dead and _music != null:
+		_music.play()
 
 # =============================================================================
 # _spawn_gold(count)

@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://cbossdragon0001"]
+[gd_scene load_steps=5 format=3 uid="uid://cbossdragon0001"]
 
 [ext_resource type="Script" path="res://scripts/enemies/boss_dragon.gd" id="1_boss"]
 [ext_resource type="AudioStream" uid="uid://bncupj5iuxe61" path="res://assets/sounds/explosion.wav" id="2_expl"]
+[ext_resource type="AudioStream" uid="uid://r7h513q17ogb" path="res://assets/music/for_a_school_game.mp3" id="3_music"]
 
 [sub_resource type="CircleShape2D" id="Cir_body"]
 radius = 22.0
@@ -26,3 +27,7 @@ shape = SubResource("Cir_hit")
 
 [node name="SoundDeath" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("2_expl")
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_music")
+volume_db = -4.0
