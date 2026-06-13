@@ -39,6 +39,7 @@ extends CharacterBody2D
 @export var speed := 80.0               # Laufgeschwindigkeit  <- probier: 200 (hektisch) oder 20 (schleichend)
 @export var gravity := 800.0            # Schwerkraft  <- 0 = schwebt (Wand-Slime), 2000 = faellt sehr schnell
 @export var detection_range := 200.0    # Erkennungsreichweite in Pixeln  <- 0 = blind, 500 = scharfaeuging
+@export var gold_drop := 1               # Wie viel Gold (Muenzen) beim Tod abfaellt  <- 0 = nichts, staerkere Gegner mehr
 
 # --- Jagd & Sprung (das macht den Slime "schlau") -----------------------------
 @export var chase_player := true        # Jagt der Slime den Spieler aktiv?  <- false = nur stures Patrouillieren
@@ -113,6 +114,8 @@ func die() -> void:
 	# Persistierten Slime als besiegt markieren (taucht beim Re-Entry nicht mehr auf)
 	if _persistent_id != "" and not _persistent_id in GameManager.defeated_enemy_ids:
 		GameManager.defeated_enemy_ids.append(_persistent_id)
+	# Jeder Gegner hinterlaesst beim Ableben Gold (Muenzen) zum Aufsammeln.
+	_spawn_gold(gold_drop)
 	# WARUM set_deferred?
 	# Diese Funktion wird aus einem Kollisions-Callback heraus aufgerufen
 	# (der Spieler trifft den Slime). Mitten in einem Physik-Frame darf
@@ -135,6 +138,27 @@ func die() -> void:
 		# alle anderen Frames normal weiter – das ist eine sog. Coroutine.
 		await sprite.animation_finished
 	queue_free()
+
+# =============================================================================
+# _spawn_gold(count)
+# Instanziiert count Muenzen ("Gold") als Kinder des Eltern-Knotens (des Levels)
+# und verteilt sie zufaellig um die aktuelle Position. Als Kinder des Levels
+# (nicht des Gegners) bleiben sie sammelbar, obwohl der Gegner gleich per
+# queue_free() verschwindet. Gleiche Idee wie bei Truhe und Mimik.
+# =============================================================================
+func _spawn_gold(count: int) -> void:
+	if count <= 0:
+		return
+	var parent := get_parent()
+	if parent == null:
+		return
+	var coin_scene := load("res://scenes/pickups/coin.tscn")
+	for i in count:
+		var c = coin_scene.instantiate()
+		var angle := randf() * TAU
+		var dist := randf_range(10.0, 26.0)
+		c.global_position = global_position + Vector2(cos(angle) * dist, sin(angle) * dist - 14.0)
+		parent.add_child(c)
 
 # =============================================================================
 # _physics_process(delta)

@@ -53,7 +53,7 @@ func _intensity_for(health: int) -> float:
 	var maxh := 1
 	if _player and "max_health" in _player:
 		maxh = max(1, int(_player.max_health))
-	var t := clamp(float(health) / float(maxh), 0.0, 1.0)
+	var t: float = clamp(float(health) / float(maxh), 0.0, 1.0)
 	# lerp(a, b, t): t=1 (voll) -> ruhe, t=0 (leer) -> max.
 	return lerp(max_intensity, ruhe_intensity, t)
 

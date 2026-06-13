@@ -50,16 +50,43 @@ const ATTACK_DURATION = 0.35        # Sekunden die eine Attacke dauert (Hitbox a
 const ATTACK_HITBOX_OFFSET = 14.0   # Wie weit vor dem Spieler die Angriffs-Hitbox liegt (in Blickrichtung)
 
 # -----------------------------------------------------------------------------
-# Upgrade-Faktoren (Upgrade-Tor, siehe upgrade_gate.gd + GameManager)
+# Faehigkeits-Stufen (Upgrade-Tor, siehe upgrade_gate.gd + GameManager)
 # -----------------------------------------------------------------------------
-# Diese Faktoren werden in apply_upgrades() auf die Basiswerte oben angewendet,
-# wenn das jeweilige Upgrade gekauft wurde. Die Basis-Konstanten bleiben
-# unveraendert -- die effektiven Werte stehen in den var-Variablen weiter unten.
-const JUMP_UPGRADE_MULTIPLIER = 1.18         # Hoeherer Sprung (negativer = hoeher)
-const CHARGE_SPEED_UPGRADE_MULTIPLIER = 1.4  # Schnellerer Charge-Dash
-const CHARGE_TIME_UPGRADE_MULTIPLIER = 1.5   # Laengerer Charge-Dash
-const ATTACK_REACH_UPGRADE = 8.0             # Zusaetzliche Reichweite der Attacke (Offset)
-const ATTACK_HITBOX_UPGRADE_SCALE = 1.6      # Groessere Angriffs-Hitbox
+# Der Charakter startet "nackt": ausser der normalen Boden-Attacke ist alles
+# gesperrt. Faehigkeiten werden im Upgrade-Tor mit Gold gekauft (Stufe 1 =
+# ABGESCHWAECHTE erste Version) und danach zweimal verbessert (Stufe 2 + 3).
+#
+# Die folgenden Tabellen liefern den effektiven Wert je Stufe. Index 0 steht
+# fuer "nicht gekauft" und wird – wo eine Faehigkeit ohne Kauf nicht nutzbar
+# ist – nur als sicherer Platzhalter gefuehrt. apply_upgrades() liest die
+# gekaufte Stufe aus dem GameManager und schreibt den passenden Wert in die
+# var-Variablen weiter unten.
+
+# Charge-Dash: Stufe 1 ist klar schwaecher als die alte Standard-Power
+# (700 / 0.5 s), Stufe 3 uebertrifft sie.
+const CHARGE_SPEED_BY_LEVEL := [0.0, 460.0, 600.0, 760.0]   # px/s je Stufe
+const CHARGE_TIME_BY_LEVEL  := [0.0, 0.30, 0.42, 0.55]      # Dash-Dauer je Stufe
+
+# Roll/Dash: Stufe 1 langsamer als die Basis (300), waechst nach oben.
+const ROLL_SPEED_BY_LEVEL := [0.0, 220.0, 300.0, 380.0]
+
+# Doppelsprung: Faktor auf die (ggf. per Jump-Upgrade erhoehte) Sprungkraft.
+# Stufe 1 gibt einen deutlich schwaecheren zweiten Sprung.
+const DOUBLE_JUMP_FACTOR_BY_LEVEL := [0.0, 0.78, 0.92, 1.06]
+
+# Wallcrawl: vertikale Klettergeschwindigkeit je Stufe (Basis war 120).
+const WALL_CRAWL_SPEED_BY_LEVEL := [0.0, 80.0, 110.0, 145.0]
+
+# Luft-Attacke: Hitbox-Groesse und Schockwellen-Groesse je Stufe.
+const AIR_ATTACK_HITBOX_BY_LEVEL := [1.0, 1.3, 1.6, 2.0]   # vorher fix 1.8
+const AIR_ATTACK_SHOCK_BY_LEVEL  := [0.0, 0.8, 1.0, 1.3]   # Faktor auf die Schockwellen-Groesse
+
+# Boden-Attacke (Basis gratis, Stufe 0 = unveraendert): mehr Reichweite + Hitbox.
+const ATTACK_REACH_BY_LEVEL := [0.0, 4.0, 9.0, 15.0]       # Zusatz-Offset je Stufe
+const ATTACK_SCALE_BY_LEVEL := [1.0, 1.25, 1.55, 1.9]      # Hitbox-Skalierung je Stufe
+
+# Hoeherer Sprung (Stufe 0 = Basis): Multiplikator auf JUMP_VELOCITY.
+const JUMP_MULT_BY_LEVEL := [1.0, 1.08, 1.18, 1.30]
 
 # -----------------------------------------------------------------------------
 # Gravity-Konstanten
@@ -145,21 +172,29 @@ var is_dead := false                # Ob der Spieler tot ist
 var _death_slowmo := false          # Ob gerade die Death-Zeitlupe (Engine.time_scale) aktiv ist
 
 # -----------------------------------------------------------------------------
-# Ability-Flags — werden per Pickup freigeschaltet
+# Ability-Flags — im Upgrade-Tor gekauft (oder per Pickup freigeschaltet)
 # -----------------------------------------------------------------------------
+# Start "nackt": alle Faehigkeiten gesperrt, nur die Boden-Attacke ist gratis.
 var has_charge = false              # Charge-Ability freigeschaltet
 var has_wallcrawl = false           # Wallcrawl-Ability freigeschaltet
 var has_double_jump = false         # Double-Jump-Ability freigeschaltet
+var has_dash = false                # Roll/Dash-Ability freigeschaltet (SHIFT)
+var has_attack_air = false          # Luft-Attacke (Sturzschlag) freigeschaltet
 
 # -----------------------------------------------------------------------------
-# Effektive Ability-Werte — Basiswert, ggf. durch ein Upgrade verstaerkt
+# Effektive Ability-Werte — je nach gekaufter Stufe (siehe apply_upgrades)
 # -----------------------------------------------------------------------------
 # Im _physics_process werden diese Variablen statt der Basis-Konstanten benutzt.
 # apply_upgrades() setzt sie beim Start und nach jedem Kauf im Upgrade-Tor.
 var jump_velocity := JUMP_VELOCITY            # effektive Sprungkraft
 var charge_speed := CHARGE_SPEED              # effektive Charge-Geschwindigkeit
 var charge_max_time := CHARGE_MAX_TIME        # effektive Charge-Dauer
+var roll_speed := ROLL_SPEED                  # effektive Roll-/Dash-Geschwindigkeit
+var double_jump_velocity := JUMP_VELOCITY     # effektive Sprungkraft des zweiten Sprungs
+var wall_crawl_speed := WALL_CRAWL_SPEED      # effektive Klettergeschwindigkeit
 var attack_hitbox_offset := ATTACK_HITBOX_OFFSET  # effektive Angriffs-Reichweite
+var air_attack_hitbox_scale := AIR_ATTACK_HITBOX_SCALE  # effektive Luft-Attacke-Hitbox
+var air_attack_shock_scale := 1.0             # effektive Schockwellen-Groesse
 
 # -----------------------------------------------------------------------------
 # Wallcrawl-Variablen
@@ -219,6 +254,8 @@ func _ready() -> void:
 	has_charge = GameManager.has_charge
 	has_wallcrawl = GameManager.has_wallcrawl
 	has_double_jump = GameManager.has_double_jump
+	has_dash = GameManager.has_dash
+	has_attack_air = GameManager.has_attack_air
 	current_health = GameManager.current_health
 	coin_count = GameManager.coin_count
 	# Gekaufte Upgrades aus dem GameManager auf die effektiven Werte anwenden.
@@ -388,14 +425,27 @@ func heal(amount: int = 1) -> void:
 func unlock_charge() -> void:
 	has_charge = true
 	GameManager.has_charge = true
+	apply_upgrades()
 
 func unlock_wallcrawl() -> void:
 	has_wallcrawl = true
 	GameManager.has_wallcrawl = true
+	apply_upgrades()
 
 func unlock_double_jump() -> void:
 	has_double_jump = true
 	GameManager.has_double_jump = true
+	apply_upgrades()
+
+func unlock_dash() -> void:
+	has_dash = true
+	GameManager.has_dash = true
+	apply_upgrades()
+
+func unlock_attack_air() -> void:
+	has_attack_air = true
+	GameManager.has_attack_air = true
+	apply_upgrades()
 
 # =============================================================================
 # apply_upgrades()
@@ -405,18 +455,49 @@ func unlock_double_jump() -> void:
 # Upgrade sofort wirkt.
 # =============================================================================
 func apply_upgrades() -> void:
-	jump_velocity = JUMP_VELOCITY * (JUMP_UPGRADE_MULTIPLIER if GameManager.upgrade_jump else 1.0)
-	charge_speed = CHARGE_SPEED * (CHARGE_SPEED_UPGRADE_MULTIPLIER if GameManager.upgrade_charge else 1.0)
-	charge_max_time = CHARGE_MAX_TIME * (CHARGE_TIME_UPGRADE_MULTIPLIER if GameManager.upgrade_charge else 1.0)
-	attack_hitbox_offset = ATTACK_HITBOX_OFFSET + (ATTACK_REACH_UPGRADE if GameManager.upgrade_attack else 0.0)
-	# Groessere Angriffs-Hitbox: die ganze AttackHitbox-Area skalieren.
-	# _attack_base_scale ist die "Ruhegroesse" (inkl. Upgrade). Der Luft-Schlag
-	# vergroessert sie zusaetzlich (siehe Attacke-Start), danach wird wieder auf
-	# diese Basis zurueckgesetzt.
-	var atk_scale = ATTACK_HITBOX_UPGRADE_SCALE if GameManager.upgrade_attack else 1.0
+	# Freischalt-Flags aus den Stufen ableiten (Stufe >= 1 = freigeschaltet).
+	has_charge      = GameManager.get_level("charge") >= 1
+	has_wallcrawl   = GameManager.get_level("wallcrawl") >= 1
+	has_double_jump = GameManager.get_level("double_jump") >= 1
+	has_dash        = GameManager.get_level("dash") >= 1
+	has_attack_air  = GameManager.get_level("attack_air") >= 1
+
+	# Hoeherer Sprung (Stufe 0 = Basis).
+	jump_velocity = JUMP_VELOCITY * JUMP_MULT_BY_LEVEL[GameManager.get_level("jump")]
+
+	# Charge-Dash (nur ab Stufe 1 nutzbar; Stufe 0 = sicherer Basiswert).
+	var lc := GameManager.get_level("charge")
+	charge_speed = CHARGE_SPEED_BY_LEVEL[lc] if lc > 0 else CHARGE_SPEED
+	charge_max_time = CHARGE_TIME_BY_LEVEL[lc] if lc > 0 else CHARGE_MAX_TIME
+
+	# Roll/Dash.
+	var ld := GameManager.get_level("dash")
+	roll_speed = ROLL_SPEED_BY_LEVEL[ld] if ld > 0 else ROLL_SPEED
+
+	# Doppelsprung: Faktor auf die (ggf. erhoehte) Sprungkraft.
+	var ldj := GameManager.get_level("double_jump")
+	double_jump_velocity = jump_velocity * (DOUBLE_JUMP_FACTOR_BY_LEVEL[ldj] if ldj > 0 else 1.0)
+
+	# Wallcrawl.
+	var lw := GameManager.get_level("wallcrawl")
+	wall_crawl_speed = WALL_CRAWL_SPEED_BY_LEVEL[lw] if lw > 0 else WALL_CRAWL_SPEED
+
+	# Boden-Attacke: Reichweite + Hitbox-Groesse (Stufe 0 = Basis, gratis).
+	# _attack_base_scale ist die "Ruhegroesse". Der Luft-Schlag vergroessert sie
+	# zusaetzlich (siehe Attacke-Start), danach wird wieder auf diese Basis
+	# zurueckgesetzt.
+	var la := GameManager.get_level("attack")
+	attack_hitbox_offset = ATTACK_HITBOX_OFFSET + ATTACK_REACH_BY_LEVEL[la]
+	var atk_scale: float = ATTACK_SCALE_BY_LEVEL[la]
 	_attack_base_scale = Vector2(atk_scale, atk_scale)
 	attack_hitbox.scale = _attack_base_scale
-	# Lebens-Maximum (Health-Upgrade); aktuelle Leben nie ueber das Maximum.
+
+	# Luft-Attacke: Hitbox- und Schockwellen-Groesse.
+	var laa := GameManager.get_level("attack_air")
+	air_attack_hitbox_scale = AIR_ATTACK_HITBOX_BY_LEVEL[laa] if laa > 0 else AIR_ATTACK_HITBOX_SCALE
+	air_attack_shock_scale = AIR_ATTACK_SHOCK_BY_LEVEL[laa] if laa > 0 else 1.0
+
+	# Lebens-Maximum (Health-Stufen); aktuelle Leben nie ueber das Maximum.
 	max_health = GameManager.get_max_health()
 	current_health = min(current_health, max_health)
 
@@ -501,6 +582,9 @@ func _spawn_shockwave() -> void:
 		target = get_parent()
 	target.add_child(wave)
 	wave.global_position = global_position + SHOCKWAVE_FEET_OFFSET
+	# Groessere Schockwelle bei hoeheren Luft-Attacke-Stufen.
+	if air_attack_shock_scale > 0.0:
+		wave.scale = wave.scale * air_attack_shock_scale
 
 # =============================================================================
 # _spawn_rocket_puff(charge_dir)
@@ -635,7 +719,7 @@ func _physics_process(delta: float) -> void:
 			_play_squash(JUMP_STRETCH_SCALE, SQUASH_RECOVER_TIME)  # Effekt: Wall-Jump-Stretch
 		elif has_double_jump and can_double_jump:
 			# Double Jump: zweiter Sprung in der Luft
-			velocity.y = jump_velocity
+			velocity.y = double_jump_velocity
 			can_double_jump = false
 			is_jumping = true
 			pass  # sound_jump.play() -- Sprung-Sound deaktiviert (zu nervig); zum Reaktivieren diese Zeile wieder zu sound_jump.play() machen
@@ -649,7 +733,7 @@ func _physics_process(delta: float) -> void:
 	# Nur am Boden auslösbar. Waehrend des Rolls werden Gegner per Hitbox getroffen.
 	# Hitbox wird mit dem Roll aktiviert/deaktiviert, damit sie ausserhalb des Rolls
 	# keine Gegner toetet.
-	if Input.is_action_just_pressed("ui_shift") and is_on_floor():
+	if Input.is_action_just_pressed("ui_shift") and is_on_floor() and has_dash:
 		is_rolling = true
 		roll_hitbox.monitoring = true
 	if Input.is_action_just_released("ui_shift"):
@@ -673,18 +757,22 @@ func _physics_process(delta: float) -> void:
 	# "attack" (Taste X) loest einen Nahkampf-Schlag aus. Waehrend der Attacke
 	# ist die AttackHitbox vor dem Spieler aktiv und toetet getroffene Gegner.
 	# Nicht ausloesbar waehrend Roll, Charge, Wallcrawl oder im Treffer-Zustand.
-	if Input.is_action_just_pressed("attack") and not is_attacking and not is_rolling and not is_charging and not is_wall_crawling and not is_hit:
+	# Boden-Attacke ist gratis und immer verfuegbar. Die Luft-Attacke
+	# (Sturzschlag nach unten) ist eine eigene, KAUFBARE Faehigkeit -- ohne sie
+	# kann in der Luft nicht attackiert werden.
+	var attack_in_air := not is_on_floor()
+	if Input.is_action_just_pressed("attack") and not is_attacking and not is_rolling and not is_charging and not is_wall_crawling and not is_hit and (not attack_in_air or has_attack_air):
 		is_attacking = true
 		attack_timer = ATTACK_DURATION
 		attack_hitbox.monitoring = true
 		# Blickrichtung beim Start merken (flip_h = true bedeutet: schaut nach links)
 		attack_facing_left = animated_sprite.flip_h
 		# In der Luft? -> Attacke nach unten (eigene, einmalige Animation)
-		attack_from_air = not is_on_floor()
+		attack_from_air = attack_in_air
 		# Luft-Schlag: Hitbox vergroessern und die Bodenschock-Welle "scharf
 		# schalten" (loest beim Aufkommen aus). Boden-Attacke: normale Groesse.
 		_air_attack_slam_armed = attack_from_air
-		attack_hitbox.scale = _attack_base_scale * (AIR_ATTACK_HITBOX_SCALE if attack_from_air else 1.0)
+		attack_hitbox.scale = _attack_base_scale * (air_attack_hitbox_scale if attack_from_air else 1.0)
 		# Animation sofort starten (auch fuer korrekten is_playing()-Status der
 		# Luft-Attacke schon im selben Frame, sonst wuerde sie unten faelschlich
 		# als "fertig" gewertet, wenn noch der alte Animationszustand anliegt).
@@ -730,12 +818,12 @@ func _physics_process(delta: float) -> void:
 	if is_wall_crawling:
 		# Wallcrawl: nur vertikale Bewegung, leichter Druck in die Wand
 		var vertical := Input.get_axis("ui_up", "ui_down")
-		velocity.y = vertical * WALL_CRAWL_SPEED
+		velocity.y = vertical * wall_crawl_speed
 		velocity.x = -last_wall_normal.x * WALL_CRAWL_PRESS_FORCE
 	elif is_rolling:
 		# Roll: fixe Geschwindigkeit in Blickrichtung, Gegner-Hitbox pruefen
 		var roll_dir = -1.0 if animated_sprite.flip_h else 1.0
-		velocity.x = roll_dir * ROLL_SPEED
+		velocity.x = roll_dir * roll_speed
 		for body in roll_hitbox.get_overlapping_bodies():
 			if body == self:
 				continue
