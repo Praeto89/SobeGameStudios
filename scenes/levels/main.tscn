@@ -255,18 +255,18 @@ position = Vector2(1211, 82)
 [node name="green_platform4" parent="." unique_id=955115571 instance=ExtResource("11_eb6dy")]
 position = Vector2(1317, 115)
 
-[node name="PortalGalerie" parent="." unique_id=1267104389 groups=["portals"] instance=ExtResource("16_muem4")]
+[node name="PortalArea1" parent="." unique_id=1267104389 groups=["portals"] instance=ExtResource("16_muem4")]
 position = Vector2(2066, -231)
-portal_id = "main_to_galerie"
+portal_id = "main_to_area1"
 target_portal_id = "from_main"
-target_scene = "res://scenes/levels/galerie.tscn"
+target_scene = "res://scenes/levels/area_1.tscn"
 
-[node name="PortalGalerieLabel" type="Label" parent="." unique_id=666599654]
+[node name="PortalArea1Label" type="Label" parent="." unique_id=666599654]
 offset_left = -710.0
 offset_top = -10.0
 offset_right = -590.0
 offset_bottom = 10.0
-text = "Galerie (Klasse)"
+text = "Area 1"
 horizontal_alignment = 1
 
 [node name="UpgradeGate" parent="." unique_id=102179361 instance=ExtResource("30_gate")]

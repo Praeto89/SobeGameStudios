@@ -305,17 +305,20 @@ rotation = -0.6374189
 scale = Vector2(0.45121953, 0.4512195)
 texture = ExtResource("8_ac54n")
 
-[node name="PortalTurm" parent="." unique_id=1284038433 groups=["portals"] instance=ExtResource("11_portal")]
+[node name="PortalPhilipp" parent="." unique_id=1284038433 groups=["portals"] instance=ExtResource("11_portal")]
 position = Vector2(414, 34)
-portal_id = "from_turm"
-target_portal_id = "turm_to_area1"
-target_scene = "res://scenes/levels/turm.tscn"
+portal_id = "area1_to_philipp"
+target_portal_id = "from_area1"
+target_scene = "res://scenes/levels/student_levels/philipp.tscn"
 
 [node name="Todeszone" parent="." unique_id=12345678 instance=ExtResource("30_death")]
 position = Vector2(0, 330)
 
-[node name="Portal" parent="." unique_id=559695772 instance=ExtResource("11_portal")]
+[node name="PortalMain" parent="." unique_id=559695772 groups=["portals"] instance=ExtResource("11_portal")]
 position = Vector2(144, 67)
+portal_id = "from_main"
+target_portal_id = "main_to_area1"
+target_scene = "res://scenes/levels/main.tscn"
 
 [node name="Chest" parent="." unique_id=1785495521 instance=ExtResource("14_asddx")]
 position = Vector2(229, 139)

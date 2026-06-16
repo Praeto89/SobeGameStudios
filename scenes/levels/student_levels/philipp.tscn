@@ -77,18 +77,18 @@ polygon = PackedVector2Array(-500, -400, -468, -400, -468, 0, -500, 0)
 [node name="Player" parent="." unique_id=1476620384 instance=ExtResource("1_dqh8m")]
 position = Vector2(-374, -112)
 
-[node name="ReturnPortal" parent="." unique_id=1332023281 groups=["portals"] instance=ExtResource("2_7rot8")]
+[node name="PortalArea1" parent="." unique_id=1332023281 groups=["portals"] instance=ExtResource("2_7rot8")]
 position = Vector2(-440, 60)
-portal_id = "from_galerie"
-target_portal_id = "galerie_entry"
-target_scene = "res://scenes/levels/galerie.tscn"
+portal_id = "from_area1"
+target_portal_id = "area1_to_philipp"
+target_scene = "res://scenes/levels/area_1.tscn"
 
 [node name="ReturnLabel" type="Label" parent="." unique_id=1723811202]
 offset_left = -474.0
 offset_top = 17.0
 offset_right = -394.0
 offset_bottom = 40.0
-text = "Galerie"
+text = "Area 1"
 horizontal_alignment = 1
 
 [node name="Death" parent="." unique_id=695650598 instance=ExtResource("3_c2g5i")]
@@ -246,9 +246,11 @@ position = Vector2(2009, -198)
 [node name="coin44" parent="." unique_id=76086670 instance=ExtResource("8_ysl4h")]
 position = Vector2(2022, -197)
 
-[node name="Portal" parent="." unique_id=559695772 instance=ExtResource("2_7rot8")]
+[node name="PortalTurm" parent="." unique_id=559695772 groups=["portals"] instance=ExtResource("2_7rot8")]
 position = Vector2(2284, -214)
-target_portal_id = "from_galerie"
+portal_id = "philipp_to_turm"
+target_portal_id = "from_philipp"
+target_scene = "res://scenes/levels/turm.tscn"
 
 [node name="upgrade_gate" parent="." unique_id=295656323 instance=ExtResource("10_aeu5r")]
 position = Vector2(431, -132)

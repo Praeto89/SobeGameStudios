@@ -137,11 +137,11 @@ position = Vector2(188, 283)
 [node name="GeenSlimeSpawner3" parent="." unique_id=576208969 instance=ExtResource("6_h8sst")]
 position = Vector2(619, 435)
 
-[node name="PortalArea1" parent="." unique_id=1497045151 groups=["portals"] instance=ExtResource("4_5dp1l")]
+[node name="PortalPhilipp" parent="." unique_id=1497045151 groups=["portals"] instance=ExtResource("4_5dp1l")]
 position = Vector2(272, 547)
-portal_id = "turm_to_area1"
-target_portal_id = "from_turm"
-target_scene = "res://scenes/levels/area_1.tscn"
+portal_id = "from_philipp"
+target_portal_id = "philipp_to_turm"
+target_scene = "res://scenes/levels/student_levels/philipp.tscn"
 
 [node name="PortalEnde" parent="." unique_id=1477270169 groups=["portals"] instance=ExtResource("4_5dp1l")]
 position = Vector2(995, -571)
