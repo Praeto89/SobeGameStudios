@@ -1,21 +1,19 @@
 [gd_scene format=4 uid="uid://c4bej2p3521hh"]
 
 [ext_resource type="PackedScene" uid="uid://dph3vsxklsitn" path="res://scenes/enemies/green_slime_spawner.tscn" id="3_85g3d"]
-[ext_resource type="PackedScene" uid="uid://dnmnbcdkt56ma" path="res://scenes/pickups/doublejump_ability.tscn" id="3_a8y0u"]
 [ext_resource type="Texture2D" uid="uid://ctbiesjqnr38r" path="res://assets/sprites/PurpleDragons Spirte set/Ground/rockgrey_tilemap.png" id="3_choun"]
 [ext_resource type="PackedScene" uid="uid://jhiuqdedq0l3" path="res://scenes/pickups/coin.tscn" id="3_tbgi4"]
-[ext_resource type="PackedScene" uid="uid://0lmbkrm3yis5" path="res://scenes/pickups/wallcrawl_ability.tscn" id="4_jkv2x"]
 [ext_resource type="Texture2D" uid="uid://cf8xs3d6osbrn" path="res://assets/sprites/world_tileset.png" id="4_jyhfs"]
 [ext_resource type="PackedScene" uid="uid://e3cei7lyh8et" path="res://scenes/enemies/green_slime.tscn" id="6_tefeu"]
 [ext_resource type="PackedScene" uid="uid://md1jdcoedfs" path="res://scenes/world/death.tscn" id="7_o6xl0"]
-[ext_resource type="PackedScene" uid="uid://b8dstnsvjshbn" path="res://scenes/pickups/charge_ability.tscn" id="10_choun"]
 [ext_resource type="PackedScene" uid="uid://dshu4ly8aip0h" path="res://scenes/world/green_platform.tscn" id="11_eb6dy"]
 [ext_resource type="Script" uid="uid://co8dnnplbt1aa" path="res://scripts/world/green_platform.gd" id="12_trceg"]
+[ext_resource type="PackedScene" uid="uid://dyr6icf4crab5" path="res://scenes/enemies/chest.tscn" id="14_6ui35"]
+[ext_resource type="PackedScene" uid="uid://bmimicscn0001" path="res://scenes/enemies/mimic.tscn" id="15_y56qp"]
 [ext_resource type="PackedScene" uid="uid://7ck1dr5e5kg0" path="res://scenes/world/portal.tscn" id="16_muem4"]
 [ext_resource type="PackedScene" uid="uid://ck6q6oyovvakg" path="res://scenes/player/player.tscn" id="17_player"]
 [ext_resource type="PackedScene" uid="uid://ccaveatmo0001" path="res://effekte/cave_atmosphere.tscn" id="20_cave"]
 [ext_resource type="PackedScene" uid="uid://dohmg1luryc5l" path="res://scenes/world/upgrade_gate.tscn" id="30_gate"]
-[ext_resource type="PackedScene" path="res://scenes/enemies/dark_knight.tscn" id="50_dk"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ya4ey"]
 texture = ExtResource("3_choun")
@@ -244,7 +242,7 @@ tile_map_data = PackedByteArray("AAAGAPj/AAABAAsAAAAHAPj/AAABAAsAAAAHAPn/AAABAAs
 tile_set = SubResource("TileSet_tefeu")
 
 [node name="green_platform" parent="." unique_id=562638760 instance=ExtResource("11_eb6dy")]
-position = Vector2(210, 30)
+position = Vector2(255, 29)
 script = ExtResource("12_trceg")
 
 [node name="green_platform2" parent="." unique_id=1564964056 instance=ExtResource("11_eb6dy")]
@@ -256,20 +254,6 @@ position = Vector2(1211, 82)
 
 [node name="green_platform4" parent="." unique_id=955115571 instance=ExtResource("11_eb6dy")]
 position = Vector2(1317, 115)
-
-[node name="doublejump_ability" parent="." unique_id=333438941 instance=ExtResource("3_a8y0u")]
-position = Vector2(-716, 141)
-
-[node name="wallcrawl_ability" parent="." unique_id=127176179 instance=ExtResource("4_jkv2x")]
-position = Vector2(-651, 138)
-
-[node name="charge_ability" parent="." unique_id=199195650 instance=ExtResource("10_choun")]
-position = Vector2(-569, 76)
-
-[node name="Portal" parent="." unique_id=559695772 groups=["portals"] instance=ExtResource("16_muem4")]
-position = Vector2(-863, 43)
-portal_id = "main_a"
-target_scene = "res://scenes/levels/turm.tscn"
 
 [node name="PortalGalerie" parent="." unique_id=1267104389 groups=["portals"] instance=ExtResource("16_muem4")]
 position = Vector2(2066, -231)
@@ -286,7 +270,7 @@ text = "Galerie (Klasse)"
 horizontal_alignment = 1
 
 [node name="UpgradeGate" parent="." unique_id=102179361 instance=ExtResource("30_gate")]
-position = Vector2(774, 90)
+position = Vector2(809, 85)
 
 [node name="UpgradeGateLabel" type="Label" parent="." unique_id=1437963247]
 offset_left = 718.0
@@ -296,5 +280,24 @@ offset_bottom = 48.0
 text = "Upgrade-Tor"
 horizontal_alignment = 1
 
-[node name="DarkKnight" parent="." unique_id=900000001 instance=ExtResource("50_dk")]
-position = Vector2(900, -29)
+[node name="green_platform5" parent="." unique_id=312236016 instance=ExtResource("11_eb6dy")]
+position = Vector2(-185, 44)
+
+[node name="green_platform6" parent="." unique_id=696304904 instance=ExtResource("11_eb6dy")]
+position = Vector2(-118, 12)
+
+[node name="Chest" parent="." unique_id=1792498842 instance=ExtResource("14_6ui35")]
+position = Vector2(-265, 75)
+
+[node name="Chest2" parent="." unique_id=567634369 instance=ExtResource("14_6ui35")]
+position = Vector2(-849, 57)
+
+[node name="Chest3" parent="." unique_id=666913123 instance=ExtResource("14_6ui35")]
+position = Vector2(-722, 140)
+
+[node name="Mimic" parent="." unique_id=1904645845 instance=ExtResource("15_y56qp")]
+position = Vector2(638, 105)
+
+[node name="green_platform7" parent="." unique_id=696267884 instance=ExtResource("11_eb6dy")]
+position = Vector2(142, 31)
+script = ExtResource("12_trceg")

@@ -8,12 +8,14 @@
 [ext_resource type="PackedScene" uid="uid://dph3vsxklsitn" path="res://scenes/enemies/green_slime_spawner.tscn" id="6_h8sst"]
 [ext_resource type="Script" uid="uid://co8dnnplbt1aa" path="res://scripts/world/green_platform.gd" id="6_horiz"]
 [ext_resource type="FontFile" uid="uid://dtx2a7s2qqtrp" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="9_font"]
-[ext_resource type="PackedScene" uid="uid://ccaveatmo0001" path="res://effekte/cave_atmosphere.tscn" id="20_cave"]
-[ext_resource type="Script" uid="uid://cssho58smdbfm" path="res://scripts/world/updown.gd" id="10_updown"]
+[ext_resource type="Script" path="res://scripts/world/updown.gd" id="10_updown"]
 [ext_resource type="PackedScene" uid="uid://v7qyx6x5blsy" path="res://scenes/world/Falling Rock.tscn" id="11_rock"]
 [ext_resource type="PackedScene" uid="uid://b8dstnsvjshbn" path="res://scenes/pickups/charge_ability.tscn" id="12_charge"]
 [ext_resource type="PackedScene" uid="uid://dnmnbcdkt56ma" path="res://scenes/pickups/doublejump_ability.tscn" id="13_djump"]
 [ext_resource type="PackedScene" uid="uid://0lmbkrm3yis5" path="res://scenes/pickups/wallcrawl_ability.tscn" id="14_wall"]
+[ext_resource type="PackedScene" uid="uid://dk00enemy001" path="res://scenes/enemies/dark_knight.tscn" id="15_h2fwq"]
+[ext_resource type="PackedScene" uid="uid://dohmg1luryc5l" path="res://scenes/world/upgrade_gate.tscn" id="16_ckooc"]
+[ext_resource type="PackedScene" uid="uid://ccaveatmo0001" path="res://effekte/cave_atmosphere.tscn" id="20_cave"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nnl3m"]
 texture = ExtResource("1_3kobl")
@@ -174,3 +176,21 @@ position = Vector2(401, 536)
 
 [node name="wallcrawl_ability" parent="." unique_id=1532143513 instance=ExtResource("14_wall")]
 position = Vector2(245, 540)
+
+[node name="DarkKnight" parent="." unique_id=801000001 instance=ExtResource("15_h2fwq")]
+position = Vector2(429, 205)
+
+[node name="DarkKnight2" parent="." unique_id=1419865737 instance=ExtResource("15_h2fwq")]
+position = Vector2(707, 385)
+
+[node name="DarkKnight3" parent="." unique_id=220878682 instance=ExtResource("15_h2fwq")]
+position = Vector2(706, -108)
+
+[node name="DarkKnight4" parent="." unique_id=654143288 instance=ExtResource("15_h2fwq")]
+position = Vector2(248, -232)
+
+[node name="DarkKnight5" parent="." unique_id=1007379516 instance=ExtResource("15_h2fwq")]
+position = Vector2(899, -575)
+
+[node name="upgrade_gate" parent="." unique_id=1582705173 instance=ExtResource("16_ckooc")]
+position = Vector2(553, 525)

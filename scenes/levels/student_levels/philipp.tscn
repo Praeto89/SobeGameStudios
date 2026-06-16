@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://e3cei7lyh8et" path="res://scenes/enemies/green_slime.tscn" id="7_1sjbt"]
 [ext_resource type="PackedScene" uid="uid://jhiuqdedq0l3" path="res://scenes/pickups/coin.tscn" id="8_ysl4h"]
 [ext_resource type="PackedScene" uid="uid://b8dstnsvjshbn" path="res://scenes/pickups/charge_ability.tscn" id="9_gdikw"]
+[ext_resource type="PackedScene" uid="uid://dohmg1luryc5l" path="res://scenes/world/upgrade_gate.tscn" id="10_aeu5r"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dqh8m"]
 texture = ExtResource("4_1sjbt")
@@ -248,3 +249,6 @@ position = Vector2(2022, -197)
 [node name="Portal" parent="." unique_id=559695772 instance=ExtResource("2_7rot8")]
 position = Vector2(2284, -214)
 target_portal_id = "from_galerie"
+
+[node name="upgrade_gate" parent="." unique_id=295656323 instance=ExtResource("10_aeu5r")]
+position = Vector2(431, -132)

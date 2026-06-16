@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://b3fmywqfcrq3g"]
 
 [ext_resource type="PackedScene" uid="uid://ck6q6oyovvakg" path="res://scenes/player/player.tscn" id="1_c5o7e"]
-[ext_resource type="PackedScene" uid="uid://0lmbkrm3yis5" path="res://scenes/pickups/wallcrawl_ability.tscn" id="4_7i8v8"]
 [ext_resource type="PackedScene" uid="uid://dnmnbcdkt56ma" path="res://scenes/pickups/doublejump_ability.tscn" id="5_ervsl"]
 [ext_resource type="Texture2D" uid="uid://ctbiesjqnr38r" path="res://assets/sprites/PurpleDragons Spirte set/Ground/rockgrey_tilemap.png" id="6_7ekqj"]
 [ext_resource type="Texture2D" uid="uid://0v6pgbxip6n6" path="res://assets/sprites/PurpleDragons Spirte set/Ground/dirtice_tilemap.png" id="6_le38f"]
@@ -11,10 +10,10 @@
 [ext_resource type="Texture2D" uid="uid://bh450uccjk0sw" path="res://assets/sprites/PurpleDragons Spirte set/Background/Stalagmite.png" id="9_yfq5b"]
 [ext_resource type="Texture2D" uid="uid://b65pogkcjh3t8" path="res://assets/sprites/PurpleDragons Spirte set/enviroment/rock 3.png" id="10_1ip4w"]
 [ext_resource type="PackedScene" uid="uid://7ck1dr5e5kg0" path="res://scenes/world/portal.tscn" id="11_portal"]
-
+[ext_resource type="PackedScene" uid="uid://dyr6icf4crab5" path="res://scenes/enemies/chest.tscn" id="14_asddx"]
 [ext_resource type="PackedScene" uid="uid://ccaveatmo0001" path="res://effekte/cave_atmosphere.tscn" id="20_cave"]
 [ext_resource type="PackedScene" uid="uid://md1jdcoedfs" path="res://scenes/world/death.tscn" id="30_death"]
-[ext_resource type="AudioStream" uid="uid://bnewproj0song1" path="res://assets/music/new_project.mp3" id="40_music"]
+[ext_resource type="AudioStream" uid="uid://01ao0iy085du" path="res://assets/music/new_project.mp3" id="40_music"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8iv4n"]
 texture = ExtResource("6_7ekqj")
@@ -235,9 +234,6 @@ polygon = PackedVector2Array(-72, 16, 56, 16, 56, 32, 0, 32, -8, 40, -8, 64, 56,
 [node name="doublejump_ability" parent="." unique_id=333438941 instance=ExtResource("5_ervsl")]
 position = Vector2(232, 88)
 
-[node name="wallcrawl_ability" parent="." unique_id=564001056 instance=ExtResource("4_7i8v8")]
-position = Vector2(344, 136)
-
 [node name="Hidden Area" type="TileMap" parent="." unique_id=737581989]
 z_index = 1
 position = Vector2(208, 136)
@@ -310,10 +306,19 @@ scale = Vector2(0.45121953, 0.4512195)
 texture = ExtResource("8_ac54n")
 
 [node name="PortalTurm" parent="." unique_id=1284038433 groups=["portals"] instance=ExtResource("11_portal")]
-position = Vector2(421, 35)
+position = Vector2(414, 34)
 portal_id = "from_turm"
 target_portal_id = "turm_to_area1"
 target_scene = "res://scenes/levels/turm.tscn"
 
 [node name="Todeszone" parent="." unique_id=12345678 instance=ExtResource("30_death")]
 position = Vector2(0, 330)
+
+[node name="Portal" parent="." unique_id=559695772 instance=ExtResource("11_portal")]
+position = Vector2(144, 67)
+
+[node name="Chest" parent="." unique_id=1785495521 instance=ExtResource("14_asddx")]
+position = Vector2(229, 139)
+
+[node name="Chest2" parent="." unique_id=1300352095 instance=ExtResource("14_asddx")]
+position = Vector2(193, 138)
