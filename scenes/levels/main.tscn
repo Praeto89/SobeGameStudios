@@ -266,9 +266,8 @@ position = Vector2(-651, 138)
 position = Vector2(-569, 76)
 
 [node name="Portal" parent="." unique_id=559695772 groups=["portals"] instance=ExtResource("16_muem4")]
-position = Vector2(-851, 37)
+position = Vector2(-863, 43)
 portal_id = "main_a"
-target_portal_id = "turm_a"
 target_scene = "res://scenes/levels/turm.tscn"
 
 [node name="PortalGalerie" parent="." unique_id=1267104389 groups=["portals"] instance=ExtResource("16_muem4")]
@@ -289,9 +288,9 @@ horizontal_alignment = 1
 position = Vector2(774, 90)
 
 [node name="UpgradeGateLabel" type="Label" parent="." unique_id=1437963247]
-offset_left = -800.0
-offset_top = 40.0
-offset_right = -690.0
-offset_bottom = 60.0
+offset_left = 718.0
+offset_top = 25.0
+offset_right = 828.0
+offset_bottom = 48.0
 text = "Upgrade-Tor"
 horizontal_alignment = 1
