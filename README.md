@@ -29,6 +29,7 @@ Ein gemeinsames Lernprojekt in Godot 4.6. Ziel ist es, durch die Entwicklung ein
 | SHIFT (halten) | Rollen (schadet Gegnern) |
 | E (halten) | Charge-Dash aufladen und auslösen |
 | Pfeiltaste Unten (in der Luft) | Schnellfall |
+| ESC | Pause (mit Lautstärke-Reglern) – nur im Level |
 
 > **Tipp:** Springen kurz drücken = niedriger Sprung. Lang drücken = höherer Sprung.
 
@@ -316,9 +317,20 @@ Der Ton läuft über ein **zentrales Audio-System**:
   Verfügbare Effekt-Namen (`SFX_LIBRARY`): `coin`, `jump`, `hurt`, `explosion`,
   `power_up`, `tap`. Neuen Sound ergänzen = eine Zeile in `SFX_LIBRARY`.
 
+- **Durchgehende Musik:** Welche Szene welchen Track spielt, steht in der
+  `MUSIC_MAP` im `AudioManager`. Er beobachtet die aktive Szene und startet die
+  passende Musik selbst – **keine Level-Szene braucht einen eigenen Musik-Player**.
+  Beim Wechsel zwischen Szenen mit gleichem Track läuft die Musik nahtlos weiter
+  (kein Neustart). Neue Szene vertonen = eine Zeile in `MUSIC_MAP`.
+
 - **Optionen-Menü** (`scenes/ui/options_menu.tscn`): über das Hauptmenü
   erreichbar (Button **Optionen**). Drei Schieberegler für Gesamt / Musik /
   Effekte, die direkt den `AudioManager` ansteuern.
+
+- **Pausenmenü** (`scenes/ui/pause_menu.tscn`, Autoload `PauseMenu`): mit **ESC**
+  in jedem Level erreichbar – pausiert das Spiel (`get_tree().paused`) und blendet
+  Lautstärke-Regler sowie *Weiter* / *Hauptmenü* ein. Liegt als Overlay über
+  allem und muss deshalb in keine Level-Szene eingebaut werden.
 
 > **Wo klingt was?** Sprung, Treffer, Tod, Attacke (Spieler), Münze, Pickups,
 > Gegner-Tod/Aufwachen sowie neu Upgrade-Kauf und Portal-Teleport. Der

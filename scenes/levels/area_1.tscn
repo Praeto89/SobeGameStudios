@@ -13,7 +13,6 @@
 [ext_resource type="PackedScene" uid="uid://dyr6icf4crab5" path="res://scenes/enemies/chest.tscn" id="14_asddx"]
 [ext_resource type="PackedScene" uid="uid://ccaveatmo0001" path="res://effekte/cave_atmosphere.tscn" id="20_cave"]
 [ext_resource type="PackedScene" uid="uid://md1jdcoedfs" path="res://scenes/world/death.tscn" id="30_death"]
-[ext_resource type="AudioStream" uid="uid://01ao0iy085du" path="res://assets/music/new_project.mp3" id="40_music"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8iv4n"]
 texture = ExtResource("6_7ekqj")
@@ -208,11 +207,6 @@ sources/1 = SubResource("TileSetAtlasSource_ac54n")
 
 [node name="Node2D" type="Node2D" unique_id=718214453]
 position = Vector2(16, 8)
-
-[node name="Musik" type="AudioStreamPlayer" parent="." unique_id=2030405060]
-stream = ExtResource("40_music")
-autoplay = true
-bus = "Music"
 
 [node name="CaveAtmosphere" parent="." unique_id=1064661870 instance=ExtResource("20_cave")]
 

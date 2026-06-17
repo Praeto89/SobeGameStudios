@@ -20,6 +20,7 @@ config/icon="res://icon.svg"
 GameManager="*uid://ca1d6h6c7yrpo"
 AudioManager="*res://scripts/audio_manager.gd"
 Hud="*res://scenes/ui/hud.tscn"
+PauseMenu="*res://scenes/ui/pause_menu.tscn"
 
 [audio]
 

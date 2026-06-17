@@ -36,10 +36,20 @@ func run(t) -> void:
 	t.check(layout.contains("\"Music\""), "Bus-Layout definiert Music")
 	t.check(layout.contains("\"SFX\""), "Bus-Layout definiert SFX")
 
-	# --- project.godot bindet Layout + AudioManager-Autoload ein ---
+	# --- project.godot bindet Layout + Autoloads ein ---
 	var proj := FileAccess.get_file_as_string("res://project.godot")
 	t.check(proj.contains("default_bus_layout.tres"), "project.godot referenziert das Bus-Layout")
 	t.check(proj.contains("AudioManager="), "AudioManager ist als Autoload eingetragen")
+	t.check(proj.contains("PauseMenu="), "PauseMenu ist als Autoload eingetragen")
+
+	# --- Musik-Map: Szenen sind .tscn-Pfade, Musikdateien existieren ---
+	var music_map = AudioManagerScript.MUSIC_MAP
+	t.check(music_map.size() > 0, "MUSIC_MAP ist nicht leer")
+	for scene_path in music_map:
+		t.check(scene_path.begins_with("res://") and scene_path.ends_with(".tscn"),
+			"MUSIC_MAP-Schluessel ist eine Szene: %s" % scene_path)
+		t.check(ResourceLoader.exists(music_map[scene_path]),
+			"Musikdatei existiert: %s" % music_map[scene_path])
 
 	# --- Lautstaerke-Umrechnung Anteil <-> Dezibel ist (nahezu) verlustfrei ---
 	for pct in [0.25, 0.5, 1.0]:

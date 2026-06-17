@@ -52,6 +52,22 @@ const SFX_LIBRARY := {
 ## Wie viele Effekte gleichzeitig klingen koennen (Groesse des Spieler-Pools).
 const POOL_SIZE := 8
 
+## Welche Szene welche Hintergrundmusik bekommt (Szenen-Pfad -> Musik-Datei).
+## Der AudioManager beobachtet die aktive Szene und startet automatisch die
+## passende Musik. Weil play_music() dasselbe Stueck nicht neu startet, laeuft
+## die Musik beim Wechsel zwischen Szenen mit GLEICHEM Track nahtlos weiter.
+## Szenen, die hier NICHT stehen, lassen die laufende Musik einfach weiterlaufen.
+const MUSIC_MAP := {
+	"res://scenes/ui/main_menu.tscn":    "res://assets/music/for_a_school_game.mp3",
+	"res://scenes/ui/credits.tscn":      "res://assets/music/for_a_school_game.mp3",
+	"res://scenes/ui/options_menu.tscn": "res://assets/music/for_a_school_game.mp3",
+	"res://scenes/levels/main.tscn":     "res://assets/music/time_for_adventure.mp3",
+	"res://scenes/levels/turm.tscn":     "res://assets/music/time_for_adventure.mp3",
+	"res://scenes/levels/sandbox.tscn":  "res://assets/music/time_for_adventure.mp3",
+	"res://scenes/levels/galerie.tscn":  "res://assets/music/time_for_adventure.mp3",
+	"res://scenes/levels/area_1.tscn":   "res://assets/music/new_project.mp3",
+}
+
 # -----------------------------------------------------------------------------
 # Interner Zustand
 # -----------------------------------------------------------------------------
@@ -60,6 +76,7 @@ var _sfx_index := 0                             # naechster freier Spieler (Ring
 var _streams: Dictionary = {}                   # Kurzname -> geladener AudioStream
 var _music_player: AudioStreamPlayer            # ein dauerhafter Spieler fuer Musik
 var _current_music := ""                        # Pfad des aktuell laufenden Stuecks
+var _last_scene_path := ""                      # zuletzt gesehene Szene (fuer MUSIC_MAP)
 
 
 # =============================================================================
@@ -92,6 +109,25 @@ func _ready() -> void:
 
 	# Gespeicherte Lautstaerken anwenden.
 	_load_settings()
+
+
+# =============================================================================
+# _process()
+# Beobachtet, welche Szene gerade aktiv ist, und startet bei einem Wechsel die
+# in MUSIC_MAP hinterlegte Musik. So braucht keine Level-Szene einen eigenen
+# Musik-Player -- und die Musik laeuft ueber Szenenwechsel hinweg weiter.
+# (Ein simpler String-Vergleich pro Frame, das kostet praktisch nichts.)
+# =============================================================================
+func _process(_delta: float) -> void:
+	var scene := get_tree().current_scene
+	if scene == null:
+		return
+	var path := scene.scene_file_path
+	if path == _last_scene_path:
+		return
+	_last_scene_path = path
+	if MUSIC_MAP.has(path):
+		play_music(MUSIC_MAP[path])
 
 
 # =============================================================================
