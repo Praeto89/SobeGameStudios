@@ -312,3 +312,4 @@ shape = SubResource("Cir_attack")
 
 [node name="SoundDeath" type="AudioStreamPlayer2D" parent="." unique_id=801000008]
 stream = ExtResource("4_expl")
+bus = "SFX"

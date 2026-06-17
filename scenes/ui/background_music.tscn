@@ -6,3 +6,4 @@
 stream = ExtResource("1_olq4t")
 autoplay = true
 stream_paused = true
+bus = "Music"

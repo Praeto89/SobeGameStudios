@@ -18,7 +18,12 @@ config/icon="res://icon.svg"
 [autoload]
 
 GameManager="*uid://ca1d6h6c7yrpo"
+AudioManager="*res://scripts/audio_manager.gd"
 Hud="*res://scenes/ui/hud.tscn"
+
+[audio]
+
+buses/default_bus_layout="res://default_bus_layout.tres"
 
 [editor]
 

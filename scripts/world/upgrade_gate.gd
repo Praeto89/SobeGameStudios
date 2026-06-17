@@ -399,6 +399,7 @@ func _buy(idx: int) -> void:
 	var cost: int = GameManager.get_next_cost(key)
 	if _player.coin_count < cost:
 		Hud.show_ability_message("Du brauchst %d Gold dafuer." % cost, 2.0)
+		AudioManager.play_sfx("tap", 0.8, -6.0)  # leiser "geht nicht"-Klick
 		return
 
 	var was_level: int = GameManager.get_level(key)
@@ -416,6 +417,7 @@ func _buy(idx: int) -> void:
 		Hud.show_ability_message("%s freigeschaltet!" % track.name, 2.0)
 	else:
 		Hud.show_ability_message("%s verbessert – Stufe %d!" % [track.name, new_level], 2.0)
+	AudioManager.play_sfx("power_up")  # hoerbares Belohnungs-Feedback beim Kauf
 	_play_unlock_fx(idx)
 	_refresh()
 

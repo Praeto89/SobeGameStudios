@@ -55,6 +55,10 @@ func _on_body_entered(body: Node2D) -> void:
 	# Ziel-Portal merken, damit wir dort spawnen koennen
 	GameManager.came_from_portal_id = target_portal_id
 
+	# Teleport-Sound. Laeuft ueber den AudioManager (Autoload) und wird daher
+	# auch bei einem Level-Wechsel nicht abgeschnitten.
+	AudioManager.play_sfx("power_up", 1.3)
+
 	if target_scene != "":
 		# Wenn der Spieler in die Galerie zurueckgeht, die aktuelle Szene
 		# als "besucht" markieren -- die Galerie zeigt darueber ein ⭐

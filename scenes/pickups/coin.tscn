@@ -113,6 +113,7 @@ shape = SubResource("CircleShape2D_ssuvv")
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=923615500]
 stream = ExtResource("3_11l1o")
+bus = "SFX"
 
 [node name="Glow" type="PointLight2D" parent="." unique_id=858440348]
 color = Color(0.6373864, 0.549033, 0, 1)

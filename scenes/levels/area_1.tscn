@@ -212,6 +212,7 @@ position = Vector2(16, 8)
 [node name="Musik" type="AudioStreamPlayer" parent="." unique_id=2030405060]
 stream = ExtResource("40_music")
 autoplay = true
+bus = "Music"
 
 [node name="CaveAtmosphere" parent="." unique_id=1064661870 instance=ExtResource("20_cave")]
 

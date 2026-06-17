@@ -594,12 +594,17 @@ script = ExtResource("4_flicker")
 
 [node name="SoundJump" type="AudioStreamPlayer" parent="CharacterBody2D"]
 stream = ExtResource("5_snd_jump")
+volume_db = -10.0
+bus = "SFX"
 
 [node name="SoundHurt" type="AudioStreamPlayer" parent="CharacterBody2D"]
 stream = ExtResource("6_snd_hurt")
+bus = "SFX"
 
 [node name="SoundDeath" type="AudioStreamPlayer" parent="CharacterBody2D"]
 stream = ExtResource("7_snd_expl")
+bus = "SFX"
 
 [node name="SoundAttack" type="AudioStreamPlayer" parent="CharacterBody2D"]
 stream = ExtResource("8_snd_tap")
+bus = "SFX"

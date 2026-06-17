@@ -106,6 +106,7 @@ SobeGameStudios/
 |---|---|
 | `scripts/player/player.gd` | **Spieler-Controller** – Bewegung, Sprung, Abilities, Schaden, Tod |
 | `scripts/game_manager.gd` | **Singleton** – speichert den Portal-Zustand zwischen Szenen |
+| `scripts/audio_manager.gd` | **Singleton** – zentrale Soundeffekte, Musik & Lautstärke (siehe *Ton & Audio*) |
 | `scripts/world/portal.gd` | **Portal** – Teleportiert den Spieler (gleiche Szene oder Level-Wechsel) |
 | `scripts/ui/hud.gd` | **HUD** – Zeigt Herzen und Münzen an, reagiert auf Spieler-Signale |
 | `scripts/pickups/coin.gd` | **Münze** – Sammelbar, löst Signal aus, spielt Sound |
@@ -289,6 +290,39 @@ Rohe Ideen und Konzept-Skizzen des Teams liegen daneben im Ordner `Concepts & id
 - **Schwert-Angriff** – Nahkampf mit Dash-Komponente
 - **Wall Jump** – Ist bereits implementiert als Teil von Wallcrawl
 - **Schwert-Slot-System** – Equipment/Ability-Slots für austauschbare Fähigkeiten
+
+---
+
+## Ton & Audio
+
+Der Ton läuft über ein **zentrales Audio-System**:
+
+- **Audio-Busse** (`default_bus_layout.tres`): Aller Ton fließt durch drei Kanäle –
+  `Master` (Gesamt) mit den Unterbussen `Music` und `SFX`. So lassen sich Musik
+  und Effekte getrennt regeln. Jeder Sound-Node im Projekt ist dem passenden
+  Bus zugeordnet (`bus = "Music"` bzw. `bus = "SFX"`).
+
+- **`AudioManager`** (Autoload-Singleton, `scripts/audio_manager.gd`): spielt
+  Soundeffekte von überall ab, verwaltet Hintergrundmusik (überlebt den
+  Szenenwechsel) und merkt sich die Lautstärke dauerhaft in `user://settings.cfg`.
+
+  ```gdscript
+  AudioManager.play_sfx("coin")                 # Effekt abspielen
+  AudioManager.play_sfx("jump", 1.2)            # mit höherer Tonhöhe
+  AudioManager.play_music("res://assets/music/time_for_adventure.mp3")
+  AudioManager.set_volume("Music", 0.5)         # 0.0 = stumm … 1.0 = voll
+  ```
+
+  Verfügbare Effekt-Namen (`SFX_LIBRARY`): `coin`, `jump`, `hurt`, `explosion`,
+  `power_up`, `tap`. Neuen Sound ergänzen = eine Zeile in `SFX_LIBRARY`.
+
+- **Optionen-Menü** (`scenes/ui/options_menu.tscn`): über das Hauptmenü
+  erreichbar (Button **Optionen**). Drei Schieberegler für Gesamt / Musik /
+  Effekte, die direkt den `AudioManager` ansteuern.
+
+> **Wo klingt was?** Sprung, Treffer, Tod, Attacke (Spieler), Münze, Pickups,
+> Gegner-Tod/Aufwachen sowie neu Upgrade-Kauf und Portal-Teleport. Der
+> Sprung-Sound ist bewusst leise (−10 dB) und über den SFX-Regler steuerbar.
 
 ---
 

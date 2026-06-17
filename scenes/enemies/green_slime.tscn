@@ -178,3 +178,4 @@ shape = SubResource("RectangleShape2D_tuic5")
 
 [node name="SoundDeath" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("2_snd_expl")
+bus = "SFX"

@@ -156,6 +156,8 @@ shape = SubResource("RectangleShape2D_hit")
 
 [node name="SoundDeath" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("3_death")
+bus = "SFX"
 
 [node name="SoundActivate" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("4_wake")
+bus = "SFX"

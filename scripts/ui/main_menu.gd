@@ -17,6 +17,8 @@ extends Control
 const LEVEL_SCENE := "res://scenes/levels/main.tscn"
 ## Pfad zum Abspann.
 const CREDITS_SCENE := "res://scenes/ui/credits.tscn"
+## Pfad zum Optionen-Menue (Lautstaerke).
+const OPTIONS_SCENE := "res://scenes/ui/options_menu.tscn"
 
 # -----------------------------------------------------------------------------
 # Node-Referenzen
@@ -24,6 +26,7 @@ const CREDITS_SCENE := "res://scenes/ui/credits.tscn"
 @onready var _logo: TextureRect = $CenterContainer/VBoxContainer/Logo
 @onready var _play_button: Button = $CenterContainer/VBoxContainer/PlayButton
 @onready var _credits_button: Button = $CenterContainer/VBoxContainer/CreditsButton
+@onready var _options_button: Button = $CenterContainer/VBoxContainer/OptionsButton
 @onready var _quit_button: Button = $CenterContainer/VBoxContainer/QuitButton
 
 
@@ -31,6 +34,7 @@ func _ready() -> void:
 	# Jeden Button mit seiner Funktion verbinden.
 	_play_button.pressed.connect(_on_play_pressed)
 	_credits_button.pressed.connect(_on_credits_pressed)
+	_options_button.pressed.connect(_on_options_pressed)
 	_quit_button.pressed.connect(_on_quit_pressed)
 	# Tastatur-/Gamepad-Fokus auf den ersten Button legen,
 	# damit man das Menue auch ohne Maus bedienen kann.
@@ -77,6 +81,10 @@ func _on_play_pressed() -> void:
 
 func _on_credits_pressed() -> void:
 	get_tree().change_scene_to_file(CREDITS_SCENE)
+
+
+func _on_options_pressed() -> void:
+	get_tree().change_scene_to_file(OPTIONS_SCENE)
 
 
 func _on_quit_pressed() -> void:

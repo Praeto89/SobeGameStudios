@@ -33,3 +33,4 @@ tempo = 3.5
 
 [node name="SoundPickup" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("4_snd_pu")
+bus = "SFX"

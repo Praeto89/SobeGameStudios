@@ -17,6 +17,7 @@ script = ExtResource("1_cred")
 [node name="Music" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_music")
 autoplay = true
+bus = "Music"
 
 [node name="Background" type="ColorRect" parent="."]
 layout_mode = 1

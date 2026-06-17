@@ -33,6 +33,7 @@ func _initialize() -> void:
 		preload("res://tests/test_constants.gd").new(),
 		preload("res://tests/test_game_manager_persistence.gd").new(),
 		preload("res://tests/test_player_abilities.gd").new(),
+		preload("res://tests/test_audio.gd").new(),
 	]
 
 	for m in modules:

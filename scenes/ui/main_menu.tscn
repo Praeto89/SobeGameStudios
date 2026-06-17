@@ -17,6 +17,7 @@ script = ExtResource("1_menu")
 [node name="Music" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_music")
 autoplay = true
+bus = "Music"
 
 [node name="Background" type="ColorRect" parent="."]
 layout_mode = 1
@@ -60,6 +61,13 @@ layout_mode = 2
 theme_override_fonts/font = ExtResource("2_font")
 theme_override_font_sizes/font_size = 32
 text = "Abspann"
+
+[node name="OptionsButton" type="Button" parent="CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(260, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 32
+text = "Optionen"
 
 [node name="QuitButton" type="Button" parent="CenterContainer/VBoxContainer"]
 custom_minimum_size = Vector2(260, 0)
