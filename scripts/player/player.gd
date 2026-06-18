@@ -278,6 +278,15 @@ func _exit_tree() -> void:
 		_death_slowmo = false
 
 # =============================================================================
+# set_checkpoint(pos)
+# Setzt den Respawn-Punkt neu (z. B. von einem Checkpoint im Level).
+# Stirbt der Spieler danach, taucht er an dieser Stelle wieder auf statt am
+# Level-Anfang. Praktisch fuer lange Levels.
+# =============================================================================
+func set_checkpoint(pos: Vector2) -> void:
+	spawn_position = pos
+
+# =============================================================================
 # respawn()
 # Setzt den Spieler auf den Spawn-Punkt zurueck und stellt alle
 # Zustandsvariablen auf ihren Ausgangswert zurueck.

@@ -29,10 +29,17 @@ extends Node2D
 # Export-Variablen (im Godot-Editor einstellbar)
 # -----------------------------------------------------------------------------
 @export var slime_scene: PackedScene    # Die Szene des Gegners der gespawnt werden soll
-@export var spawn_interval := 3.0       # Wartezeit in Sekunden zwischen zwei Spawns
+@export var spawn_interval := 6.0       # Wartezeit in Sekunden zwischen zwei Spawns  <- groesser = seltener
 @export var max_slimes := 5             # Maximal erlaubte Anzahl gleichzeitiger Gegner (pro Spawner)
 @export var spawn_spread := 8.0         # Zufaelliger horizontaler Versatz beim Spawn (Pixel)
 @export var despawn_distance := 0.0     # Spieler-Abstand ab dem Slimes entfernt werden (0 = aus)
+
+# --- Boden-Spawn ---------------------------------------------------------------
+# Damit Slimes nicht "aus dem Himmel fallen", sucht der Spawner per Strahl nach
+# unten den Boden und setzt den frischen Slime direkt darauf.
+@export var ground_ray_length := 2000.0 # Wie weit nach unten nach Boden gesucht wird (Pixel)
+@export var ground_offset := 10.0       # Wie hoch ueber dem gefundenen Boden der Slime erscheint (Pixel)
+@export var ground_mask := 1            # Physik-Ebene des Bodens (Standard-Welt = 1)
 
 # -----------------------------------------------------------------------------
 # Node-Referenzen
@@ -83,9 +90,27 @@ func _on_timer_timeout() -> void:
 		slime.is_spawned = true
 	# Kleiner Zufallsversatz, damit frische Slimes sich nicht exakt stapeln.
 	var offset_x = randf_range(-spawn_spread, spawn_spread) if spawn_spread > 0.0 else 0.0
-	slime.global_position = global_position + Vector2(offset_x, 0.0)
+	var spawn_pos := global_position + Vector2(offset_x, 0.0)
+	# Auf den Boden setzen, statt aus der Luft fallen zu lassen.
+	spawn_pos = _ground_position(spawn_pos)
+	slime.global_position = spawn_pos
 	get_parent().add_child(slime)
 	_spawned.append(slime)
+
+# =============================================================================
+# _ground_position(from)
+# Schiesst einen Strahl von "from" gerade nach unten und gibt die Position
+# knapp ueber dem ersten getroffenen Boden zurueck. Findet sich kein Boden
+# (z. B. ueber einem Abgrund), wird "from" unveraendert zurueckgegeben.
+# =============================================================================
+func _ground_position(from: Vector2) -> Vector2:
+	var space := get_world_2d().direct_space_state
+	var query := PhysicsRayQueryParameters2D.create(
+		from, from + Vector2(0.0, ground_ray_length), ground_mask)
+	var hit := space.intersect_ray(query)
+	if hit.is_empty():
+		return from
+	return Vector2(from.x, hit.position.y - ground_offset)
 
 # =============================================================================
 # _prune()
