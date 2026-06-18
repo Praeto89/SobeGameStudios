@@ -41,7 +41,7 @@ func _ready() -> void:
 	if GameManager.came_from_portal_id == portal_id:
 		var player = get_tree().get_first_node_in_group(GameConstants.GROUP_PLAYER)
 		if player:
-			player.global_position = global_position
+			_place_body_at_portal(player)
 		GameManager.came_from_portal_id = ""
 		_start_cooldown()
 
@@ -80,11 +80,34 @@ func _teleport_in_scene(body: Node2D) -> void:
 		if portal == self:
 			continue
 		if portal.portal_id == target_portal_id:
-			body.global_position = portal.global_position
+			portal._place_body_at_portal(body)
 			portal._start_cooldown()   # Partner sperren -> kein Ping-Pong
 			_start_cooldown()
 			return
 	push_warning("Portal '%s': Kein Partner mit ID '%s' gefunden!" % [portal_id, target_portal_id])
+
+
+# -------------------------------------------------------
+# _place_body_at_portal(body)
+# Setzt den Koerper (Spieler) sauber MITTIG ins Portal.
+#
+# WARUM nicht einfach body.global_position = global_position?
+# Der Spieler hat seine CollisionShape2D im player.tscn versetzt liegen
+# (sie sitzt ein Stueck links/oben vom Knoten-Ursprung). Setzt man nur den
+# Ursprung aufs Portal, landet die KOLLISIONS-Kapsel daneben -- bei einem eng
+# an einer Wand stehenden Portal (z. B. in area_1) steckt der Spieler dann in
+# der Wand fest. Hier verschieben wir so, dass die Kapsel-MITTE aufs Portal
+# faellt, also dort, wo optisch das offene Portal ist. Zusaetzlich setzen wir
+# das Tempo auf 0, damit der Spieler nicht mit Schwung in die Wand rutscht.
+# -------------------------------------------------------
+func _place_body_at_portal(body: Node2D) -> void:
+	var shape := body.get_node_or_null("CollisionShape2D")
+	var shape_offset := Vector2.ZERO
+	if shape:
+		shape_offset = shape.global_position - body.global_position
+	body.global_position = global_position - shape_offset
+	if "velocity" in body:
+		body.velocity = Vector2.ZERO
 
 
 func _start_cooldown() -> void:

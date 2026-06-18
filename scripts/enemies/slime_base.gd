@@ -82,6 +82,13 @@ func _ready():
 	add_to_group(GameConstants.GROUP_ENEMY)
 	player = get_tree().get_first_node_in_group(GameConstants.GROUP_PLAYER)
 	hitbox.body_entered.connect(_on_hitbox_body_entered)
+	# Gegner und Spieler sollen sich NICHT gegenseitig blockieren:
+	# Der Spieler kann nicht auf dem Gegner stehen und wird auch nicht von ihm
+	# in eine Wand gedrueckt. Schaden gibt es weiterhin ueber die Hitbox (Area2D).
+	# add_collision_exception_with wirkt fuer BEIDE Koerper -- sie durchdringen
+	# sich gegenseitig, kollidieren aber ganz normal weiter mit Waenden/Boden.
+	if player and is_instance_valid(player):
+		add_collision_exception_with(player)
 	# Persistenz: nur fest platzierte Slimes (nicht vom Spawner) checken,
 	# ob sie schon mal besiegt wurden.
 	if not is_spawned:
@@ -225,6 +232,17 @@ func _handle_extra_state(_delta: float) -> bool:
 	return false
 
 # =============================================================================
+# _can_walk() -> bool
+# Darf der Gegner sich gerade horizontal bewegen?
+#   - Normale (schwerkraft-gebundene) Gegner: NUR am Boden. In der Luft behalten
+#     sie ihren Schwung, koennen aber nicht selbst steuern.
+#   - Schwebende Gegner (gravity == 0, z. B. Wand-Slime): immer, denn sie
+#     "stehen" nie auf einem Boden.
+# =============================================================================
+func _can_walk() -> bool:
+	return is_on_floor() or gravity <= 0.0
+
+# =============================================================================
 # _state_activation()
 # Einmaliger Uebergang-Zustand: Slime dreht sich zum Spieler und spielt
 # die Aktivierungs-Animation. Danach ist "activated = true" und der Slime
@@ -251,9 +269,13 @@ func _state_activation():
 # dreht er die Richtung um.
 # =============================================================================
 func _state_patrol():
-	velocity.x = patrol_direction * speed
 	sprite.flip_h = patrol_direction < 0
 	sprite.play("patrol")
+	# In der Luft kann der Gegner NICHT laufen: er behaelt nur seinen vorhandenen
+	# Schwung (Momentum), steuert aber nicht aktiv. Erst wieder am Boden bewegen.
+	if not _can_walk():
+		return
+	velocity.x = patrol_direction * speed
 	if is_on_wall() and wall_cooldown <= 0:
 		patrol_direction *= -1      # Richtung umkehren
 		wall_cooldown = 0.3         # Kurze Pause damit der Slime nicht sofort wieder dreht
@@ -270,16 +292,19 @@ func _state_chase(delta: float) -> void:
 	var direction = sign(player.global_position.x - global_position.x)
 	if direction == 0:
 		direction = patrol_direction        # genau uebereinander? -> alte Richtung halten
-	velocity.x = direction * chase_speed
 	sprite.flip_h = direction < 0
-	patrol_direction = direction            # merken, damit Patrouille spaeter nahtlos weitergeht
 
-	# --- Springen ---
-	# Nur springen wenn erlaubt, wenn wir auf festem Boden stehen und die
-	# Pause (jump_cooldown) abgelaufen ist. Steht eine Wand im Weg, springt
-	# der Slime sofort, um darueber zu klettern.
-	if can_jump and is_on_floor() and (jump_cooldown <= 0 or is_on_wall()):
-		_do_jump()
+	# In der Luft kann der Gegner NICHT aktiv die Richtung wechseln oder
+	# beschleunigen -- er behaelt nur seinen Schwung vom Absprung (so "fliegt"
+	# z. B. der Dark Knight nicht mehr in der Luft auf den Spieler zu).
+	if _can_walk():
+		velocity.x = direction * chase_speed
+		patrol_direction = direction        # merken, damit Patrouille spaeter nahtlos weitergeht
+		# --- Springen ---
+		# Nur springen wenn erlaubt, am Boden und die Pause (jump_cooldown)
+		# abgelaufen ist. Steht eine Wand im Weg, springt er sofort drueber.
+		if can_jump and is_on_floor() and (jump_cooldown <= 0 or is_on_wall()):
+			_do_jump()
 
 	# --- Animation ---
 	# In der Luft die Sprung-Animation, am Boden die normale Lauf-Animation.
